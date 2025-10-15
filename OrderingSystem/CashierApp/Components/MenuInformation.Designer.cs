@@ -47,9 +47,9 @@
             this.closeButton = new Guna.UI2.WinForms.Guna2PictureBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.b3 = new Guna.UI2.WinForms.Guna2Button();
+            this.b4 = new Guna.UI2.WinForms.Guna2Button();
             this.lPrice = new System.Windows.Forms.Label();
             this.price = new Guna.UI2.WinForms.Guna2TextBox();
-            this.b4 = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.closeButton)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
@@ -293,6 +293,23 @@
             this.b3.Text = "Update Bundle";
             this.b3.Click += new System.EventHandler(this.guna2Button1_Click);
             // 
+            // b4
+            // 
+            this.b4.AutoRoundedCorners = true;
+            this.b4.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.b4.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.b4.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.b4.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.b4.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.b4.ForeColor = System.Drawing.Color.White;
+            this.b4.Location = new System.Drawing.Point(3, 120);
+            this.b4.Name = "b4";
+            this.b4.Size = new System.Drawing.Size(214, 33);
+            this.b4.TabIndex = 4;
+            this.b4.Text = "Additional Ingredients";
+            this.b4.Visible = false;
+            this.b4.Click += new System.EventHandler(this.b4_Click);
+            // 
             // lPrice
             // 
             this.lPrice.AutoSize = true;
@@ -330,22 +347,6 @@
             this.price.Size = new System.Drawing.Size(141, 36);
             this.price.TabIndex = 17;
             this.price.Visible = false;
-            // 
-            // b4
-            // 
-            this.b4.AutoRoundedCorners = true;
-            this.b4.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.b4.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.b4.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.b4.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.b4.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.b4.ForeColor = System.Drawing.Color.White;
-            this.b4.Location = new System.Drawing.Point(3, 120);
-            this.b4.Name = "b4";
-            this.b4.Size = new System.Drawing.Size(214, 33);
-            this.b4.TabIndex = 4;
-            this.b4.Text = "Additional Ingredients";
-            this.b4.Click += new System.EventHandler(this.b4_Click);
             // 
             // MenuInformation
             // 

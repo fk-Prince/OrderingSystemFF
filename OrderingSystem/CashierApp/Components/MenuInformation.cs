@@ -67,6 +67,7 @@ namespace OrderingSystem.CashierApp.Components
             if (isPackaged)
             {
                 b2.Visible = false;
+                b4.Visible = true;
                 included = menuRepository.getBundled(menu);
                 loadForm(package = new PackageTable(included, menuRepository));
                 package.dataGrid.Enabled = false;
@@ -205,12 +206,10 @@ namespace OrderingSystem.CashierApp.Components
                 displayTable();
             }
         }
-
         private void closeButton_Click(object sender, EventArgs e)
         {
             Hide();
         }
-
         private void guna2Button1_Click(object sender, EventArgs e)
         {
             BundleMenuPopup bb = new BundleMenuPopup(included);
@@ -222,7 +221,6 @@ namespace OrderingSystem.CashierApp.Components
                 bb.Hide();
             }
         }
-
         private void b4_Click(object sender, EventArgs e)
         {
             IngredientMenu pop = new IngredientMenu(ingredientRepository);
