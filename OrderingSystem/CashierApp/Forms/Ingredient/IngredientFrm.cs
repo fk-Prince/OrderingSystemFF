@@ -12,15 +12,6 @@ namespace OrderingSystem.CashierApp.Forms
             // INGREDIENT BUILDER => MODELS / INGREDIENTMODEL
         }
 
-        public void loadForm(Form f)
-        {
-            if (mm.Controls.Count > 0) mm.Controls.Clear();
-            f.TopLevel = false;
-            f.Dock = DockStyle.Fill;
-            mm.Controls.Add(f);
-            mm.Tag = f;
-            f.Show();
-        }
 
         public void showAddIngredient()
         {
