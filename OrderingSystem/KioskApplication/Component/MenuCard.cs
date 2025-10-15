@@ -1,0 +1,104 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.Windows.Forms;
+using Guna.UI2.WinForms;
+using OrderingSystem.Model;
+using OrderingSystem.Repository;
+
+namespace OrderingSystem.KioskApplication.Cards
+{
+    public partial class MenuCard : Guna2Panel
+
+    {
+        private MenuModel menu;
+        private IKioskMenuRepository _menuRepository;
+        public event EventHandler<List<MenuModel>> orderListEvent;
+        private List<MenuModel> orderList;
+
+        public MenuModel Menu => menu;
+
+        public MenuCard(IKioskMenuRepository _menuRepository, MenuModel menu)
+        {
+            InitializeComponent();
+            this._menuRepository = _menuRepository;
+            this.menu = menu;
+            orderList = new List<MenuModel>();
+            displayMenu();
+            cardLayout();
+        }
+
+        private void cardLayout()
+        {
+            BorderRadius = 8;
+            BorderThickness = 1;
+            BorderColor = Color.FromArgb(34, 34, 34);
+            FillColor = Color.White;
+
+            handleClicked(this);
+            hoverEffects(this);
+        }
+
+        private void handleClicked(Control c)
+        {
+            c.Click += menuClicked;
+            foreach (Control cc in c.Controls)
+            {
+                handleClicked(cc);
+            }
+        }
+
+        private void menuClicked(object sender, EventArgs b)
+        {
+            PopupOption popup = new PopupOption(_menuRepository, menu, orderList);
+            popup.orderListEvent += (s, e) =>
+            {
+                orderListEvent?.Invoke(this, e);
+            };
+            DialogResult res = popup.ShowDialog(this);
+
+            if (res == DialogResult.OK)
+            {
+                popup.Hide();
+            }
+        }
+
+        private void hoverEffects(Control c)
+        {
+            c.MouseEnter += (s, e) => { BorderColor = Color.FromArgb(94, 148, 255); BorderThickness = 2; };
+            c.MouseLeave += (s, e) => { BorderColor = Color.FromArgb(34, 34, 34); BorderThickness = 1; };
+            c.Cursor = Cursors.Hand;
+
+            foreach (Control cc in c.Controls)
+            {
+                hoverEffects(cc);
+            }
+        }
+
+        private void displayMenu()
+        {
+            menuName.Text = menu.MenuName;
+            price.Text = menu.MenuPrice.ToString("C", new CultureInfo("en-PH"));
+            if (menu.DiscountMenuRate != 0.00)
+            {
+                off.Visible = true;
+                off.Text = (menu.DiscountMenuRate * 100).ToString() + "%";
+                stick.Visible = true;
+                newPrice.Visible = true;
+                newPrice.Text = menu.GetDiscountedPrice().ToString("C", new CultureInfo("en-PH"));
+            }
+            else
+            {
+                stick.Visible = false;
+                newPrice.Visible = false;
+                off.Visible = false;
+            }
+            image.Image = menu.MenuImage;
+            description.Text = menu.MenuDescription;
+            menuName.ForeColor = Color.Black;
+            price.ForeColor = Color.Black;
+            description.ForeColor = Color.Black;
+        }
+    }
+}
