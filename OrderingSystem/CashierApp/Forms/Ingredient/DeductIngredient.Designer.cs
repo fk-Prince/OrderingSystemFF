@@ -168,6 +168,7 @@
             this.Controls.Add(this.guna2TextBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "DeductIngredient";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DeductIngredient";
             this.ResumeLayout(false);
             this.PerformLayout();
