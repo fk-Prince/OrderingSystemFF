@@ -24,17 +24,35 @@ namespace OrderingSystem.CashierApp.Forms
 
         public void showAddIngredient()
         {
-            loadForm(new AddIngredient());
+            AddIngredient add = new AddIngredient();
+            DialogResult rs = add.ShowDialog(this);
+            if (rs == DialogResult.OK)
+            {
+                add.Hide();
+            }
+            //loadForm(new AddIngredient());
         }
 
         public void showDeductIngredient()
         {
-            loadForm(new DeductIngredient());
+            DeductIngredient ded = new DeductIngredient();
+            DialogResult rs = ded.ShowDialog(this);
+            if (rs == DialogResult.OK)
+            {
+                ded.Hide();
+            }
+            //loadForm(new DeductIngredient());
         }
 
         public void showRestockIngredient()
         {
-            loadForm(new RestockIngredient());
+            RestockIngredient re = new RestockIngredient();
+            DialogResult rs = re.ShowDialog(this);
+            if (rs == DialogResult.OK)
+            {
+                re.Hide();
+            }
+            //loadForm(new RestockIngredient());
         }
     }
 }
