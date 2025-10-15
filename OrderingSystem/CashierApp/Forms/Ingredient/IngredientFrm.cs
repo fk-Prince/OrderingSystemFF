@@ -8,8 +8,7 @@ namespace OrderingSystem.CashierApp.Forms
         public IngredientFrm()
         {
             InitializeComponent();
-            // FILE PATH
-            // INGREDIENT BUILDER => MODELS / INGREDIENTMODEL
+
         }
 
 
@@ -21,7 +20,7 @@ namespace OrderingSystem.CashierApp.Forms
             {
                 add.Hide();
             }
-            //loadForm(new AddIngredient());
+
         }
 
         public void showDeductIngredient()
@@ -32,7 +31,7 @@ namespace OrderingSystem.CashierApp.Forms
             {
                 ded.Hide();
             }
-            //loadForm(new DeductIngredient());
+
         }
 
         public void showRestockIngredient()
@@ -43,7 +42,7 @@ namespace OrderingSystem.CashierApp.Forms
             {
                 re.Hide();
             }
-            //loadForm(new RestockIngredient());
+
         }
     }
 }
