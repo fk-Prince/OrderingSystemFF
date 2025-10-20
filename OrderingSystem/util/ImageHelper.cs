@@ -7,7 +7,7 @@ namespace OrderingSystem
 {
     public class ImageHelper
     {
-        public static Image GetImageFromBlob(MySqlDataReader reader)
+        public static Image GetImageFromBlob(MySqlDataReader reader, string type)
         {
             try
             {
@@ -20,14 +20,32 @@ namespace OrderingSystem
                 }
                 else
                 {
-                    return Properties.Resources.placeholder;
+                    if (type == "menu")
+                    {
+                        return Properties.Resources.placeholder;
+                    }
+                    else if (type == "staff")
+                    {
+                        return Properties.Resources.staff;
+                    }
+
                 }
+                return Properties.Resources.exit;
 
 
             }
             catch (Exception)
             {
-                return Properties.Resources.placeholder;
+                if (type == "menu")
+                {
+                    return Properties.Resources.placeholder;
+                }
+                else if (type == "staff")
+                {
+                    return Properties.Resources.staff;
+
+                }
+                return Properties.Resources.exit;
             }
         }
 

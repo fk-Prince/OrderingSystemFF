@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using OrderingSystem.CashierApp.Layout;
+using OrderingSystem.Model;
 
 namespace OrderingSystem.CashierApp.Forms
 {
@@ -9,15 +11,32 @@ namespace OrderingSystem.CashierApp.Forms
         private IngredientFrm ingredientInstance;
         private MenuFrm menuIntance;
         private Guna2Button lastClicked;
-        public CashierLayout()
+        private StaffModel staff;
+        private CashierLayout instance;
+        public CashierLayout(StaffModel staff)
         {
             InitializeComponent();
-            loadForm(OrderFrm.orderFactory());
+            if (instance == null)
+                instance = this;
+            this.staff = staff;
+            loadForm(OrderFrm.OrderInstance(staff));
             lastClicked = orderButton;
+            if (staff.Role.ToLower() != "manager")
+            {
+                nm.Visible = false;
+                nb.Visible = false;
+                ri.Visible = false;
+                ai.Visible = false;
+                ri.Visible = false;
+            }
+            image.Image = staff.Image;
+            name.Text = staff.FirstName.Substring(0, 1).ToUpper() + staff.FirstName.Substring(1).ToLower() + "  " + staff.LastName.Substring(0, 1).ToUpper() + staff.LastName.Substring(1).ToLower();
+            role.Text = staff.Role.Substring(0, 1).ToUpper() + staff.Role.Substring(1);
         }
 
         public void loadForm(Form f)
         {
+
             if (mm.Tag is Form ff && ff.Name == f.Name) return;
             if (mm.Controls.Count > 0) mm.Controls.Clear();
 
@@ -29,7 +48,7 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void showSub(Panel panel)
         {
-            if (panel.Visible == false)
+            if (panel.Visible == false && staff.Role.ToLower() == "manager")
             {
                 hideSubMenu();
                 panel.Visible = true;
@@ -42,12 +61,12 @@ namespace OrderingSystem.CashierApp.Forms
 
         private void hideSubMenu()
         {
-            if (s1.Visible == true) s1.Visible = false;
-            if (s2.Visible == true) s2.Visible = false;
+            if (s1.Visible == true && staff.Role.ToLower() == "manager") s1.Visible = false;
+            if (s2.Visible == true && staff.Role.ToLower() == "manager") s2.Visible = false;
         }
         private void guna2Button14_Click(object sender, System.EventArgs e)
         {
-            loadForm(OrderFrm.orderFactory());
+            loadForm(OrderFrm.OrderInstance(staff));
             hideSubMenu();
         }
         private void showMenu(object sender, System.EventArgs e)
@@ -57,11 +76,14 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void newMenu(object sender, System.EventArgs e)
         {
+
             if (menuIntance == null) return;
             menuIntance.showNewMenu();
+
         }
         private void bundleMenu(object sender, System.EventArgs e)
         {
+
             if (menuIntance == null) return;
             menuIntance.showBundle();
         }
@@ -113,6 +135,49 @@ namespace OrderingSystem.CashierApp.Forms
             hideSubMenu();
         }
 
+        private void mm_Paint(object sender, PaintEventArgs e)
+        {
 
+        }
+
+        private void guna2Panel1_SizeChanged(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void signout_Click(object sender, System.EventArgs e)
+        {
+            Hide();
+            LoginLayout ll = new LoginLayout();
+            ll.Show();
+        }
+
+        private void su_Click(object sender, System.EventArgs e)
+        {
+
+            LoginLayout ll = new LoginLayout();
+            ll.isPopup = true;
+            DialogResult rs = ll.ShowDialog(this);
+
+            if (rs == DialogResult.OK)
+            {
+
+                if (ll.isLogin)
+                {
+                    Hide();
+                }
+                ll.Hide();
+            }
+        }
+
+        private void couponCodeButton(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }

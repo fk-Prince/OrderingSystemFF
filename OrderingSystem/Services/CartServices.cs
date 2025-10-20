@@ -27,13 +27,14 @@ namespace OrderingSystem.KioskApplication.Services
 
         public void addMenuToCart(List<MenuModel> newOrders)
         {
+
             foreach (var menu in newOrders)
             {
-                var exist = orderList.FirstOrDefault(o => o.MenuDetailId == menu.MenuDetailId && o.GetDiscountedPrice() == menu.GetDiscountedPrice() && o is MenuModel mp);
+                MenuModel mm = getOrder(menu);
 
-                if (exist != null)
+                if (mm != null)
                 {
-                    exist.PurchaseQty++;
+                    mm.PurchaseQty++;
 
                     foreach (var i in flowCart.Controls.OfType<CartCard>())
                     {
@@ -55,8 +56,9 @@ namespace OrderingSystem.KioskApplication.Services
             try
             {
                 CartCard cc = sender as CartCard;
-                var order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId);
-
+                //var order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId);
+                MenuModel order = getOrder(e);
+                //order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId && o.getPrice() == e.getPrice());
                 int b = _menuRepository.getMaxOrderRealTime(e.MenuDetailId, orderList);
                 if (b <= 0)
                 {
@@ -72,13 +74,21 @@ namespace OrderingSystem.KioskApplication.Services
                 MessageBox.Show(ex.Message);
             }
         }
-
+        public MenuModel getOrder(MenuModel e)
+        {
+            MenuModel order = null;
+            if (order is MenuPackageModel)
+                return order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId && o.getPrice() == e.getPrice() && o is MenuPackageModel);
+            else
+                return order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId && o.getPrice() == e.getPrice());
+        }
         private void deductQuantity(object sender, MenuModel e)
         {
             CartCard cc = sender as CartCard;
-            var order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId);
+            //var order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId);
+            MenuModel order = getOrder(e);
             order.PurchaseQty--;
-            if (order.PurchaseQty == 0)
+            if (order.PurchaseQty <= 0)
             {
                 orderList.Remove(order);
                 flowCart.Controls.Remove(cc);
@@ -99,7 +109,7 @@ namespace OrderingSystem.KioskApplication.Services
 
         public double calculateSubtotal()
         {
-            return orderList.Sum(e => e.GetDiscountedPrice() * e.PurchaseQty);
+            return orderList.Sum(e => e.getPrice() * e.PurchaseQty);
         }
 
         public double calculateTotalAmount()

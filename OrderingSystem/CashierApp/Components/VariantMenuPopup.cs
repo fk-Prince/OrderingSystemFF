@@ -94,13 +94,20 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         }
         private void VariantMenuPopup_Load(object sender, EventArgs e)
         {
-            MenuRepository menuRepository = new MenuRepository();
-            List<string> flavor = menuRepository.getFlavor();
-            List<string> size = menuRepository.getSize();
-            flavor.ForEach(f => cmbFlavor.Items.Add(f));
-            size.ForEach(f => cmbSize.Items.Add(f));
-            if (flavor.Count > 0) cmbFlavor.SelectedIndex = 0;
-            if (size.Count > 0) cmbSize.SelectedIndex = 0;
+            try
+            {
+                MenuRepository menuRepository = new MenuRepository();
+                List<string> flavor = menuRepository.getFlavor();
+                List<string> size = menuRepository.getSize();
+                flavor.ForEach(f => cmbFlavor.Items.Add(f));
+                size.ForEach(f => cmbSize.Items.Add(f));
+                if (flavor.Count > 0) cmbFlavor.SelectedIndex = 0;
+                if (size.Count > 0) cmbSize.SelectedIndex = 0;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Internal Server Error.");
+            }
         }
         public void displayIngredient()
         {

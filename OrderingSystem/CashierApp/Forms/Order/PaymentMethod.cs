@@ -13,12 +13,12 @@ namespace OrderingSystem.CashierApp.Forms.Order
 
         private void guna2Button1_Click(object sender, System.EventArgs e)
         {
-            PaymentMethodChanged.Invoke(this, "Cash");
+            PaymentMethodChanged?.Invoke(this, "Cash");
         }
 
         private void guna2Button3_Click(object sender, EventArgs e)
         {
-            PaymentMethodChanged.Invoke(this, "Credit-Card");
+            PaymentMethodChanged?.Invoke(this, "Credit-Card");
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

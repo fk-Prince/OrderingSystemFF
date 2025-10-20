@@ -40,9 +40,9 @@ namespace OrderingSystem.KioskApplication.Options
                     flowPanel.Controls.SetChildIndex(fot, flowPanel.Controls.Count - 1);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Internal Server Error.");
+                MessageBox.Show("Internal Server Error." + ex.Message);
             }
         }
 

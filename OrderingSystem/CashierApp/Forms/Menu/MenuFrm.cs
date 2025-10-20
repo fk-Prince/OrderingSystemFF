@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using OrderingSystem.CashierApp.Components;
 using OrderingSystem.CashierApp.Forms.Menu;
@@ -29,23 +30,36 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void displayMenu()
         {
-            flowMenu.Controls.Clear();
-            List<MenuModel> list = menuService.getMenus();
-            foreach (var i in list)
+            try
             {
 
-                MenuCard m = new MenuCard(i);
-                m.Margin = new Padding(10, 10, 10, 10);
-                m.Tag = i;
-                flowMenu.Controls.Add(m);
-                hover(m, i);
+
+                flowMenu.Controls.Clear();
+                List<MenuModel> list = menuService.getMenus();
+                foreach (var i in list)
+                {
+
+                    MenuCard m = new MenuCard(i);
+                    m.Margin = new Padding(10, 10, 10, 10);
+                    m.Tag = i;
+                    flowMenu.Controls.Add(m);
+                    hover(m, i);
+                }
+            }
+            catch (NotSupportedException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Internal Server Error.");
             }
         }
         private void hover(Control c, MenuModel i)
         {
             c.Click += (s, e) =>
             {
-                MenuInformation mi = new MenuInformation(i, menuRepository, categoryRepository, ingredientRepository);
+                MenuInformation mi = new MenuInformation(i, menuService, categoryRepository, ingredientRepository);
                 mi.menuUpdated += (ss, ee) => displayMenu();
                 DialogResult rs = mi.ShowDialog(this);
                 if (rs == DialogResult.OK)
@@ -61,7 +75,7 @@ namespace OrderingSystem.CashierApp.Forms
         }
         public void showBundle()
         {
-            MenuBundleFrm f = new MenuBundleFrm();
+            MenuBundleFrm f = new MenuBundleFrm(menuService);
             DialogResult rs = f.ShowDialog(this);
             if (rs == DialogResult.OK)
             {

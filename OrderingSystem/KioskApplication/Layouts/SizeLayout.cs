@@ -49,29 +49,29 @@ namespace OrderingSystem.KioskApplication.Components
                     else
                     {
 
-                        p = m.GetDiscountedPrice() - menuDetails[0].GetDiscountedPrice();
+                        p = m.getPrice() - menuDetails[0].getPrice();
                         priceText = p.ToString("N2");
                         if (isFirst)
                         {
-                            displayPrice = isFirst && m.GetDiscountedPrice() <= menuDetails[0].GetDiscountedPrice() ? "Free" : priceText;
+                            displayPrice = isFirst && m.getPrice() <= menuDetails[0].getPrice() ? "Free" : priceText;
                         }
                         else
                         {
-                            displayPrice = !isFirst && m.GetDiscountedPrice() <= menuDetails[0].GetDiscountedPrice() ? "Free" : priceText;
+                            displayPrice = !isFirst && m.getPrice() <= menuDetails[0].getPrice() ? "Free" : priceText;
                         }
                     }
                 }
                 else
                 {
-                    p = m.GetDiscountedPrice() - menuDetails[0].GetDiscountedPrice();
+                    p = m.getPrice() - menuDetails[0].getPrice();
                     priceText = p.ToString("N2");
                     if (isFirst)
                     {
-                        displayPrice = isFirst && m.GetDiscountedPrice() <= menuDetails[0].GetDiscountedPrice() ? "Free" : priceText;
+                        displayPrice = isFirst && m.getPrice() <= menuDetails[0].getPrice() ? "Free" : priceText;
                     }
                     else
                     {
-                        displayPrice = !isFirst && m.GetDiscountedPrice() <= menuDetails[0].GetDiscountedPrice() ? "Free" : priceText;
+                        displayPrice = !isFirst && m.getPrice() <= menuDetails[0].getPrice() ? "Free" : priceText;
                     }
                 }
                 MyRadioButton rs = new MyRadioButton(m.SizeName, displayPrice, m);

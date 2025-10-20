@@ -44,7 +44,7 @@ namespace OrderingSystem.KioskApplication.Components
         {
             menuName.Text = menu.MenuName;
             detail.Text = menu.SizeName;
-            price.Text = "₱       + " + menu.GetDiscountedPrice().ToString("N2");
+            price.Text = "₱       + " + menu.getPrice().ToString("N2");
             image.Image = menu.MenuImage;
         }
 

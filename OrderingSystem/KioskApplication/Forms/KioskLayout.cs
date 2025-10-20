@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using OrderingSystem.KioskApplication;
@@ -8,6 +9,7 @@ using OrderingSystem.KioskApplication.Cards;
 using OrderingSystem.KioskApplication.Component;
 using OrderingSystem.KioskApplication.Services;
 using OrderingSystem.Model;
+using OrderingSystem.Receipt;
 using OrderingSystem.Repository;
 using OrderingSystem.Repository.CategoryRepository;
 using OrderingSystem.Repository.Coupon;
@@ -21,85 +23,84 @@ namespace OrderingSystem
         private Dictionary<int, FlowLayoutPanel> _categoryPanels;
         private Dictionary<int, Guna2Panel> _categoryCons;
         private List<MenuModel> _orderList;
+        private List<Guna2Button> buttonListTop;
+        private List<Guna2Button> buttonListSide;
         private List<MenuModel> _allMenus;
-        private Guna2Button lastActiveButton;
+        private Guna2Button lastActiveButtonSide;
         private bool isFilter = false;
         private CartServices cartServices;
         private CouponModel couponSelected;
+        private Guna2Button lastClickedTop;
 
-        // CART PROPERTIES
+
         private bool isShowing = true;
         private int x = 0;
+        private int x1 = 20;
         private int basedx = 0;
 
         public KioskLayout()
         {
             InitializeComponent();
             _orderList = new List<MenuModel>();
+            buttonListTop = new List<Guna2Button>();
+            buttonListSide = new List<Guna2Button>();
             _categoryPanels = new Dictionary<int, FlowLayoutPanel>();
             _categoryCons = new Dictionary<int, Guna2Panel>();
+            cc.Start();
+            dt.Start();
+            flowMenu.MouseWheel += FlowMenu_MouseWheel;
         }
 
-        private void KioskLayout_Load(object sender, EventArgs e)
+
+        private void lastButton(Guna2Button b)
         {
-            _menuRepository = new KioskMenuRepository(_orderList);
-            ICategoryRepository categoryRepository = new CategoryRepository();
 
-            List<CategoryModel> cats = categoryRepository.getCategories();
-            displayCategory(cats);
-
-            _allMenus = _menuRepository.getMenu();
-            displayMenu(_allMenus);
-
-            cartServices = new CartServices(_menuRepository, flowCart, _orderList);
-            cartServices.quantityChanged += (s, b) => displayTotal(this, EventArgs.Empty);
-        }
-        private void displayCategory(List<CategoryModel> cats)
-        {
-            foreach (CategoryModel c in cats)
+            foreach (var c in buttonListSide)
             {
-                Guna2Panel p = new Guna2Panel();
-                p.Width = flowMenu.Width - 40;
-                //p.Padding = new Padding(20, 0, 20, 0);
-                p.Margin = new Padding(20, 20, 20, 20);
-                p.MaximumSize = new Size(flowMenu.Width - 40, 10000);
-                p.AutoSize = true;
-                p.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-
-                Title title = new Title(c.CategoryName);
-                title.BackColor = Color.Transparent;
-
-                p.Controls.Add(title);
-
-                FlowLayoutPanel flowCat = new FlowLayoutPanel();
-                flowCat.MaximumSize = new Size(flowMenu.Width - 40, 10000);
-                flowCat.AutoSize = true;
-                flowCat.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                p.Controls.Add(flowCat);
-                flowMenu.Controls.Add(p);
-
-                _categoryPanels.Add(c.CategoryId, flowCat);
-                _categoryCons.Add(c.CategoryId, p);
-
-                Guna2Button b = new Guna2Button();
-                b.Text = c.CategoryName;
-                b.Size = new Size(230, 45);
-                b.Tag = c.CategoryId;
-                b.Click += catClicked;
-                b.Margin = new Padding(0);
-                b.TextOffset = new Point(20, 0);
-                b.TextAlign = HorizontalAlignment.Left;
-                b.FillColor = Color.Transparent;
-                catFlow.Controls.Add(b);
+                if ((int)c.Tag == (int)b.Tag)
+                {
+                    c.FillColor = Color.White;
+                    c.BackColor = Color.Transparent;
+                    c.CustomizableEdges.TopRight = false;
+                    c.CustomizableEdges.BottomRight = false;
+                    c.AutoRoundedCorners = true;
+                    c.ForeColor = Color.FromArgb(34, 34, 34);
+                    lastActiveButtonSide.FillColor = Color.FromArgb(9, 119, 206);
+                    lastActiveButtonSide.ForeColor = Color.White;
+                    lastActiveButtonSide = c;
+                    break;
+                }
             }
-
-            if (catFlow.Controls.Count > 0)
+            foreach (var c in buttonListTop)
             {
-                lastActiveButton = (Guna2Button)catFlow.Controls[0];
-                lastActiveButton.Paint += bottomBorder;
+                if ((int)c.Tag == (int)b.Tag)
+                {
+                    c.BackColor = Color.Transparent;
+                    c.ForeColor = Color.White;
+                    c.FillColor = ColorTranslator.FromHtml("#689FF9");
+                    lastClickedTop.FillColor = ColorTranslator.FromHtml("#DBEAFE");
+                    lastClickedTop.ForeColor = Color.FromArgb(34, 34, 34);
+                    lastClickedTop = c;
+                    break;
+                }
             }
         }
-        private void catClicked(object sender, EventArgs e)
+        private void catClickedTop(object sender, EventArgs e)
+        {
+            Guna2Button b = sender as Guna2Button;
+            int catId = (int)b.Tag;
+
+            if (_categoryPanels.ContainsKey(catId))
+            {
+                FlowLayoutPanel p = _categoryPanels[catId];
+                flowMenu.ScrollControlIntoView(p);
+            }
+            if (lastClickedTop != null && lastClickedTop != b)
+            {
+                lastButton(b);
+            }
+        }
+        private void catClickedSide(object sender, EventArgs e)
         {
             Guna2Button b = (Guna2Button)sender;
             int catId = (int)b.Tag;
@@ -110,25 +111,12 @@ namespace OrderingSystem
                 flowMenu.ScrollControlIntoView(p);
             }
 
-            if (lastActiveButton != null && b != lastActiveButton)
+            if (lastActiveButtonSide != null && b != lastActiveButtonSide)
             {
-                lastActiveButton.Paint -= bottomBorder;
-                lastActiveButton.Invalidate();
-            }
-
-            lastActiveButton = b;
-            b.Paint -= bottomBorder;
-            b.Paint += bottomBorder;
-        }
-        private void bottomBorder(object sender, PaintEventArgs e)
-        {
-            Control btn = (sender) as Control;
-            using (Pen p = new Pen(Color.FromArgb(255, 255, 255), 2))
-            {
-                e.Graphics.DrawLine(p, 0, btn.Height - 2, btn.Width, btn.Height - 2);
+                lastButton(b);
             }
         }
-        private void displayMenu(List<MenuModel> menusToDisplay)
+        private void displayMenu(List<MenuModel> mm)
         {
             foreach (var p in _categoryPanels.Values)
                 p.Controls.Clear();
@@ -148,7 +136,7 @@ namespace OrderingSystem
                 flatPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                 flatPanel.Margin = new Padding(10);
 
-                foreach (MenuModel menu in menusToDisplay)
+                foreach (MenuModel menu in mm)
                 {
                     card = new MenuCard(_menuRepository, menu);
                     card.Margin = new Padding(20, 20, 20, 0);
@@ -179,7 +167,7 @@ namespace OrderingSystem
                     }
                 }
 
-                foreach (MenuModel menu in menusToDisplay)
+                foreach (MenuModel menu in mm)
                 {
                     if (_categoryPanels.ContainsKey(menu.CategoryId))
                     {
@@ -202,6 +190,77 @@ namespace OrderingSystem
                 }
             }
 
+
+
+        }
+        private void displayCategory(List<CategoryModel> cats)
+        {
+
+            foreach (CategoryModel c in cats)
+            {
+                Guna2Panel p = new Guna2Panel();
+                p.Width = flowMenu.Width - 40;
+                //p.Padding = new Padding(20, 0, 20, 0);
+                p.Margin = new Padding(20, 20, 20, 20);
+                p.MaximumSize = new Size(flowMenu.Width - 40, 10000);
+                p.AutoSize = true;
+                p.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+
+                Title title = new Title(c.CategoryName);
+                title.BackColor = Color.Transparent;
+
+                p.Controls.Add(title);
+
+                FlowLayoutPanel flowCat = new FlowLayoutPanel();
+                flowCat.MaximumSize = new Size(flowMenu.Width - 40, 10000);
+                flowCat.AutoSize = true;
+                flowCat.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                p.Controls.Add(flowCat);
+                flowMenu.Controls.Add(p);
+
+                _categoryPanels.Add(c.CategoryId, flowCat);
+                _categoryCons.Add(c.CategoryId, p);
+
+                Guna2Button b = new Guna2Button();
+                b.Text = c.CategoryName;
+                b.Size = new Size(230, 45);
+                b.Tag = c.CategoryId;
+                b.Click += catClickedSide;
+                b.Margin = new Padding(0);
+                b.TextOffset = new Point(20, 0);
+                b.TextAlign = HorizontalAlignment.Left;
+                b.FillColor = Color.Transparent;
+                catFlow.Controls.Add(b);
+                buttonListSide.Add(b);
+
+                Guna2Button b1 = new Guna2Button();
+                b1.Text = c.CategoryName;
+                b1.Size = new Size(200, 35);
+                b1.Tag = c.CategoryId;
+                b1.Margin = new Padding(0);
+                b1.Location = new Point(x1, 90);
+                b1.AutoRoundedCorners = true;
+                b1.FillColor = ColorTranslator.FromHtml("#DBEAFE");
+                b1.Click += catClickedTop;
+                b1.BackColor = Color.Transparent;
+                b1.ForeColor = Color.FromArgb(34, 34, 34);
+                x1 += b1.Size.Width + 5;
+                xxx.Controls.Add(b1);
+                buttonListTop.Add(b1);
+            }
+            if (catFlow.Controls.Count > 0)
+            {
+                lastActiveButtonSide = (Guna2Button)catFlow.Controls[0];
+                lastClickedTop = buttonListTop[0];
+                lastClickedTop.FillColor = ColorTranslator.FromHtml("#689FF9");
+                lastClickedTop.ForeColor = Color.White;
+                lastActiveButtonSide.FillColor = Color.White;
+                lastActiveButtonSide.BackColor = Color.Transparent;
+                lastActiveButtonSide.CustomizableEdges.TopRight = false;
+                lastActiveButtonSide.CustomizableEdges.BottomRight = false;
+                lastActiveButtonSide.AutoRoundedCorners = true;
+                lastActiveButtonSide.ForeColor = Color.FromArgb(34, 34, 34);
+            }
         }
         private void displayTotal(object sender, EventArgs e)
         {
@@ -235,14 +294,31 @@ namespace OrderingSystem
                 MessageBox.Show("No items in the cart.");
                 return;
             }
-            IOrderRepository orderRepository = new OrderRepository();
-            OrderServices orderServices = new OrderServices(orderRepository);
-            orderServices.confirmOrder(
-                            OrderModel.Builder()
-                            .SetOrderList(_orderList)
-                            .SetCoupon(couponSelected)
-                            .Build()
-                           );
+            try
+            {
+                IOrderRepository orderRepository = new OrderRepository();
+                OrderServices orderServices = new OrderServices(orderRepository);
+                string orderId = orderServices.getNewOrderId();
+                OrderModel om = OrderModel.Builder()
+                                .SetOrderId(orderId)
+                                .SetOrderList(_orderList)
+                                .SetCoupon(couponSelected)
+                                .Build();
+                bool suc = orderServices.confirmOrder(om);
+                if (suc)
+                {
+                    OrderReceipt or = new OrderReceipt(om);
+                    or.Message("Proceed to the cashier \n    Within 30minutes");
+                    or.d();
+                    _orderList.Clear();
+                    flowCart.Controls.Clear();
+                    displayTotal(this, EventArgs.Empty);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Internal Server Error.");
+            }
 
         }
         private void t_Tick(object sender, EventArgs e)
@@ -276,6 +352,26 @@ namespace OrderingSystem
             x = cartPanel.Location.X;
             basedx = x;
         }
+        private void KioskLayout_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                _menuRepository = new KioskMenuRepository(_orderList);
+                ICategoryRepository categoryRepository = new CategoryRepository();
+
+                List<CategoryModel> cats = categoryRepository.getCategories();
+                displayCategory(cats);
+                _allMenus = _menuRepository.getMenu();
+                displayMenu(_allMenus);
+
+                cartServices = new CartServices(_menuRepository, flowCart, _orderList);
+                cartServices.quantityChanged += (s, b) => displayTotal(this, EventArgs.Empty);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Internal Server Error");
+            }
+        }
         private void triggerCart(object sender, EventArgs e)
         {
             t.Stop();
@@ -284,7 +380,7 @@ namespace OrderingSystem
         private void debouncing_Tick(object sender, EventArgs e)
         {
             debouncing.Stop();
-            string t = guna2TextBox1.Text.Trim().ToLower();
+            string t = txt.Text.Trim().ToLower();
 
             if (string.IsNullOrEmpty(t))
             {
@@ -308,6 +404,85 @@ namespace OrderingSystem
             );
 
             displayMenu(filter);
+        }
+        private void flowMenuScroll()
+        {
+            Control onScren = null;
+            int top = int.MaxValue;
+
+            bool isBottom = flowMenu.VerticalScroll.Value + flowMenu.ClientSize.Height >= flowMenu.VerticalScroll.Maximum;
+
+            if (isBottom)
+            {
+                top = int.MinValue;
+                foreach (var v in _categoryPanels)
+                {
+                    var panel = v.Value;
+                    Rectangle scren = panel.RectangleToScreen(panel.ClientRectangle);
+                    Rectangle panelRect = flowMenu.RectangleToClient(scren);
+                    bool isVisible = panelRect.Bottom > 0 && panelRect.Top < flowMenu.ClientSize.Height;
+
+                    if (isVisible && panelRect.Top > top)
+                    {
+                        top = panelRect.Top;
+                        onScren = panel;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var kvp in _categoryPanels)
+                {
+                    var panel = kvp.Value;
+
+                    Rectangle screenRect = panel.RectangleToScreen(panel.ClientRectangle);
+                    //Rectangle scren = panel.RectangleToScreen(screenRect.ClientRectangle);
+                    Rectangle panelRect = flowMenu.RectangleToClient(screenRect);
+
+                    bool isVisible = panelRect.Bottom > 0 && panelRect.Top < flowMenu.ClientSize.Height;
+
+                    if (isVisible && panelRect.Top < top)
+                    {
+                        top = panelRect.Top;
+                        onScren = panel;
+                    }
+                }
+            }
+            if (onScren != null)
+            {
+                int categoryId = _categoryPanels.FirstOrDefault(v => v.Value == onScren).Key;
+                var b = buttonListSide.FirstOrDefault(b2 => (int)b2.Tag == categoryId);
+
+                if (b != null && b != lastActiveButtonSide) lastButton(b);
+            }
+        }
+        private void FlowMenu_MouseWheel(object sender, MouseEventArgs e)
+        {
+            flowMenuScroll();
+        }
+        private void cc_Tick(object sender, EventArgs e)
+        {
+            foreach (var btn in buttonListTop)
+            {
+                int x2 = btn.Location.X - 2;
+                if (x2 + btn.Width < 0)
+                {
+                    int x3 = buttonListTop.Max(b => b.Location.X + b.Width);
+                    x2 = x3 + 10;
+                }
+                btn.Location = new Point(x2, btn.Location.Y);
+            }
+
+        }
+        private void flowMenu_Scroll(object sender, ScrollEventArgs e)
+        {
+            flowMenuScroll();
+        }
+        private void dt_Tick(object sender, EventArgs e)
+        {
+            time.Text = DateTime.Now.ToString("hh:mm:ss tt");
+            date.Text = DateTime.Now.ToString("yyyy, MMMM dd");
+            week.Text = DateTime.Now.DayOfWeek.ToString();
         }
     }
 }

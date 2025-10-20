@@ -8,5 +8,10 @@ namespace OrderingSystem.CashierApp.Forms
         {
             InitializeComponent();
         }
+
+        private void guna2Button2_Click(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }

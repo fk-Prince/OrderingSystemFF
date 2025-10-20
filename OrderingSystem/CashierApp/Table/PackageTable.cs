@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OrderingSystem.Model;
-using OrderingSystem.Repo.CashierMenuRepository;
 
 namespace OrderingSystem.CashierApp.Table
 {
@@ -12,8 +11,6 @@ namespace OrderingSystem.CashierApp.Table
         private DataTable table;
         private List<MenuModel> included;
         private List<MenuModel> menuS;
-        private readonly IMenuRepository menuRepository;
-        private readonly MenuModel menu;
 
         public List<MenuModel> getMenus()
         {
@@ -52,10 +49,9 @@ namespace OrderingSystem.CashierApp.Table
 
             return menuS;
         }
-        public PackageTable(List<MenuModel> included, IMenuRepository menuRepository)
+        public PackageTable(List<MenuModel> included)
         {
             InitializeComponent();
-            this.menuRepository = menuRepository;
             this.included = included;
             displayPackage();
         }

@@ -35,10 +35,9 @@ namespace OrderingSystem.Repository
                                 .WithMenuDescription(reader.GetString("menu_description"))
                                 .WithMenuDetailId(reader.GetInt32("menu_detail_id"))
                                 .WithPrice(reader.GetDouble("min_price"))
+                                .WithEstimatedTime(reader.GetTimeSpan("estimated_time"))
                                 .WithCategoryId(reader.GetInt32("category_id"))
-                                .WithDiscountId(reader.GetInt32("discount_id"))
-                                .WithDiscountMenuRate(reader.GetDouble("discount_rate"))
-                                .WithMenuImage(ImageHelper.GetImageFromBlob(reader))
+                                .WithMenuImage(ImageHelper.GetImageFromBlob(reader, "menu"))
                                 .Build();
                             list.Add(menu);
                         }
@@ -47,7 +46,8 @@ namespace OrderingSystem.Repository
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error ehere" + ex.Message);
+                Console.WriteLine(ex.Message + "KioskMenuRepository getMenu");
+                throw;
             }
             finally
             {
@@ -71,12 +71,8 @@ namespace OrderingSystem.Repository
                                       md.price,
                                       f.flavor_name,
                                       s.size_name,
-                                      COALESCE(d.rate,0) discount_rate,
-                                      COALESCE(d.discount_id,0) discount_id,
                                       md.estimated_time
                                   FROM menu m
-                                  LEFT JOIN menu_discount mdc ON m.menu_id = mdc.menu_id
-                                  LEFT JOIN discount d ON d.discount_id = mdc.discount_id AND d.until_date > NOW()
                                   LEFT JOIN category c ON m.category_id = c.category_id
                                   LEFT JOIN menu_detail md ON m.menu_id = md.menu_id
                                   LEFT JOIN flavor f ON f.flavor_id = md.flavor_id
@@ -99,11 +95,9 @@ namespace OrderingSystem.Repository
                                 .WithMenuDetailId(reader.GetInt32("menu_detail_id"))
                                 .WithPrice(reader.GetDouble("price"))
                                 .WithMenuName(reader.GetString("menu_name"))
-                                .WithMenuImage(ImageHelper.GetImageFromBlob(reader))
-                                .WithDiscountMenuRate(reader.GetDouble("discount_rate"))
+                                .WithMenuImage(ImageHelper.GetImageFromBlob(reader, "menu"))
                                 .WithEstimatedTime(reader.GetTimeSpan("estimated_time"))
                                 .WithMaxOrder(maxOrder)
-                                .WithDiscountId(reader.GetInt32("discount_id"))
                                 .WithFlavorName(reader.GetString("flavor_name"))
                                 .WithSizeName(reader.GetString("size_name"))
                                 .Build());
@@ -113,7 +107,7 @@ namespace OrderingSystem.Repository
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + " xdxd");
+
                 Console.WriteLine("error on getMenuDetailFlavor");
                 throw;
             }
@@ -148,7 +142,7 @@ namespace OrderingSystem.Repository
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show(ex.Message + "123");
+
                 Console.WriteLine("error on getMaxOrderRealTime");
                 throw;
             }
@@ -210,16 +204,14 @@ namespace OrderingSystem.Repository
                     {
                         while (reader.Read())
                         {
-                            int discount_id = reader.GetOrdinal("discount_id");
+
                             var menu = MenuModel.Builder()
                                 .WithMenuId(reader.GetInt32("menu_id"))
                                 .WithMenuName(reader.GetString("menu_name"))
                                 .WithMenuDescription(reader.GetString("menu_description"))
                                 .WithMenuDetailId(reader.GetInt32("menu_detail_id"))
                                 .WithPrice(reader.GetDouble("price"))
-                                .WithDiscountId(reader.IsDBNull(discount_id) ? 0 : reader.GetInt32(discount_id))
-                                .WithDiscountMenuRate(reader.GetDouble("discount_rate"))
-                                .WithMenuImage(ImageHelper.GetImageFromBlob(reader))
+                                .WithMenuImage(ImageHelper.GetImageFromBlob(reader, "menu"))
                                 .Build();
                             list.Add(menu);
                         }
@@ -228,7 +220,8 @@ namespace OrderingSystem.Repository
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error ehere" + ex.Message);
+                Console.WriteLine(ex.Message + "KioskMenuRepository getFrequentlyOrderedTogether");
+                throw;
             }
             finally
             {
@@ -270,15 +263,11 @@ namespace OrderingSystem.Repository
                                 f.flavor_name,
                                 s.size_name,
                                 md.price,
-                                COALESCE(d.rate, 0) discount_rate,
-                                COALESCE(d.discount_id, 0) discount_id,
                                 pi.quantity,
                                 pi.package_type
                             FROM package_items pi
                             JOIN menu_detail md ON pi.included_menu_detail_id = md.menu_detail_id
                             LEFT JOIN menu m ON md.menu_id = m.menu_id
-                            LEFT JOIN menu_discount mdc ON md.menu_id = mdc.menu_id
-                            LEFT JOIN discount d ON d.discount_id = mdc.discount_id
                             LEFT JOIN flavor f ON f.flavor_id = md.flavor_id
                             LEFT JOIN size s ON s.size_id = md.size_id
                             ORDER BY
@@ -303,9 +292,7 @@ namespace OrderingSystem.Repository
                                .WithPrice(reader.GetDouble("price"))
                                .WithSizeName(reader.GetString("size_name"))
                                .WithFlavorName(reader.GetString("flavor_name"))
-                               .WithDiscountId(reader.GetInt32("discount_id"))
-                               .WithDiscountMenuRate(reader.GetDouble("discount_rate"))
-                               .WithMenuImage(ImageHelper.GetImageFromBlob(reader))
+                               .WithMenuImage(ImageHelper.GetImageFromBlob(reader, "menu"))
                                .Build();
                             list.Add(x);
                         }
@@ -337,19 +324,14 @@ namespace OrderingSystem.Repository
                                 md.price,
                                 f.flavor_name,
                                 s.size_name,
-                                COALESCE(d.discount_id, 0) AS discount_id,
-                                COALESCE(d.rate, 0) AS discount_rate,
                                 COALESCE(mp.package_type, 'Not-Fixed') AS package_type
                             FROM menu m
-                            LEFT JOIN menu_discount mdc ON m.menu_id = mdc.menu_id
-                            LEFT JOIN discount d ON d.discount_id = mdc.discount_id
-                            LEFT JOIN category c ON m.category_id = c.category_id
+                         
                             LEFT JOIN menu_detail md ON m.menu_id = md.menu_id
                             LEFT JOIN flavor f ON f.flavor_id = md.flavor_id
                             LEFT JOIN size s ON s.size_id = md.size_id
                             LEFT JOIN (SELECT from_menu_detail_id, package_type FROM menu_package) mp ON mp.from_menu_detail_id = md.menu_detail_id
-                            WHERE m.isAvailable = 'Yes' 
-                              AND m.menu_id = @menu_id
+                            WHERE m.menu_id = @menu_id
                              AND (
                                   mp.package_type IS NULL  
                                   OR
@@ -366,7 +348,6 @@ namespace OrderingSystem.Repository
 
                     cmd.Parameters.AddWithValue("@menu_id", menu.MenuId);
                     cmd.Parameters.AddWithValue("@id", menu.MenuDetailId);
-                    //cmd.Parameters.AddWithValue("@flavor_name", md.FlavorName);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -376,8 +357,6 @@ namespace OrderingSystem.Repository
                                .WithMenuId(reader.GetInt32("menu_id"))
                                .WithMenuDetailId(reader.GetInt32("menu_detail_id"))
                                .WithPrice(reader.GetDouble("price"))
-                               .WithDiscountMenuRate(reader.GetDouble("discount_rate"))
-                               .WithDiscountId(reader.GetInt32("discount_id"))
                                .isFixed(reader.GetString("package_type") == "Fixed" ? true : false)
                                .WithMaxOrder(maxOrder)
                                .WithFlavorName(reader.GetString("flavor_name"))
@@ -401,76 +380,74 @@ namespace OrderingSystem.Repository
         }
         public MenuModel getSelectedMenu(int menu_id, string flavorName, string sizeName)
         {
-            var db = DatabaseHandler.getInstance();
-            try
-            {
-                string query = @"
-                                 SELECT
-                                        md.menu_detail_id,
-                                        md.price,
-                                        f.flavor_name,
-                                        s.size_name,
-                                        md.estimated_time,
-                                        m.*,
-                                        d.discount_id,
-                                        COALESCE(d.rate,0) discount_rate 
-                                 FROM menu_detail md
-                                 INNER JOIN menu m ON m.menu_id = md.menu_id
-                                 LEFT JOIN menu_discount mdc ON mdc.menu_id = m.menu_id
-                                 LEFT JOIN discount d ON d.discount_id = mdc.discount_id
-                                 LEFT JOIN flavor f ON f.flavor_id = md.flavor_id
-                                 LEFT JOIN size s ON s.size_id = md.size_id
-                                 WHERE md.menu_id = @menu_id";
+            //var db = DatabaseHandler.getInstance();
+            //try
+            //{
+            //    string query = @"
+            //                     SELECT
+            //                            md.menu_detail_id,
+            //                            md.price,
+            //                            f.flavor_name,
+            //                            s.size_name,
+            //                            md.estimated_time,
+            //                            m.*,
+            //                            d.discount_id,
+            //                            COALESCE(d.rate,0) discount_rate 
+            //                     FROM menu_detail md
+            //                     INNER JOIN menu m ON m.menu_id = md.menu_id
+            //                     LEFT JOIN menu_discount mdc ON mdc.menu_id = m.menu_id
+            //                     LEFT JOIN discount d ON d.discount_id = mdc.discount_id
+            //                     LEFT JOIN flavor f ON f.flavor_id = md.flavor_id
+            //                     LEFT JOIN size s ON s.size_id = md.size_id
+            //                     WHERE md.menu_id = @menu_id";
 
-                if (!string.IsNullOrWhiteSpace(flavorName))
-                    query += " AND LOWER(f.flavor_name) = LOWER(@flavor_name)";
+            //    if (!string.IsNullOrWhiteSpace(flavorName))
+            //        query += " AND LOWER(f.flavor_name) = LOWER(@flavor_name)";
 
 
-                if (!string.IsNullOrWhiteSpace(sizeName))
-                    query += " AND LOWER(s.size_name) = LOWER(@size_name)";
+            //    if (!string.IsNullOrWhiteSpace(sizeName))
+            //        query += " AND LOWER(s.size_name) = LOWER(@size_name)";
 
-                query += " ORDER BY md.menu_detail_id LIMIT 1";
+            //    query += " ORDER BY md.menu_detail_id LIMIT 1";
 
-                var conn = db.getConnection();
+            //    var conn = db.getConnection();
 
-                using (var cmd = new MySqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@menu_id", menu_id);
-                    if (!string.IsNullOrWhiteSpace(flavorName))
-                        cmd.Parameters.AddWithValue("@flavor_name", flavorName);
+            //    using (var cmd = new MySqlCommand(query, conn))
+            //    {
+            //        cmd.Parameters.AddWithValue("@menu_id", menu_id);
+            //        if (!string.IsNullOrWhiteSpace(flavorName))
+            //            cmd.Parameters.AddWithValue("@flavor_name", flavorName);
 
-                    if (!string.IsNullOrWhiteSpace(sizeName))
-                        cmd.Parameters.AddWithValue("@size_name", sizeName);
+            //        if (!string.IsNullOrWhiteSpace(sizeName))
+            //            cmd.Parameters.AddWithValue("@size_name", sizeName);
 
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            int discountId = reader.IsDBNull(reader.GetOrdinal("discount_id")) ? 0 : reader.GetInt32(reader.GetOrdinal("discount_id"));
-                            return MenuModel.Builder()
-                                .WithMenuId(reader.GetInt32("menu_id"))
-                                .WithMenuDescription(reader.GetString("menu_description"))
-                                .WithMenuName(reader.GetString("menu_name"))
-                                .WithPrice(reader.GetDouble("price"))
-                                .WithFlavorName(reader.GetString("flavor_name"))
-                                .WithSizeName(reader.GetString("size_name"))
-                                .WithMenuDetailId(reader.GetInt32("menu_detail_id"))
-                                .WithDiscountMenuRate(reader.GetDouble("discount_rate"))
-                                .WithDiscountId(discountId)
-                                .Build();
-                        }
-                    }
-                }
-            }
-            catch (MySqlException)
-            {
-                Console.WriteLine("error on getSelectedMenu");
-                throw;
-            }
-            finally
-            {
-                db.closeConnection();
-            }
+            //        using (var reader = cmd.ExecuteReader())
+            //        {
+            //            while (reader.Read())
+            //            {
+            //                int discountId = reader.IsDBNull(reader.GetOrdinal("discount_id")) ? 0 : reader.GetInt32(reader.GetOrdinal("discount_id"));
+            //                return MenuModel.Builder()
+            //                    .WithMenuId(reader.GetInt32("menu_id"))
+            //                    .WithMenuDescription(reader.GetString("menu_description"))
+            //                    .WithMenuName(reader.GetString("menu_name"))
+            //                    .WithPrice(reader.GetDouble("price"))
+            //                    .WithFlavorName(reader.GetString("flavor_name"))
+            //                    .WithSizeName(reader.GetString("size_name"))
+            //                    .WithMenuDetailId(reader.GetInt32("menu_detail_id"))
+            //                    .Build();
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (MySqlException)
+            //{
+            //    Console.WriteLine("error on getSelectedMenu");
+            //    throw;
+            //}
+            //finally
+            //{
+            //    db.closeConnection();
+            //}
 
             return null;
         }
@@ -487,7 +464,6 @@ namespace OrderingSystem.Repository
                     cmd.CommandType = CommandType.StoredProcedure;
                     string json = JsonConvert.SerializeObject(selectedMenus);
                     Console.WriteLine(json);
-                    MessageBox.Show(menuid.ToString());
                     cmd.Parameters.AddWithValue("@p_package_id", menuid);
                     cmd.Parameters.AddWithValue("@p_included", json);
 

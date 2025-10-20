@@ -15,6 +15,7 @@ namespace OrderingSystem.Model
         {
 
             MenuPackageBuilder WithMenuImageByte(byte[] image);
+            MenuPackageBuilder isAvailable(bool x);
             MenuPackageBuilder WithEstimatedTime(TimeSpan ts);
             MenuPackageBuilder WithQuantity(int ts);
             MenuPackageBuilder WithPackageId(int ts);
@@ -22,14 +23,11 @@ namespace OrderingSystem.Model
             MenuPackageBuilder WithCategory(CategoryModel cat);
             MenuPackageBuilder WithCategoryId(int cat);
             MenuPackageBuilder WithMenuImage(Image image);
-            MenuPackageBuilder WithDiscount(DiscountModel discount);
-            MenuPackageBuilder WithDiscountMenuRate(double rate);
             MenuPackageBuilder WithMenuId(int menuId);
             MenuPackageBuilder WithMaxOrder(int menuId);
             MenuPackageBuilder WithMenuName(string menuName);
             MenuPackageBuilder WithFlavorName(string menuName);
             MenuPackageBuilder WithSizeName(string menuName);
-            MenuPackageBuilder WithDiscountId(int menuId);
             MenuPackageBuilder WithMenuDescription(string menuDescription);
             MenuPackageBuilder WithMenuDetailId(int lowestMenuDetailId);
             MenuPackageBuilder WithPrice(double lowestMenuPrice);
@@ -74,11 +72,6 @@ namespace OrderingSystem.Model
                 return _menuModel;
             }
 
-            public MenuPackageBuilder WithDiscount(DiscountModel discount)
-            {
-                _menuModel.Discount = discount;
-                return this;
-            }
 
             public MenuPackageBuilder WithCategory(CategoryModel category)
             {
@@ -92,11 +85,6 @@ namespace OrderingSystem.Model
                 return this;
             }
 
-            public MenuPackageBuilder WithDiscountMenuRate(double rate)
-            {
-                _menuModel.DiscountMenuRate = rate;
-                return this;
-            }
 
             public MenuPackageBuilder WithMenuImage(Image image)
             {
@@ -128,11 +116,6 @@ namespace OrderingSystem.Model
                 return this;
             }
 
-            public MenuPackageBuilder WithDiscountId(int id)
-            {
-                _menuModel.Discountid = id;
-                return this;
-            }
 
             public MenuPackageBuilder isFixed(bool b)
             {
@@ -175,6 +158,12 @@ namespace OrderingSystem.Model
             public MenuPackageBuilder WithPackageId(int ts)
             {
                 _menuModel.PackageId = ts;
+                return this;
+            }
+
+            public MenuPackageBuilder isAvailable(bool ts)
+            {
+                _menuModel.isAvailable = ts;
                 return this;
             }
         }

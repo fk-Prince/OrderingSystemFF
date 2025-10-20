@@ -11,9 +11,10 @@ namespace OrderingSystem.KioskApplication.Component
             InitializeComponent();
             tt.Text = title;
             AutoRoundedCorners = true;
-            BorderColor = Color.DarkGray;
+            //BorderColor = ColorTranslator.FromHtml("#EFF6FF");
+            BorderColor = Color.FromArgb(9, 119, 206);
             BackColor = Color.Transparent;
-            FillColor = Color.DarkGray;
+            FillColor = ColorTranslator.FromHtml("#689FF9");
 
             BorderThickness = 1;
         }

@@ -2,89 +2,102 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using MySqlConnector;
 using OrderingSystem.CashierApp.Components;
 using OrderingSystem.Model;
 using OrderingSystem.Properties;
-using OrderingSystem.Repo.CashierMenuRepository;
 using OrderingSystem.Repository.CategoryRepository;
+using OrderingSystem.Repository.Ingredients;
+using OrderingSystem.Services;
 namespace OrderingSystem.CashierApp.Forms.Menu
 {
     public partial class MenuBundleFrm : Form
     {
         private List<MenuModel> inclded = new List<MenuModel>();
         private List<IngredientModel> ingredientSelected = new List<IngredientModel>();
-        private IMenuRepository cashierMenuRepository;
-        public MenuBundleFrm()
+        private MenuService menuService;
+        public MenuBundleFrm(MenuService menuService)
         {
             InitializeComponent();
-            cashierMenuRepository = new MenuRepository();
+            this.menuService = menuService;
         }
 
 
         private void newBundleEvent(object sender, System.EventArgs e)
         {
-            if (string.IsNullOrEmpty(menuName.Text.Trim()) ||
+            try
+            {
+                if (string.IsNullOrEmpty(menuName.Text.Trim()) ||
                string.IsNullOrEmpty(menuDescription.Text.Trim()) ||
                string.IsNullOrEmpty(menuPrice.Text.Trim()) ||
                string.IsNullOrEmpty(cmbCat.Text.Trim()) ||
                string.IsNullOrWhiteSpace(estimatedTime.Text.Trim()))
-            {
-                MessageBox.Show("Please fill all * fields.");
-                return;
+                {
+                    MessageBox.Show("Please fill all * fields.");
+                    return;
+                }
+
+                if (inclded.Count <= 1)
+                {
+                    MessageBox.Show("It should atleast contain 2 Existing Menu.");
+                    return;
+                }
+
+                if (!isPriceValid(menuPrice.Text.Trim()))
+                {
+                    MessageBox.Show("Invalid price .");
+                    return;
+                }
+
+                if (!TimeSpan.TryParse(estimatedTime.Text.Trim(), out TimeSpan est))
+                {
+                    MessageBox.Show("Invalid estimated time format.");
+                    return;
+                }
+
+                string name = menuName.Text.Trim();
+
+                if (menuService.isMenuNameExist(name))
+                {
+                    MessageBox.Show("Menu Name already exists, try different.");
+                    return;
+                }
+
+                string desc = menuDescription.Text.Trim();
+                double price = double.Parse(menuPrice.Text.Trim());
+                string cat = cmbCat.Text.Trim();
+                if (pictureBox.Image == null) pictureBox.Image = Resources.placeholder;
+                byte[] image = ImageHelper.GetImageFromFile(pictureBox.Image);
+
+
+                MenuPackageModel md = MenuPackageModel.Builder()
+                    .WithMenuName(name)
+                    .WithMenuDescription(desc)
+                    .WithPrice(price)
+                    .WithEstimatedTime(est)
+                    .WithMenuImageByte(image)
+                    .WithIngredients(ingredientSelected)
+                    .WithPackageIncluded(inclded)
+                    .WithCategoryName(cat)
+                    .Build();
+
+                if (menuService.saveMenu(md, "Bundle"))
+                {
+                    MessageBox.Show("New menu created successfully.");
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to create new menu.");
+                }
             }
-
-            if (inclded.Count <= 1)
+            catch (NotSupportedException ex)
             {
-                MessageBox.Show("It should atleast contain 2 Existing Menu.");
-                return;
+                MessageBox.Show(ex.Message);
             }
-
-            if (!isPriceValid(menuPrice.Text.Trim()))
+            catch (MySqlException)
             {
-                MessageBox.Show("Invalid price .");
-                return;
-            }
-
-            if (!TimeSpan.TryParse(estimatedTime.Text.Trim(), out TimeSpan est))
-            {
-                MessageBox.Show("Invalid estimated time format.");
-                return;
-            }
-
-            string name = menuName.Text.Trim();
-
-            if (cashierMenuRepository.isMenuNameExist(name))
-            {
-                MessageBox.Show("Menu Name already exists, try different.");
-                return;
-            }
-
-            string desc = menuDescription.Text.Trim();
-            double price = double.Parse(menuPrice.Text.Trim());
-            string cat = cmbCat.Text.Trim();
-            if (pictureBox.Image == null) pictureBox.Image = Resources.placeholder;
-            byte[] image = ImageHelper.GetImageFromFile(pictureBox.Image);
-
-
-            MenuPackageModel md = MenuPackageModel.Builder()
-                .WithMenuName(name)
-                .WithMenuDescription(desc)
-                .WithPrice(price)
-                .WithEstimatedTime(est)
-                .WithMenuImageByte(image)
-                .WithIngredients(ingredientSelected)
-                .WithPackageIncluded(inclded)
-                .WithCategoryName(cat)
-                .Build();
-
-            if (cashierMenuRepository.createBundleMenu(md))
-            {
-                MessageBox.Show("New menu created successfully.");
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Failed to create new menu.");
+                MessageBox.Show("Internal Server Error");
             }
         }
         private bool isPriceValid(string text)
@@ -93,20 +106,23 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         }
         private void ingredientListButton(object sender, EventArgs eb)
         {
-            //IngredientPopup p = new IngredientPopup("Add Ingredient");
-            //p.ingredientSelector(ingredientSelected);
-            //p.initTable();
-            //p.closeButton.Visible = true;
-            //p.buttonClicked += (s, e) =>
-            //{
-            //    ingredientSelected = e;
-            //};
-            //DialogResult rs = p.ShowDialog(this);
-            //if (rs == DialogResult.OK)
-            //{
-            //    ingredientButton.Text = ingredientSelected.Count > 0 ? "View selected ingredients" : "Click to choose ingredients";
-            //    p.Hide();
-            //}
+            IIngredientRepository ingredientRepository = new IngredientRepository();
+            IngredientMenu p = new IngredientMenu(ingredientRepository);
+            p.getIngredient();
+            p.initTable2();
+            p.ingredientSelector(ingredientSelected);
+            p.closeButton.Visible = true;
+            p.IngredientSelectedEvent += (s, e) =>
+            {
+                ingredientSelected = e;
+                if (e.Count > 0) MessageBox.Show("Added");
+            };
+            DialogResult rs = p.ShowDialog(this);
+            if (rs == DialogResult.OK)
+            {
+                ingredientButton.Text = ingredientSelected.Count > 0 ? "View selected ingredients" : "Click to choose ingredients";
+                p.Hide();
+            }
         }
         private void menuListButton(object sender, System.EventArgs e)
         {

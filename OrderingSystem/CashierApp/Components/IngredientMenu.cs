@@ -112,6 +112,8 @@ namespace OrderingSystem.CashierApp.Components
         }
         private void submit(object sender, EventArgs e)
         {
+
+            ingredientSelected.Clear();
             foreach (DataGridViewRow row in dataGrid.Rows)
             {
                 bool check = false;
@@ -142,6 +144,15 @@ namespace OrderingSystem.CashierApp.Components
                     {
                         MessageBox.Show("There is an empty quantity field");
                         return;
+                    }
+                }
+                else
+                {
+                    string ingredientName = row.Cells["Ingredient Name"].Value?.ToString();
+                    var selectedIngredient = ingredientList.Find(x => x.IngredientName == ingredientName);
+                    if (selectedIngredient != null)
+                    {
+                        ingredientSelected.Remove(selectedIngredient);
                     }
                 }
             }

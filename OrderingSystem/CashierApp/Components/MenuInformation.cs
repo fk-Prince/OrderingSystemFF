@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -7,19 +8,20 @@ using Guna.UI2.WinForms;
 using OrderingSystem.CashierApp.Forms.Menu;
 using OrderingSystem.CashierApp.Table;
 using OrderingSystem.Model;
-using OrderingSystem.Repo.CashierMenuRepository;
 using OrderingSystem.Repository.CategoryRepository;
 using OrderingSystem.Repository.Ingredients;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Components
 {
     public partial class MenuInformation : Form
     {
-        private readonly IMenuRepository menuRepository;
+        //private readonly IMenuRepository menuRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IIngredientRepository ingredientRepository;
         private List<MenuModel> variantList;
         private List<MenuModel> included;
+        private MenuService menuService;
 
         private readonly MenuModel menu;
         private RegularTable regular;
@@ -27,11 +29,11 @@ namespace OrderingSystem.CashierApp.Components
         private bool isEditMode = false;
         private bool isPackaged = false;
         public event EventHandler menuUpdated;
-        public MenuInformation(MenuModel menu, IMenuRepository menuRepository, ICategoryRepository categoryRepository, IIngredientRepository ingredientRepository)
+        public MenuInformation(MenuModel menu, MenuService menuService, ICategoryRepository categoryRepository, IIngredientRepository ingredientRepository)
         {
             InitializeComponent();
             this.menu = menu;
-            this.menuRepository = menuRepository;
+            this.menuService = menuService;
             this.categoryRepository = categoryRepository;
             this.ingredientRepository = ingredientRepository;
             displayMenuDetails();
@@ -43,11 +45,22 @@ namespace OrderingSystem.CashierApp.Components
             menuName.Text = menu.MenuName;
             description.Text = menu.MenuDescription;
             catTxt.Text = menu.CategoryName;
+            category.Text = menu.CategoryName;
+            toggle.CheckedChanged -= guna2ToggleSwitch1_CheckedChanged;
+            toggle.Checked = menu.isAvailable;
+            toggle.CheckedChanged += guna2ToggleSwitch1_CheckedChanged;
+            isAvailable();
+            try
+            {
 
-
-            List<CategoryModel> ca = categoryRepository.getCategories();
-            ca.ForEach(e => category.Items.Add(e.CategoryName));
-            category.SelectedItem = menu.CategoryName;
+                List<CategoryModel> ca = categoryRepository.getCategories();
+                ca.ForEach(e => category.Items.Add(e.CategoryName));
+                category.SelectedItem = menu.CategoryName;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private void loadForm(Form f)
         {
@@ -63,29 +76,39 @@ namespace OrderingSystem.CashierApp.Components
         }
         private void displayTable()
         {
-            isPackaged = menuRepository.isMenuPackage(menu);
-            if (isPackaged)
+            try
             {
-                b2.Visible = false;
-                b4.Visible = true;
-                included = menuRepository.getBundled(menu);
-                loadForm(package = new PackageTable(included, menuRepository));
-                package.dataGrid.Enabled = false;
-                lPrice.Visible = true;
-                price.Visible = true;
-                price.Text = menuRepository.getBundlePrice(menu).ToString("N2");
+                isPackaged = menuService.isMenuPackage(menu);
+                if (isPackaged)
+                {
+                    b2.Visible = false;
+                    b4.Visible = true;
+                    included = menuService.getBundled(menu);
+                    loadForm(package = new PackageTable(included));
+
+                    lPrice.Visible = true;
+                    price.Visible = true;
+                    price.Text = menuService.getBundlePrice(menu).ToString("N2");
+                }
+                else
+                {
+                    b3.Visible = false;
+                    variantList = menuService.getMenuDetail().FindAll(e => e.MenuId == menu.MenuId);
+                    loadForm(regular = new RegularTable(variantList, ingredientRepository));
+
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                b3.Visible = false;
-                variantList = menuRepository.getMenuDetail().FindAll(e => e.MenuId == menu.MenuId);
-                loadForm(regular = new RegularTable(variantList, ingredientRepository));
-                regular.dataGrid.Enabled = false;
+                MessageBox.Show("Internal Server Error");
+                Console.WriteLine(ex.Message + "displayTable ON menuinfroamtion");
             }
         }
         private void changeMode(object sender, EventArgs e)
         {
             isEditMode = !isEditMode;
+            b1.Text = isEditMode ? "Save" : "Edit";
             if (isEditMode)
             {
                 catTxt.Visible = false;
@@ -98,67 +121,83 @@ namespace OrderingSystem.CashierApp.Components
                 catTxt.Visible = true;
                 Border(false);
             }
-            if (package != null) package.dataGrid.Enabled = isEditMode;
-            if (regular != null) regular.dataGrid.Enabled = isEditMode;
-            category.SelectedItem = menu.CategoryName;
+            toggle.Enabled = isEditMode;
+            category.Text = menu.CategoryName;
+            catTxt.Text = menu.CategoryName;
         }
         private void confirmEdit()
         {
-            string name = menuName.Text.Trim();
-            string cat = category.Text.Trim();
-            string desc = description.Text.Trim();
-            string pricex = price.Text.Trim();
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(desc) || string.IsNullOrEmpty(cat) || (isPackaged && string.IsNullOrEmpty(pricex)))
+            try
             {
-                MessageBox.Show("Emty Field");
-                return;
-            }
-            if (!isPriceValid(pricex) && isPackaged)
-            {
-                MessageBox.Show("Invalid price");
-                return;
-            }
+                string name = menuName.Text.Trim();
+                string cat = category.Text.Trim();
+                string desc = description.Text.Trim();
+                string pricex = price.Text.Trim();
 
-            byte[] imagex = null;
-            if (image.ImageLocation != null)
-                imagex = ImageHelper.GetImageFromFile(image.Image);
+                DialogResult rs = MessageBox.Show("Do you want to proceed to update this menu?", "Update", MessageBoxButtons.YesNo);
+                if (rs == DialogResult.No)
+                {
+                    return;
+                }
 
-            bool suc = false;
+                if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(desc) || string.IsNullOrEmpty(cat) || (isPackaged && string.IsNullOrEmpty(pricex)))
+                {
+                    MessageBox.Show("Emty Field");
+                    return;
+                }
+                if (!isPriceValid(pricex) && isPackaged)
+                {
+                    MessageBox.Show("Invalid price");
+                    return;
+                }
 
-            if (package != null)
-            {
-                var builder = MenuPackageModel.Builder()
+                byte[] imagex = null;
+                if (image.ImageLocation != null)
+                    imagex = ImageHelper.GetImageFromFile(image.Image);
+
+                bool suc = false;
+                MenuModel menus = null;
+                string type = "";
+                if (package != null)
+                {
+                    var builder = MenuPackageModel.Builder()
+                                     .WithMenuId(menu.MenuId)
+                                     .WithMenuName(name)
+                                     .isAvailable(toggle.Checked)
+                                     .WithMenuDescription(desc)
+                                     .WithCategoryName(cat)
+                                     .WithPrice(double.Parse(pricex))
+                                     .WithPackageIncluded(package.getMenus());
+                    if (imagex != null) builder = builder.WithMenuImageByte(imagex);
+                    menus = builder.Build();
+                    type = "package";
+                }
+                else if (regular != null)
+                {
+                    var builder = MenuModel.Builder()
                                  .WithMenuId(menu.MenuId)
                                  .WithMenuName(name)
+                                 .isAvailable(toggle.Checked)
                                  .WithMenuDescription(desc)
                                  .WithCategoryName(cat)
-                                 .WithPrice(double.Parse(pricex))
-                                 .WithPackageIncluded(package.getMenus());
-                if (imagex != null) builder = builder.WithMenuImageByte(imagex);
-                MenuPackageModel menus = builder.Build();
-                suc = menuRepository.updatePackageMenu(menus);
+                                 .WithVariant(regular.getValues());
+                    if (imagex != null) builder = builder.WithMenuImageByte(imagex);
+                    menus = builder.Build();
+                    type = "regular";
+                }
+                suc = menuService.updateMenu(menus, type);
+
+                if (suc)
+                {
+                    MessageBox.Show("Updated Successfully");
+                    menuUpdated.Invoke(this, EventArgs.Empty);
+                }
+                else MessageBox.Show("Failed to update");
             }
-            else if (regular != null)
+            catch (Exception ex)
             {
-                var builder = MenuModel.Builder()
-                             .WithMenuId(menu.MenuId)
-                             .WithMenuName(name)
-                             .WithMenuDescription(desc)
-                             .WithCategoryName(cat)
-                             .WithVariant(regular.getValues());
-
-                if (imagex != null) builder = builder.WithMenuImageByte(imagex);
-
-                MenuModel menus = builder.Build();
-                suc = menuRepository.updateRegularMenu(menus);
+                MessageBox.Show("Internal Server Error." + ex.Message);
             }
-
-            if (suc)
-            {
-                MessageBox.Show("Updated Successfully");
-                menuUpdated.Invoke(this, EventArgs.Empty);
-            }
-            else MessageBox.Show("Failed to update");
         }
         private void Border(bool x)
         {
@@ -201,7 +240,7 @@ namespace OrderingSystem.CashierApp.Components
             {
                 cloneList = pop.getVariants();
                 var difference = cloneList.Except(variantList).ToList();
-                menuRepository.newMenuVariant(menu.MenuId, difference);
+                menuService.newMenuVariant(menu.MenuId, difference);
                 variantList.AddRange(difference);
                 displayTable();
             }
@@ -249,6 +288,39 @@ namespace OrderingSystem.CashierApp.Components
             if (rs == DialogResult.OK)
             {
                 pop.Hide();
+            }
+        }
+
+        private void guna2ToggleSwitch1_CheckedChanged(object sender, EventArgs e)
+        {
+            toggle.CheckedChanged -= guna2ToggleSwitch1_CheckedChanged;
+            DialogResult rs = MessageBox.Show($"Are you sure you want to {(!toggle.Checked ? "disable" : "enable")} this menu?", "Confirm Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (rs == DialogResult.Yes)
+            {
+                toggle.Checked = toggle.Checked;
+            }
+            else
+            {
+                toggle.Checked = !toggle.Checked;
+            }
+            toggle.CheckedChanged += guna2ToggleSwitch1_CheckedChanged;
+
+            isAvailable();
+        }
+
+        private void isAvailable()
+        {
+            if (toggle.Checked || !isEditMode)
+            {
+                BackColor = Color.White;
+                if (package != null) package.BackColor = Color.White;
+                if (regular != null) regular.BackColor = Color.White;
+            }
+            else
+            {
+                if (package != null) package.BackColor = Color.LightGray;
+                if (regular != null) regular.BackColor = Color.LightGray;
+                BackColor = Color.LightGray;
             }
         }
     }

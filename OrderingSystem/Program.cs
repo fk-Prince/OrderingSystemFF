@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using OrderingSystem.CashierApp.Forms;
+using OrderingSystem.CashierApp.Layout;
 
 namespace OrderingSystem
 {
@@ -14,8 +14,10 @@ namespace OrderingSystem
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
             //Application.Run(new KioskLayout());
-            Application.Run(new CashierLayout());
+            Application.Run(new LoginLayout());
+            //Application.Run(new CashierLayout());
         }
     }
 }

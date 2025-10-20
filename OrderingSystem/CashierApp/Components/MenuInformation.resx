@@ -120,17 +120,6 @@
   <metadata name="guna2BorderlessForm1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="b1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABGdBTUEAALGPC/xhBQAAAP1JREFUaEPt
-        ljEKwlAQRHMnQVs9kIVY2Il2FuLVxENYWWhjrbPowkfG+I3gbGAfPAghxZtfJGmSJAnFHB7hHo7sRp/Y
-        wVvhFU5gL9jCMr5XI9aQxbs2YgzDsoEsvPQChzAsNSPOcADDUjPiAOUsnjI+jThBKRbuMV1GTKGMFXwN
-        snsM9uwMymBBbs0I+0LLaIt320YsH5caauLddyNkfBPvhhnRJd6VjyhflV2016iMX07elJ5+xqvIeBUZ
-        ryLjVWS8ioxX0et4g0XVKv0ldlhYjfKTd1jcJ8PEGyywzVDxBot8Z7h4g4UyQ8YbLPbVsPEGCy4NHZ8k
-        SfIPmuYOOY3Z2cLjmcEAAAAASUVORK5CYII=
-</value>
-  </data>
   <metadata name="ofd.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>192, 17</value>
   </metadata>

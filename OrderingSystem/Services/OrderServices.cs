@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using OrderingSystem.Exceptions;
+﻿using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Repository;
 
@@ -12,12 +11,15 @@ namespace OrderingSystem.KioskApplication.Services
         {
             this.orderRepository = orderRepository;
         }
-
+        public string getNewOrderId()
+        {
+            return orderRepository.getOrderId();
+        }
         public bool confirmOrder(OrderModel order)
         {
             return orderRepository.saveNewOrder(order);
         }
-        public List<OrderModel> getAllOrders(string order_id)
+        public OrderModel getAllOrders(string order_id)
         {
             bool existsting = orderRepository.getOrderExists(order_id);
             if (!existsting)

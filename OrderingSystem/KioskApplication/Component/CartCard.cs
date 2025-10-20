@@ -30,7 +30,7 @@ namespace OrderingSystem.KioskApplication.Components
         {
 
             menuName.Text = menu.MenuName;
-            price.Text = menu.GetDiscountedPrice().ToString("N2");
+            price.Text = menu.getPrice().ToString("N2");
 
             string text = "";
 
@@ -41,7 +41,7 @@ namespace OrderingSystem.KioskApplication.Components
             detail.Text = text;
             qty.Text = menu.PurchaseQty.ToString();
             bb.Text = qty.Text;
-            total.Text = (menu.GetDiscountedPrice() * menu.PurchaseQty).ToString("N2");
+            total.Text = (menu.getPrice() * menu.PurchaseQty).ToString("N2");
         }
 
         private void addQuantity(object sender, System.EventArgs e)

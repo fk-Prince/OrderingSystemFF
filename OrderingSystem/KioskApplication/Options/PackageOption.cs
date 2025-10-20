@@ -26,9 +26,6 @@ namespace OrderingSystem.KioskApplication.Options
             _orderListPackage = new List<PackageLayout>();
             frequentlyOrderedOption = new FrequentlyOrderedOption(_menuRepository, flowPanel);
         }
-
-
-
         public void displayMenuOptions(MenuModel menu)
         {
             try
@@ -48,6 +45,7 @@ namespace OrderingSystem.KioskApplication.Options
             }
             catch (Exception)
             {
+
                 Console.WriteLine("Error on package option displayMenuOptions");
                 throw;
             }
@@ -71,7 +69,6 @@ namespace OrderingSystem.KioskApplication.Options
 
                 var includedMenu = _orderListPackage.Select(pg => pg.SelectedMenuDetail).ToList();
                 double newPrice = _menuRepository.getNewPackagePrice(menu.MenuDetailId, includedMenu);
-                //var menux = _menuRepository.getSelectedMenu(menu.MenuId, "", "");
 
                 var packageBundle = MenuPackageModel.Builder()
                     .WithMenuDetailId(menu.MenuDetailId)
@@ -82,18 +79,8 @@ namespace OrderingSystem.KioskApplication.Options
                     .WithPackageIncluded(includedMenu)
                     .WithEstimatedTime(menu.EstimatedTime)
                     .Build();
-                //var packageBundle = MenuPackageModel.Builder()
-                //    .WithMenuDetailId(menux.MenuDetailId)
-                //    .WithMenuName(menux.MenuName)
-                //    .WithPrice(newPrice)
-                //    .WithMenuImage(menux.MenuImage)
-                //    .WithMenuId(menux.MenuId)
-                //    .WithPackageIncluded(selectedMenus)
-                //    .WithPrepTime(menux.PrepTime)
-                //    .Build();
 
                 packageBundle.PurchaseQty++;
-
                 return new List<MenuModel> { packageBundle };
             }
             catch (Exception)

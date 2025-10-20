@@ -310,7 +310,6 @@
             this.dataGrid.ThemeStyle.RowsStyle.Height = 40;
             this.dataGrid.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.dataGrid.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            this.dataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_CellContentClick);
             // 
             // txt
             // 
@@ -321,7 +320,7 @@
             this.txt.BackColor = System.Drawing.Color.Transparent;
             this.txt.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
             this.txt.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.txt.DefaultText = "";
+            this.txt.DefaultText = "ORD-000001";
             this.txt.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
             this.txt.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
             this.txt.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
@@ -345,6 +344,7 @@
             this.txt.Size = new System.Drawing.Size(469, 47);
             this.txt.TabIndex = 9;
             this.txt.TextOffset = new System.Drawing.Point(10, 0);
+            this.txt.TextChanged += new System.EventHandler(this.txt_TextChanged);
             this.txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             this.txt.MouseDown += new System.Windows.Forms.MouseEventHandler(this.txt_MouseDown);
             // 

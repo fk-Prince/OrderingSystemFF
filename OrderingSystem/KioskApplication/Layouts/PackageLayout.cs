@@ -27,10 +27,10 @@ namespace OrderingSystem.KioskApplication.Layouts
         {
             InitializeComponent();
             this.menuDetail = menuDetail;
-
             try
             {
                 menuDetails = _menuRepository.getDetailsByPackage(menuDetail);
+
                 cardLayout();
                 displayFlavor(menuDetail);
             }
@@ -50,6 +50,7 @@ namespace OrderingSystem.KioskApplication.Layouts
         }
         private void displayFlavor(MenuModel menuDetail)
         {
+
             titleOption = "Option A";
             subTitle = $"Select Flavor of your choice.";
             try
@@ -58,6 +59,7 @@ namespace OrderingSystem.KioskApplication.Layouts
                    .GroupBy(ex => ex.FlavorName)
                    .Select(group => group.First())
                    .ToList();
+
 
                 if (menuDetail is MenuPackageModel mp)
                 {
@@ -81,7 +83,7 @@ namespace OrderingSystem.KioskApplication.Layouts
                 selectedFlavor = x[0];
                 filterSizeByFlavor(menuDetails, menuDetail.MenuId, menuDetail.FlavorName);
             }
-            catch (Exception)
+            catch (Exception xe)
             {
                 Console.WriteLine("Error on PackageLayout displayFlavor");
                 throw;

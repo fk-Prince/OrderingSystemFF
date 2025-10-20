@@ -89,47 +89,59 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         }
         private void confirmNewMenu(object sender, System.EventArgs e)
         {
-            if (string.IsNullOrEmpty(menuName.Text.Trim()) ||
-                string.IsNullOrEmpty(menuDescription.Text.Trim()) ||
-                string.IsNullOrEmpty(cmbCat.Text.Trim()))
+            try
             {
-                MessageBox.Show("Please fill all * fields.");
-                return;
-            }
+                if (string.IsNullOrEmpty(menuName.Text.Trim()) ||
+                    string.IsNullOrEmpty(menuDescription.Text.Trim()) ||
+                    string.IsNullOrEmpty(cmbCat.Text.Trim()))
+                {
+                    MessageBox.Show("Please fill all * fields.");
+                    return;
+                }
 
-            if (variantList.Count <= 0)
+                if (variantList.Count <= 0)
+                {
+                    MessageBox.Show("No Selected Ingredient");
+                    return;
+                }
+
+                string name = menuName.Text.Trim();
+
+                if (menuService.isMenuNameExist(name))
+                {
+                    MessageBox.Show("Menu Name already exists, try different.");
+                    return;
+                }
+
+                string desc = menuDescription.Text.Trim();
+                string cat = cmbCat.Text.Trim();
+                if (pictureBox.Image == null) pictureBox.Image = Resources.placeholder;
+                byte[] image = ImageHelper.GetImageFromFile(pictureBox.Image);
+
+
+                MenuModel md = MenuModel.Builder()
+                    .WithMenuName(name)
+                    .WithVariant(variantList)
+                    .WithMenuDescription(desc)
+                    .WithMenuImageByte(image)
+                    .WithCategoryName(cat)
+                    .Build();
+
+                bool success = menuService.saveMenu(md, "Normal");
+                MessageBox.Show(success ? "New menu created successfully." : "Failed to create new menu.");
+            }
+            catch (NotSupportedException ex)
             {
-                MessageBox.Show("No Selected Ingredient");
-                return;
+                MessageBox.Show(ex.Message);
             }
-
-            string name = menuName.Text.Trim();
-
-            if (menuService.isMenuNameExist(name))
+            catch (Exception)
             {
-                MessageBox.Show("Menu Name already exists, try different.");
-                return;
+                MessageBox.Show("Internal Server Error.");
             }
-
-            string desc = menuDescription.Text.Trim();
-            string cat = cmbCat.Text.Trim();
-            if (pictureBox.Image == null) pictureBox.Image = Resources.placeholder;
-            byte[] image = ImageHelper.GetImageFromFile(pictureBox.Image);
-
-
-            MenuModel md = MenuModel.Builder()
-                .WithMenuName(name)
-                .WithVariant(variantList)
-                .WithMenuDescription(desc)
-                .WithMenuImageByte(image)
-                .WithCategoryName(cat)
-                .Build();
-
-            bool success = menuService.saveMenu(md);
-            MessageBox.Show(success ? "New menu created successfully." : "Failed to create new menu.");
         }
         private void VariantPopupButton(object sender, System.EventArgs e)
         {
+
             VariantMenuPopup p = new VariantMenuPopup(variantList, ingredientRepository);
             DialogResult rs = p.ShowDialog(this);
 

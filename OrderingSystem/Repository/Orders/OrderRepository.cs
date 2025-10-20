@@ -37,7 +37,6 @@ namespace OrderingSystem.Repository.Order
             }
             return false;
         }
-
         public bool getOrderExists(string order_id)
         {
             var db = DatabaseHandler.getInstance();
@@ -66,11 +65,13 @@ namespace OrderingSystem.Repository.Order
             }
             return false;
         }
-
-        public List<OrderModel> getOrders(string order_id)
+        public OrderModel getOrders(string order_id)
         {
-            List<OrderModel> orderList = new List<OrderModel>();
+            List<MenuModel> orderList = new List<MenuModel>();
             var db = DatabaseHandler.getInstance();
+            double couponRate = 0;
+            string orderId = "";
+
             try
             {
                 var conn = db.getConnection();
@@ -82,16 +83,20 @@ namespace OrderingSystem.Repository.Order
                     {
                         while (reader.Read())
                         {
-                            OrderModel om = OrderModel.Builder()
-                                .SetOrderId(reader.GetString("order_id"))
-                                .SetMenuName(reader.GetString("menu_name"))
-                                .SetTotalPrice(reader.GetDouble("total_price"))
-                                .SetPricePerQuantity(reader.GetDouble("price"))
-                                .SetQuantity(reader.GetInt32("quantity"))
-                                .SetCouponRate(reader.GetDouble("coupon_rate"))
+                            MenuModel m = MenuModel.Builder()
+                                .WithMenuName(reader.GetString("menu_name"))
+                                .WithFlavorName(reader.GetString("flavor_name"))
+                                .WithSizeName(reader.GetString("size_name"))
+                                .WithPurchaseQty(reader.GetInt32("quantity"))
+                                .WithPrice(reader.GetDouble("price"))
                                 .Build();
+                            orderList.Add(m);
+                            if (string.IsNullOrEmpty(orderId))
+                            {
+                                orderId = reader.GetString("order_id");
+                                couponRate = reader.GetDouble("coupon_rate");
+                            }
 
-                            orderList.Add(om);
                         }
                     }
                 }
@@ -104,9 +109,14 @@ namespace OrderingSystem.Repository.Order
             {
                 db.closeConnection();
             }
-            return orderList;
-        }
+            OrderModel om = OrderModel.Builder()
+                                .SetOrderId(orderId)
+                                .SetOrderList(orderList)
+                                .SetCouponRate(couponRate)
+                                .Build();
 
+            return om;
+        }
         public bool saveNewOrder(OrderModel order)
         {
             var db = DatabaseHandler.getInstance();
@@ -139,7 +149,6 @@ namespace OrderingSystem.Repository.Order
                 db.closeConnection();
             }
         }
-
         public bool payOrder(string order_id, int staff_id, string payment_method)
         {
             var db = DatabaseHandler.getInstance();
@@ -166,7 +175,6 @@ namespace OrderingSystem.Repository.Order
             }
 
         }
-
         public bool isOrderPayed(string order_id)
         {
             var db = DatabaseHandler.getInstance();
@@ -195,6 +203,32 @@ namespace OrderingSystem.Repository.Order
                 db.closeConnection();
             }
             return false;
+        }
+
+        public string getOrderId()
+        {
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+                using (var cmd = new MySqlCommand("p_GenerateNextOrderId", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    var p = new MySqlParameter("p_order_id", MySqlDbType.VarChar, 255);
+                    p.Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add(p);
+                    cmd.ExecuteNonQuery();
+                    return p.Value.ToString();
+                }
+            }
+            catch (MySqlException)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
         }
     }
 }

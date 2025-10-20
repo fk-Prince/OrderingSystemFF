@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Windows.Forms;
 using MySqlConnector;
 using Newtonsoft.Json;
 using OrderingSystem.DatabaseConnection;
@@ -32,6 +31,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message + "MenuRepository isMenuNameExist");
                 throw ex;
             }
             finally
@@ -64,7 +64,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex.Message + "MenuRepository createregular");
                 throw ex;
             }
             finally
@@ -101,6 +101,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message + "MenuRepository createBundleMenu");
                 throw ex;
             }
             finally
@@ -124,11 +125,12 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                         {
                             MenuModel md = MenuModel.Builder()
                                      .WithCategoryName(reader.GetString("category_Name"))
+                                     .isAvailable(reader.GetString("isAvailable").ToLower() == "yes")
                                      .WithMenuId(reader.GetInt32("menu_id"))
                                      .WithMenuDescription(reader.GetString("menu_description"))
                                      .WithMenuName(reader.GetString("menu_name"))
                                      .WithCategoryId(reader.GetInt32("category_id"))
-                                     .WithMenuImage(ImageHelper.GetImageFromBlob(reader))
+                                     .WithMenuImage(ImageHelper.GetImageFromBlob(reader, "menu"))
                                      .Build();
                             list.Add(md);
                         }
@@ -137,6 +139,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message + "MenuRepository getMenu");
                 throw ex;
             }
             finally
@@ -175,6 +178,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message + "MenuRepository getMenu");
                 throw ex;
             }
             finally
@@ -256,39 +260,6 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                     cmd.ExecuteNonQuery();
                     return true;
                 }
-            }
-            catch (MySqlException ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                db.closeConnection();
-            }
-
-        }
-        public bool updateRegularMenu(MenuModel m)
-        {
-            var db = DatabaseHandler.getInstance();
-            try
-            {
-                var con = db.getConnection();
-                using (var cmd = new MySqlCommand("p_updateMenu", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    string ijson = JsonConvert.SerializeObject(m.MenuIngredients);
-                    cmd.Parameters.AddWithValue("@p_menu_id", m.MenuId);
-                    cmd.Parameters.AddWithValue("@p_menu_name", m.MenuName);
-                    cmd.Parameters.AddWithValue("@p_category_name", m.CategoryName);
-                    cmd.Parameters.AddWithValue("@p_description", m.MenuDescription);
-                    if (m.MenuImageByte == null) cmd.Parameters.AddWithValue("@p_image", DBNull.Value);
-                    else cmd.Parameters.AddWithValue("@p_image", m.MenuImageByte);
-                    string json = JsonConvert.SerializeObject(m.MenuVariant);
-                    cmd.Parameters.AddWithValue("@p_menu_detail", json);
-                    cmd.ExecuteNonQuery();
-                    return true;
-                }
-
             }
             catch (MySqlException ex)
             {
@@ -382,6 +353,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message + "MenuRepository getBundled");
                 throw ex;
             }
             finally
@@ -421,6 +393,40 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             }
             return 0;
         }
+        public bool updateRegularMenu(MenuModel m)
+        {
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var con = db.getConnection();
+                using (var cmd = new MySqlCommand("p_updateMenu", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    string ijson = JsonConvert.SerializeObject(m.MenuIngredients);
+                    cmd.Parameters.AddWithValue("@p_menu_id", m.MenuId);
+                    cmd.Parameters.AddWithValue("@p_menu_name", m.MenuName);
+                    cmd.Parameters.AddWithValue("@p_category_name", m.CategoryName);
+                    cmd.Parameters.AddWithValue("@p_description", m.MenuDescription);
+                    cmd.Parameters.AddWithValue("@p_isAvailable", m.isAvailable);
+                    if (m.MenuImageByte == null) cmd.Parameters.AddWithValue("@p_image", DBNull.Value);
+                    else cmd.Parameters.AddWithValue("@p_image", m.MenuImageByte);
+                    string json = JsonConvert.SerializeObject(m.MenuVariant);
+                    cmd.Parameters.AddWithValue("@p_menu_detail", json);
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+
+        }
         public bool updatePackageMenu(MenuPackageModel m)
         {
             var db = DatabaseHandler.getInstance();
@@ -435,6 +441,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                     cmd.Parameters.AddWithValue("@p_menu_name", m.MenuName);
                     cmd.Parameters.AddWithValue("@p_category_name", m.CategoryName);
                     cmd.Parameters.AddWithValue("@p_description", m.MenuDescription);
+                    cmd.Parameters.AddWithValue("@p_available", m.isAvailable);
                     if (m.MenuImageByte == null) cmd.Parameters.AddWithValue("@p_image", DBNull.Value);
                     else cmd.Parameters.AddWithValue("@p_image", m.MenuImageByte);
                     string json = JsonConvert.SerializeObject(m.MenuIncluded);
@@ -448,13 +455,14 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message + "MenuRepository updatePackageMenu");
+
                 throw ex;
             }
             finally
             {
                 db.closeConnection();
             }
-            return false;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -9,6 +8,7 @@ using OrderingSystem.CashierApp.Forms.Order;
 using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication.Services;
 using OrderingSystem.Model;
+using OrderingSystem.Receipt;
 using OrderingSystem.Repository;
 using OrderingSystem.Repository.Order;
 
@@ -17,17 +17,18 @@ namespace OrderingSystem.CashierApp.Forms
     public partial class OrderFrm : Form
     {
         private DataTable table;
-        private int staff_id = 1;
+        private OrderModel om;
         private string order_id;
         private readonly OrderServices orderServices;
+        private readonly StaffModel staff;
 
-        public OrderFrm(IOrderRepository orderRepository)
+        public OrderFrm(IOrderRepository orderRepository, StaffModel staff)
         {
             InitializeComponent();
+            this.staff = staff;
             orderServices = new OrderServices(orderRepository);
             initTable();
         }
-
         private void initTable()
         {
             table = new DataTable();
@@ -46,35 +47,36 @@ namespace OrderingSystem.CashierApp.Forms
             table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
             table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
         }
-        public static OrderFrm orderFactory()
+        public static OrderFrm OrderInstance(StaffModel staff)
         {
             IOrderRepository orderRepository = new OrderRepository();
-            return new OrderFrm(orderRepository);
+            return new OrderFrm(orderRepository, staff);
         }
         private void displayOrders()
         {
             try
             {
                 string orderId = txt.Text.Trim();
-                List<OrderModel> om = orderServices.getAllOrders(orderId);
+                om = orderServices.getAllOrders(orderId);
+
                 DialogResult = DialogResult.OK;
-                if (om.Count > 0)
+                if (om.OrderList.Count > 0)
                 {
-                    order_id = om[0].Order_id;
-                    foreach (var order in om)
+                    order_id = om.Order_id;
+                    foreach (var order in om.OrderList)
                     {
                         DataRow row = table.NewRow();
-                        row["Order-ID"] = order.Order_id;
-                        row["Name"] = order.Menu_name;
-                        row["Price"] = order.PricePerQuantity;
-                        row["Quantity"] = order.Quantity;
-                        row["Total Amount"] = order.TotalPrice;
+                        row["Order-ID"] = om.Order_id;
+                        row["Name"] = order.MenuName;
+                        row["Price"] = order.MenuPrice;
+                        row["Quantity"] = order.PurchaseQty;
+                        row["Total Amount"] = order.GetTotal();
                         table.Rows.Add(row);
                     }
-                    double subtotald = om.Sum(o => o.TotalPrice);
-                    double couponRated = om.Sum(o => o.TotalPrice * o.CouponRate);
-                    double vatd = om.Sum(o => (o.TotalPrice - o.CouponRate) * 0.12);
-                    double rated = om[0].CouponRate * 100;
+                    double subtotald = om.OrderList.Sum(o => o.MenuPrice);
+                    double couponRated = om.OrderList.Sum(o => o.MenuPrice * om.CouponRate);
+                    double vatd = om.OrderList.Sum(o => (o.MenuPrice - om.CouponRate) * 0.12);
+                    double rated = om.CouponRate * 100;
                     double totald = (subtotald - couponRated) + vatd;
                     subtotal.Text = subtotald.ToString("N2");
                     coupon.Text = couponRated.ToString("N2");
@@ -87,27 +89,32 @@ namespace OrderingSystem.CashierApp.Forms
             {
                 MessageBox.Show(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Internal Server Error");
+                MessageBox.Show("Internal Server Error" + ex.Message);
             }
         }
         private void reset(object sender, System.EventArgs e)
         {
+            clear();
+        }
+        private void clear()
+        {
             table.Clear();
+            txt.Text = "";
             subtotal.Text = "0.00";
             order_id = "";
             coupon.Text = "0.00";
             vat.Text = "0.00";
             total.Text = "0.00";
+
         }
         private void cashPayment(object sender, System.EventArgs e)
         {
             PaymentMethod p = new PaymentMethod();
-            p.ShowDialog(this);
             p.PaymentMethodChanged += (s, ee) => payment(ee);
+            p.ShowDialog(this);
         }
-
         private void payment(string payment_method)
         {
             try
@@ -117,8 +124,15 @@ namespace OrderingSystem.CashierApp.Forms
                     MessageBox.Show("No Orders");
                     return;
                 }
-                bool result = orderServices.payOrder(order_id, staff_id, payment_method);
-                if (result) MessageBox.Show("Payment Success");
+                bool result = orderServices.payOrder(order_id, staff.StaffId, payment_method);
+                OrderReceipt or = new OrderReceipt(om);
+                or.Message("Thank you for coming");
+                or.d();
+                if (result)
+                {
+                    MessageBox.Show("Payment Success");
+                    clear();
+                }
                 else MessageBox.Show("Payment Failed");
             }
             catch (Exception ex)
@@ -126,7 +140,6 @@ namespace OrderingSystem.CashierApp.Forms
                 MessageBox.Show("Internal Server Error." + ex.Message);
             }
         }
-
         private void txt_MouseDown(object sender, MouseEventArgs e)
         {
             var txt = sender as Guna2TextBox;
@@ -137,7 +150,6 @@ namespace OrderingSystem.CashierApp.Forms
                 displayOrders();
             }
         }
-
         private void txt_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -147,7 +159,7 @@ namespace OrderingSystem.CashierApp.Forms
             }
         }
 
-        private void dataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void txt_TextChanged(object sender, EventArgs e)
         {
 
         }

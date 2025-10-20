@@ -42,8 +42,9 @@ namespace OrderingSystem.KioskApplication.Options
                 displayFlavor(menuDetails);
                 frequentlyOrderedOption.displayFrequentlyOrdered(menu);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+
                 throw;
             }
         }
@@ -136,9 +137,10 @@ namespace OrderingSystem.KioskApplication.Options
                          .WithMenuId(selectedMenu.MenuId)
                          .WithMenuDetailId(selectedMenu.MenuDetailId)
                          .WithEstimatedTime(selectedMenu.EstimatedTime)
-                         .WithDiscountId(selectedMenu.Discountid)
+                         .WithSizeName(selectedMenu.SizeName)
+                         .WithFlavorName(selectedMenu.FlavorName)
                          .WithMenuImage(selectedMenu.MenuImage)
-                         .WithPrice(selectedMenu.GetDiscountedPrice())
+                         .WithPrice(selectedMenu.getPrice())
                          .Build();
             purchaseMenu.PurchaseQty++;
 

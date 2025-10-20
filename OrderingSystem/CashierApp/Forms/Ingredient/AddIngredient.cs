@@ -10,5 +10,10 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
             // FILE PATH
             // INGREDIENT BUILDER => MODELS / INGREDIENTMODEL
         }
+
+        private void AddIngredient_Load(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }

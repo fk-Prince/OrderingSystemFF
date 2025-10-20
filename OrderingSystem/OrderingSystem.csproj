@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net-Next, Version=4.0.3.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net-Next.4.0.3\lib\net472\BCrypt.Net-Next.dll</HintPath>
+    </Reference>
     <Reference Include="Guna.UI2, Version=2.0.4.7, Culture=neutral, PublicKeyToken=8b9d14aa5142e261, processorArchitecture=MSIL">
       <HintPath>..\packages\Guna.UI2.WinForms.2.0.4.7\lib\net472\Guna.UI2.dll</HintPath>
     </Reference>
@@ -111,11 +114,37 @@
     <Compile Include="CashierApp\Components\MenuInformation.Designer.cs">
       <DependentUpon>MenuInformation.cs</DependentUpon>
     </Compile>
+    <Compile Include="CashierApp\Forms\FactoryForm\IForms.cs" />
+    <Compile Include="CashierApp\Forms\FactoryForm\MyTextBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Forms\FactoryForm\MyTextBox.Designer.cs">
+      <DependentUpon>MyTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CashierApp\Forms\FactoryForm\PopupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Forms\FactoryForm\PopupForm.Designer.cs">
+      <DependentUpon>PopupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CashierApp\Forms\Order\PaymentMethod.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CashierApp\Forms\Order\PaymentMethod.Designer.cs">
       <DependentUpon>PaymentMethod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CashierApp\Forms\Utilities\GenerateUtilityForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Forms\Utilities\GenerateUtilityForm.Designer.cs">
+      <DependentUpon>GenerateUtilityForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CashierApp\Forms\Utilities\UtilityFormFactory.cs" />
+    <Compile Include="CashierApp\Layout\LoginLayout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Layout\LoginLayout.Designer.cs">
+      <DependentUpon>LoginLayout.cs</DependentUpon>
     </Compile>
     <Compile Include="CashierApp\Table\PackageTable.cs">
       <SubType>Form</SubType>
@@ -207,6 +236,9 @@
     <Compile Include="CashierApp\Layout\CashierLayout.Designer.cs">
       <DependentUpon>CashierLayout.cs</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\IncorrectCredentials.cs" />
+    <Compile Include="Exceptions\NotSupportedException.cs" />
+    <Compile Include="Exceptions\UnauthorizedPersonel.cs" />
     <Compile Include="KioskApplication\Component\FrequentlyOrderedCard.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -294,13 +326,19 @@
     </Compile>
     <Compile Include="Model\CategoryModel.cs" />
     <Compile Include="Model\CouponModel.cs" />
-    <Compile Include="Model\DiscountModel.cs" />
     <Compile Include="Model\IngredientModel.cs" />
     <Compile Include="Model\MenuModel.cs" />
     <Compile Include="Model\MenuPackageModel.cs" />
     <Compile Include="Model\OrderModel.cs" />
+    <Compile Include="Model\StaffModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Receipt\OrderReceipt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Receipt\OrderReceipt.Designer.cs">
+      <DependentUpon>OrderReceipt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Repository\Cashier\MenuRepository.cs" />
     <Compile Include="Repository\Cashier\IMenuRepository.cs" />
     <Compile Include="Repository\Category\CategoryRepository.cs" />
@@ -313,7 +351,10 @@
     <Compile Include="Repository\KioskMenu\KioskMenuRepository.cs" />
     <Compile Include="Repository\Orders\IOrderRepository.cs" />
     <Compile Include="Repository\Orders\OrderRepository.cs" />
+    <Compile Include="Repository\Staff\IStaffRepository.cs" />
+    <Compile Include="Repository\Staff\StaffRepository.cs" />
     <Compile Include="Services\CartServices.cs" />
+    <Compile Include="Services\IngredientServices.cs" />
     <Compile Include="Services\MenuService.cs" />
     <Compile Include="Services\OrderServices.cs" />
     <Compile Include="util\ImageHelper.cs" />
@@ -329,8 +370,20 @@
     <EmbeddedResource Include="CashierApp\Components\MenuInformation.resx">
       <DependentUpon>MenuInformation.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CashierApp\Forms\FactoryForm\MyTextBox.resx">
+      <DependentUpon>MyTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CashierApp\Forms\FactoryForm\PopupForm.resx">
+      <DependentUpon>PopupForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\Order\PaymentMethod.resx">
       <DependentUpon>PaymentMethod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CashierApp\Forms\Utilities\GenerateUtilityForm.resx">
+      <DependentUpon>GenerateUtilityForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CashierApp\Layout\LoginLayout.resx">
+      <DependentUpon>LoginLayout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Table\PackageTable.resx">
       <DependentUpon>PackageTable.cs</DependentUpon>
@@ -423,6 +476,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Receipt\OrderReceipt.resx">
+      <DependentUpon>OrderReceipt.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -460,6 +516,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bloopandas.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eyeclosed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eye.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\staff.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

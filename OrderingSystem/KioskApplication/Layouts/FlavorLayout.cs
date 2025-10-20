@@ -52,13 +52,13 @@ namespace OrderingSystem.KioskApplication.Components
                 double p = 0;
                 string priceText;
 
-                if (m.GetDiscountedPrice() <= menuDetails[0].GetDiscountedPrice())
+                if (m.getPrice() <= menuDetails[0].getPrice())
                 {
                     priceText = "Free";
                 }
                 else
                 {
-                    p = m.GetDiscountedPrice() - menuDetails[0].GetDiscountedPrice();
+                    p = m.getPrice() - menuDetails[0].getPrice();
                     priceText = p.ToString("N2");
                 }
 

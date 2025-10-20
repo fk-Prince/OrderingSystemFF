@@ -210,9 +210,10 @@ namespace OrderingSystem.CashierApp.Components
             DialogResult = DialogResult.Abort;
         }
 
-        private void search_TextChanged(object sender, EventArgs e)
+
+        private void guna2TextBox1_TextChanged(object sender, EventArgs e)
         {
-            string tx = search.Text.Trim().Replace("'", "''");
+            string tx = s.Text.Trim().Replace("'", "''");
             view.RowFilter = string.IsNullOrEmpty(tx) ? "" : $"[Menu Name] LIKE '%{tx}%'";
         }
     }

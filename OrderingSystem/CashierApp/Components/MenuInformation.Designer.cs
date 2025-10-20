@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MenuInformation));
             this.b2 = new Guna.UI2.WinForms.Guna2Button();
             this.menuName = new Guna.UI2.WinForms.Guna2TextBox();
             this.description = new Guna.UI2.WinForms.Guna2TextBox();
@@ -50,6 +49,8 @@
             this.b4 = new Guna.UI2.WinForms.Guna2Button();
             this.lPrice = new System.Windows.Forms.Label();
             this.price = new Guna.UI2.WinForms.Guna2TextBox();
+            this.toggle = new Guna.UI2.WinForms.Guna2ToggleSwitch();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.closeButton)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
@@ -62,6 +63,7 @@
             this.b2.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.b2.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.b2.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.b2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
             this.b2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.b2.ForeColor = System.Drawing.Color.White;
             this.b2.Location = new System.Drawing.Point(3, 42);
@@ -83,12 +85,12 @@
             this.menuName.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
             this.menuName.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
             this.menuName.Enabled = false;
-            this.menuName.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(241)))), ((int)(((byte)(241)))));
+            this.menuName.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
             this.menuName.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.menuName.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menuName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.menuName.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.menuName.Location = new System.Drawing.Point(26, 49);
+            this.menuName.Location = new System.Drawing.Point(26, 69);
             this.menuName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.menuName.Name = "menuName";
             this.menuName.PlaceholderText = "";
@@ -108,12 +110,12 @@
             this.description.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
             this.description.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
             this.description.Enabled = false;
-            this.description.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(241)))), ((int)(((byte)(241)))));
+            this.description.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
             this.description.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.description.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.description.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.description.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.description.Location = new System.Drawing.Point(26, 189);
+            this.description.Location = new System.Drawing.Point(26, 209);
             this.description.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.description.Multiline = true;
             this.description.Name = "description";
@@ -132,33 +134,33 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Gray;
-            this.label1.Location = new System.Drawing.Point(13, 30);
+            this.label1.Location = new System.Drawing.Point(13, 48);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 13);
+            this.label1.Size = new System.Drawing.Size(80, 17);
             this.label1.TabIndex = 7;
             this.label1.Text = "Menu Name";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Gray;
-            this.label2.Location = new System.Drawing.Point(13, 104);
+            this.label2.Location = new System.Drawing.Point(13, 120);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 13);
+            this.label2.Size = new System.Drawing.Size(61, 17);
             this.label2.TabIndex = 8;
             this.label2.Text = "Category";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Gray;
-            this.label3.Location = new System.Drawing.Point(13, 173);
+            this.label3.Location = new System.Drawing.Point(13, 188);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 13);
+            this.label3.Size = new System.Drawing.Size(74, 17);
             this.label3.TabIndex = 9;
             this.label3.Text = "Description";
             // 
@@ -168,7 +170,7 @@
             this.category.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.category.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.category.FormattingEnabled = true;
-            this.category.Location = new System.Drawing.Point(26, 124);
+            this.category.Location = new System.Drawing.Point(26, 144);
             this.category.Name = "category";
             this.category.Size = new System.Drawing.Size(385, 25);
             this.category.TabIndex = 11;
@@ -186,12 +188,12 @@
             this.catTxt.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
             this.catTxt.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
             this.catTxt.Enabled = false;
-            this.catTxt.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(241)))), ((int)(((byte)(241)))));
+            this.catTxt.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
             this.catTxt.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.catTxt.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.catTxt.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.catTxt.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.catTxt.Location = new System.Drawing.Point(26, 121);
+            this.catTxt.Location = new System.Drawing.Point(26, 141);
             this.catTxt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.catTxt.Name = "catTxt";
             this.catTxt.PlaceholderText = "";
@@ -202,11 +204,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.label4.ForeColor = System.Drawing.Color.Gray;
-            this.label4.Location = new System.Drawing.Point(12, 296);
+            this.label4.Location = new System.Drawing.Point(13, 307);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(75, 13);
+            this.label4.Size = new System.Drawing.Size(84, 17);
             this.label4.TabIndex = 13;
             this.label4.Text = "Menu Details";
             // 
@@ -216,9 +218,9 @@
             // 
             // mm
             // 
-            this.mm.Location = new System.Drawing.Point(16, 317);
+            this.mm.Location = new System.Drawing.Point(16, 327);
             this.mm.Name = "mm";
-            this.mm.Size = new System.Drawing.Size(661, 236);
+            this.mm.Size = new System.Drawing.Size(661, 245);
             this.mm.TabIndex = 15;
             // 
             // b1
@@ -228,9 +230,9 @@
             this.b1.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.b1.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.b1.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.b1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
             this.b1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.b1.ForeColor = System.Drawing.Color.White;
-            this.b1.Image = ((System.Drawing.Image)(resources.GetObject("b1.Image")));
             this.b1.ImageOffset = new System.Drawing.Point(-5, 0);
             this.b1.ImageSize = new System.Drawing.Size(15, 15);
             this.b1.Location = new System.Drawing.Point(3, 3);
@@ -243,10 +245,11 @@
             // 
             // image
             // 
+            this.image.BorderRadius = 10;
             this.image.ImageRotate = 0F;
-            this.image.Location = new System.Drawing.Point(759, 30);
+            this.image.Location = new System.Drawing.Point(750, 21);
             this.image.Name = "image";
-            this.image.Size = new System.Drawing.Size(214, 200);
+            this.image.Size = new System.Drawing.Size(229, 200);
             this.image.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.image.TabIndex = 0;
             this.image.TabStop = false;
@@ -258,7 +261,7 @@
             this.closeButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.closeButton.Image = global::OrderingSystem.Properties.Resources.exit;
             this.closeButton.ImageRotate = 0F;
-            this.closeButton.Location = new System.Drawing.Point(974, 7);
+            this.closeButton.Location = new System.Drawing.Point(985, 1);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(26, 25);
             this.closeButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -272,9 +275,10 @@
             this.flowLayoutPanel1.Controls.Add(this.b2);
             this.flowLayoutPanel1.Controls.Add(this.b3);
             this.flowLayoutPanel1.Controls.Add(this.b4);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(759, 248);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(756, 230);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(223, 278);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(223, 355);
             this.flowLayoutPanel1.TabIndex = 16;
             // 
             // b3
@@ -284,6 +288,7 @@
             this.b3.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.b3.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.b3.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.b3.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
             this.b3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.b3.ForeColor = System.Drawing.Color.White;
             this.b3.Location = new System.Drawing.Point(3, 81);
@@ -300,6 +305,7 @@
             this.b4.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.b4.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.b4.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.b4.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
             this.b4.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.b4.ForeColor = System.Drawing.Color.White;
             this.b4.Location = new System.Drawing.Point(3, 120);
@@ -313,11 +319,11 @@
             // lPrice
             // 
             this.lPrice.AutoSize = true;
-            this.lPrice.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lPrice.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lPrice.ForeColor = System.Drawing.Color.Gray;
-            this.lPrice.Location = new System.Drawing.Point(426, 104);
+            this.lPrice.Location = new System.Drawing.Point(425, 120);
             this.lPrice.Name = "lPrice";
-            this.lPrice.Size = new System.Drawing.Size(31, 13);
+            this.lPrice.Size = new System.Drawing.Size(36, 17);
             this.lPrice.TabIndex = 18;
             this.lPrice.Text = "Price";
             this.lPrice.Visible = false;
@@ -334,12 +340,12 @@
             this.price.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
             this.price.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
             this.price.Enabled = false;
-            this.price.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(241)))), ((int)(((byte)(241)))));
+            this.price.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
             this.price.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.price.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.price.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.price.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.price.Location = new System.Drawing.Point(429, 121);
+            this.price.Location = new System.Drawing.Point(429, 141);
             this.price.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.price.Name = "price";
             this.price.PlaceholderText = "";
@@ -348,12 +354,42 @@
             this.price.TabIndex = 17;
             this.price.Visible = false;
             // 
+            // toggle
+            // 
+            this.toggle.CheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.toggle.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.toggle.CheckedState.InnerBorderColor = System.Drawing.Color.White;
+            this.toggle.CheckedState.InnerColor = System.Drawing.Color.White;
+            this.toggle.Enabled = false;
+            this.toggle.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.toggle.Location = new System.Drawing.Point(82, 6);
+            this.toggle.Name = "toggle";
+            this.toggle.Size = new System.Drawing.Size(35, 20);
+            this.toggle.TabIndex = 20;
+            this.toggle.UncheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.toggle.UncheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
+            this.toggle.UncheckedState.InnerBorderColor = System.Drawing.Color.White;
+            this.toggle.UncheckedState.InnerColor = System.Drawing.Color.White;
+            this.toggle.CheckedChanged += new System.EventHandler(this.guna2ToggleSwitch1_CheckedChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.Gray;
+            this.label5.Location = new System.Drawing.Point(16, 6);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(60, 17);
+            this.label5.TabIndex = 21;
+            this.label5.Text = "Available";
+            // 
             // MenuInformation
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1012, 570);
+            this.ClientSize = new System.Drawing.Size(1012, 600);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.toggle);
             this.Controls.Add(this.lPrice);
             this.Controls.Add(this.price);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -402,5 +438,7 @@
         private System.Windows.Forms.Label lPrice;
         private Guna.UI2.WinForms.Guna2TextBox price;
         private Guna.UI2.WinForms.Guna2Button b4;
+        private Guna.UI2.WinForms.Guna2ToggleSwitch toggle;
+        private System.Windows.Forms.Label label5;
     }
 }

@@ -48,12 +48,15 @@ namespace OrderingSystem.KioskApplication
                         //outofstock.Visible = true;
                         bb.Enabled = false;
                     };
+
+                    menuOptions.displayMenuOptions(menu);
                 }
-                menuOptions.displayMenuOptions(menu);
+                ;
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Internal Server Error. " + ex.Message);
+                MessageBox.Show("Internal Server Error. 3" + ex.Message);
             }
         }
         private void displayDetails(MenuModel menu)
@@ -79,8 +82,9 @@ namespace OrderingSystem.KioskApplication
                     if (orders == null || orders.Count == 0)
                         return;
 
+
                     orderList.AddRange(orders);
-                    orderListEvent?.Invoke(this, orderList);
+                    orderListEvent?.Invoke(this, orders);
                     DialogResult = DialogResult.OK;
                 }
             }
