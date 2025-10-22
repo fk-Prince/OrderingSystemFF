@@ -33,7 +33,9 @@
             this.description = new System.Windows.Forms.Label();
             this.image = new Guna.UI2.WinForms.Guna2PictureBox();
             this.price = new System.Windows.Forms.Label();
+            this.ooo = new Guna.UI2.WinForms.Guna2PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ooo)).BeginInit();
             this.SuspendLayout();
             // 
             // menuName
@@ -51,7 +53,7 @@
             // 
             this.description.BackColor = System.Drawing.Color.Transparent;
             this.description.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.description.Location = new System.Drawing.Point(34, 147);
+            this.description.Location = new System.Drawing.Point(24, 114);
             this.description.Name = "description";
             this.description.Size = new System.Drawing.Size(202, 59);
             this.description.TabIndex = 2;
@@ -64,9 +66,9 @@
             this.image.FillColor = System.Drawing.Color.Transparent;
             this.image.Image = ((System.Drawing.Image)(resources.GetObject("image.Image")));
             this.image.ImageRotate = 0F;
-            this.image.Location = new System.Drawing.Point(152, 9);
+            this.image.Location = new System.Drawing.Point(156, 12);
             this.image.Name = "image";
-            this.image.Size = new System.Drawing.Size(122, 100);
+            this.image.Size = new System.Drawing.Size(94, 89);
             this.image.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.image.TabIndex = 3;
             this.image.TabStop = false;
@@ -76,7 +78,7 @@
             // 
             this.price.BackColor = System.Drawing.Color.Transparent;
             this.price.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.price.Location = new System.Drawing.Point(13, 77);
+            this.price.Location = new System.Drawing.Point(13, 56);
             this.price.Name = "price";
             this.price.Size = new System.Drawing.Size(78, 21);
             this.price.TabIndex = 1;
@@ -84,9 +86,25 @@
             this.price.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.price.Click += new System.EventHandler(this.price_Click);
             // 
+            // ooo
+            // 
+            this.ooo.AutoRoundedCorners = true;
+            this.ooo.BackColor = System.Drawing.Color.Transparent;
+            this.ooo.Image = ((System.Drawing.Image)(resources.GetObject("ooo.Image")));
+            this.ooo.ImageRotate = 0F;
+            this.ooo.Location = new System.Drawing.Point(-23, 132);
+            this.ooo.Name = "ooo";
+            this.ooo.Size = new System.Drawing.Size(114, 59);
+            this.ooo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ooo.TabIndex = 4;
+            this.ooo.TabStop = false;
+            this.ooo.UseTransparentBackground = true;
+            this.ooo.Visible = false;
+            // 
             // MenuCard
             // 
-            this.ClientSize = new System.Drawing.Size(282, 230);
+            this.ClientSize = new System.Drawing.Size(250, 189);
+            this.Controls.Add(this.ooo);
             this.Controls.Add(this.image);
             this.Controls.Add(this.description);
             this.Controls.Add(this.price);
@@ -94,6 +112,7 @@
             this.Name = "MenuCard";
             this.Text = "MenuCard";
             ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ooo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -105,5 +124,6 @@
         private System.Windows.Forms.Label description;
         private Guna.UI2.WinForms.Guna2PictureBox image;
         private System.Windows.Forms.Label price;
+        private Guna.UI2.WinForms.Guna2PictureBox ooo;
     }
 }

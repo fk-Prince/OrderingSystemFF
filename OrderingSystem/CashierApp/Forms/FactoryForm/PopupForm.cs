@@ -1,20 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Guna.UI2.WinForms;
 
 namespace OrderingSystem.CashierApp.Forms.FactoryForm
 {
     public partial class PopupForm : Form
     {
+
+        public event EventHandler buttonClicked;
         public PopupForm()
         {
             InitializeComponent();
+        }
+
+        private void guna2Button1_Click(object sender, System.EventArgs e)
+        {
+            foreach (var c in Controls)
+            {
+                if (c is Guna2TextBox t && (string.IsNullOrEmpty(t.Text) && t.Visible))
+                {
+                    MessageBox.Show("Empty Input Fill all fields");
+                    return;
+                }
+
+                if (c is ComboBox b && (string.IsNullOrEmpty(b.Text) && b.Visible))
+                {
+                    MessageBox.Show("Empty Input Fill all fields");
+                    return;
+                }
+            }
+
+            buttonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void guna2PictureBox1_Click(object sender, System.EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
+
+
         }
     }
 }

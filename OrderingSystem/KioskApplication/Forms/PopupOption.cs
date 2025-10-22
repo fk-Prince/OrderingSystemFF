@@ -45,13 +45,11 @@ namespace OrderingSystem.KioskApplication
                 {
                     e.outOfOrder += (ses, ese) =>
                     {
-                        //outofstock.Visible = true;
                         bb.Enabled = false;
                     };
-
-                    menuOptions.displayMenuOptions(menu);
                 }
-                ;
+                menuOptions.displayMenuOptions(menu);
+
 
             }
             catch (Exception ex)

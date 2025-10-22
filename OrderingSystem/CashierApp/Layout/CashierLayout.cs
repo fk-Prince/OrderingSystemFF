@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using OrderingSystem.CashierApp.Forms.FactoryForm;
+using OrderingSystem.CashierApp.Forms.Staffs;
 using OrderingSystem.CashierApp.Layout;
 using OrderingSystem.Model;
 
@@ -94,13 +96,31 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void restockIngredient(object sender, System.EventArgs e)
         {
-            if (ingredientInstance == null) return;
-            ingredientInstance.showRestockIngredient();
+            IForms f = new FormFactory();
+            PopupForm p = new PopupForm();
+            p.buttonClicked += (ss, ee) =>
+            {
+                FactoryFormServices.saveFormData((PopupForm)ss, "restock-ingredients");
+            };
+            DialogResult rs = f.selectForm(p, "restock-ingredients").ShowDialog(this);
+            if (rs == DialogResult.OK)
+            {
+                p.Hide();
+            }
         }
         private void addIngredient(object sender, System.EventArgs e)
         {
-            if (ingredientInstance == null) return;
-            ingredientInstance.showAddIngredient();
+            IForms f = new FormFactory();
+            PopupForm p = new PopupForm();
+            p.buttonClicked += (ss, ee) =>
+            {
+                FactoryFormServices.saveFormData((PopupForm)ss, "add-ingredients");
+            };
+            DialogResult rs = f.selectForm(p, "add-ingredients").ShowDialog(this);
+            if (rs == DialogResult.OK)
+            {
+                p.Hide();
+            }
         }
         private void deductIngredient(object sender, System.EventArgs e)
         {
@@ -130,25 +150,13 @@ namespace OrderingSystem.CashierApp.Forms
             hideSubMenu();
         }
 
-        private void utilitiesClicked(object sender, System.EventArgs e)
+        private void staffClicked(object sender, System.EventArgs e)
         {
             hideSubMenu();
+            loadForm(new StaffFrm(staff));
         }
 
-        private void mm_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
-
-        private void guna2Panel1_SizeChanged(object sender, System.EventArgs e)
-        {
-
-        }
-
-        private void panel3_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void signout_Click(object sender, System.EventArgs e)
         {
@@ -163,7 +171,6 @@ namespace OrderingSystem.CashierApp.Forms
             LoginLayout ll = new LoginLayout();
             ll.isPopup = true;
             DialogResult rs = ll.ShowDialog(this);
-
             if (rs == DialogResult.OK)
             {
 
@@ -174,10 +181,19 @@ namespace OrderingSystem.CashierApp.Forms
                 ll.Hide();
             }
         }
-
         private void couponCodeButton(object sender, System.EventArgs e)
         {
-
+            IForms f = new FormFactory();
+            PopupForm p = new PopupForm();
+            p.buttonClicked += (ss, ee) =>
+            {
+                FactoryFormServices.saveFormData((PopupForm)ss, "Coupon");
+            };
+            DialogResult rs = f.selectForm(p, "coupon").ShowDialog(this);
+            if (rs == DialogResult.OK)
+            {
+                p.Hide();
+            }
         }
     }
 }

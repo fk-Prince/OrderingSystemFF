@@ -74,6 +74,7 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
@@ -114,13 +115,15 @@
     <Compile Include="CashierApp\Components\MenuInformation.Designer.cs">
       <DependentUpon>MenuInformation.cs</DependentUpon>
     </Compile>
+    <Compile Include="CashierApp\Components\StaffCard.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Components\StaffCard.Designer.cs">
+      <DependentUpon>StaffCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CashierApp\Forms\FactoryForm\FactoryFormServices.cs" />
+    <Compile Include="CashierApp\Forms\FactoryForm\FormFactory.cs" />
     <Compile Include="CashierApp\Forms\FactoryForm\IForms.cs" />
-    <Compile Include="CashierApp\Forms\FactoryForm\MyTextBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CashierApp\Forms\FactoryForm\MyTextBox.Designer.cs">
-      <DependentUpon>MyTextBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="CashierApp\Forms\FactoryForm\PopupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,13 +136,18 @@
     <Compile Include="CashierApp\Forms\Order\PaymentMethod.Designer.cs">
       <DependentUpon>PaymentMethod.cs</DependentUpon>
     </Compile>
-    <Compile Include="CashierApp\Forms\Utilities\GenerateUtilityForm.cs">
+    <Compile Include="CashierApp\Forms\Staffs\StaffFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CashierApp\Forms\Utilities\GenerateUtilityForm.Designer.cs">
-      <DependentUpon>GenerateUtilityForm.cs</DependentUpon>
+    <Compile Include="CashierApp\Forms\Staffs\StaffFrm.Designer.cs">
+      <DependentUpon>StaffFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CashierApp\Forms\Utilities\UtilityFormFactory.cs" />
+    <Compile Include="CashierApp\Forms\Staffs\StaffInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Forms\Staffs\StaffInformation.Designer.cs">
+      <DependentUpon>StaffInformation.cs</DependentUpon>
+    </Compile>
     <Compile Include="CashierApp\Layout\LoginLayout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,12 +231,6 @@
     </Compile>
     <Compile Include="CashierApp\Forms\Order\OrderFrm.Designer.cs">
       <DependentUpon>OrderFrm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CashierApp\Forms\Utilities\UtilitiesFrm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CashierApp\Forms\Utilities\UtilitiesFrm.Designer.cs">
-      <DependentUpon>UtilitiesFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="CashierApp\Layout\CashierLayout.cs">
       <SubType>Form</SubType>
@@ -354,9 +356,11 @@
     <Compile Include="Repository\Staff\IStaffRepository.cs" />
     <Compile Include="Repository\Staff\StaffRepository.cs" />
     <Compile Include="Services\CartServices.cs" />
+    <Compile Include="Services\CouponServices.cs" />
     <Compile Include="Services\IngredientServices.cs" />
     <Compile Include="Services\MenuService.cs" />
     <Compile Include="Services\OrderServices.cs" />
+    <Compile Include="Services\StaffServices.cs" />
     <Compile Include="util\ImageHelper.cs" />
     <EmbeddedResource Include="CashierApp\Components\BundleMenuPopup.resx">
       <DependentUpon>BundleMenuPopup.cs</DependentUpon>
@@ -370,8 +374,8 @@
     <EmbeddedResource Include="CashierApp\Components\MenuInformation.resx">
       <DependentUpon>MenuInformation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Forms\FactoryForm\MyTextBox.resx">
-      <DependentUpon>MyTextBox.cs</DependentUpon>
+    <EmbeddedResource Include="CashierApp\Components\StaffCard.resx">
+      <DependentUpon>StaffCard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\FactoryForm\PopupForm.resx">
       <DependentUpon>PopupForm.cs</DependentUpon>
@@ -379,8 +383,11 @@
     <EmbeddedResource Include="CashierApp\Forms\Order\PaymentMethod.resx">
       <DependentUpon>PaymentMethod.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Forms\Utilities\GenerateUtilityForm.resx">
-      <DependentUpon>GenerateUtilityForm.cs</DependentUpon>
+    <EmbeddedResource Include="CashierApp\Forms\Staffs\StaffFrm.resx">
+      <DependentUpon>StaffFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CashierApp\Forms\Staffs\StaffInformation.resx">
+      <DependentUpon>StaffInformation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Layout\LoginLayout.resx">
       <DependentUpon>LoginLayout.cs</DependentUpon>
@@ -423,9 +430,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\Order\OrderFrm.resx">
       <DependentUpon>OrderFrm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Forms\Utilities\UtilitiesFrm.resx">
-      <DependentUpon>UtilitiesFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Layout\CashierLayout.resx">
       <DependentUpon>CashierLayout.cs</DependentUpon>

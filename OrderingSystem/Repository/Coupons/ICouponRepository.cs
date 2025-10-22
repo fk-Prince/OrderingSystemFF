@@ -1,7 +1,11 @@
-﻿namespace OrderingSystem.Repository
+﻿using OrderingSystem.Model;
+
+namespace OrderingSystem.Repository
 {
     public interface ICouponRepository
     {
-        Model.CouponModel getCoupon(string code);
+
+        CouponModel getCoupon(string code);
+        bool generateCoupon(CouponModel co);
     }
 }

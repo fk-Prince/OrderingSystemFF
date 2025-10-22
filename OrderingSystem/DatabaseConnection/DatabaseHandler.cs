@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySqlConnector;
@@ -11,10 +10,8 @@ namespace OrderingSystem.DatabaseConnection
         private static DatabaseHandler instance;
         private static readonly object lockObject = new object();
         private MySqlConnection conn;
-        private SemaphoreSlim connectionSemaphore;
         private DatabaseHandler()
         {
-            connectionSemaphore = new SemaphoreSlim(1, 1);
         }
 
         public static DatabaseHandler getInstance()

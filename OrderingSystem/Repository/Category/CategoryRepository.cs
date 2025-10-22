@@ -23,7 +23,7 @@ namespace OrderingSystem.Repository.CategoryRepository
                     {
                         while (reader.Read())
                         {
-                            CategoryModel categoryModel = new CategoryModel(reader.GetInt32("category_id"), reader.GetString("category_name"));
+                            CategoryModel categoryModel = new CategoryModel(reader.GetInt32("category_id"), reader.GetString("category_name"), ImageHelper.GetImageFromBlob(reader, "menu"));
                             list.Add(categoryModel);
                         }
                     }

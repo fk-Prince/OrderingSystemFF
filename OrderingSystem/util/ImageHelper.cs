@@ -43,7 +43,6 @@ namespace OrderingSystem
                 else if (type == "staff")
                 {
                     return Properties.Resources.staff;
-
                 }
                 return Properties.Resources.exit;
             }

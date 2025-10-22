@@ -1,6 +1,15 @@
-﻿namespace OrderingSystem.Services
+﻿using OrderingSystem.Repository.Ingredients;
+
+namespace OrderingSystem.Services
 {
-    internal class IngredientServices
+    public class IngredientServices
     {
+
+        IIngredientRepository ingredientRepository;
+
+        public IngredientServices()
+        {
+            ingredientRepository = new IngredientRepository();
+        }
     }
 }

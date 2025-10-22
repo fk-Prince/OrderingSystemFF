@@ -4,6 +4,6 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
 {
     public interface IForms
     {
-        Form selectForm(string type);
+        Form selectForm(Form f, string type);
     }
 }

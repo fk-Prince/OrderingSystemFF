@@ -50,7 +50,7 @@ namespace OrderingSystem.Model
             MenuBuilder WithMaxOrder(int menuId);
             MenuBuilder WithPurchaseQty(int p);
             MenuBuilder WithMenuName(string menuName);
-            MenuBuilder WithCategoryName(string n);
+            MenuBuilder WithCategoryName(string n); //
             MenuBuilder WithFlavorName(string menuName);
             MenuBuilder WithSizeName(string menuName);
             MenuBuilder WithMenuDescription(string menuDescription);

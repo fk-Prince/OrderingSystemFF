@@ -31,6 +31,8 @@ namespace OrderingSystem.KioskApplication.Cards
 
         private void cardLayout()
         {
+
+            ooo.Visible = !(menu.MaxOrder <= 0);
             BorderRadius = 8;
             BorderThickness = 1;
             BorderColor = Color.FromArgb(34, 34, 34);
@@ -80,22 +82,6 @@ namespace OrderingSystem.KioskApplication.Cards
         {
             menuName.Text = menu.MenuName;
             price.Text = menu.MenuPrice.ToString("C", new CultureInfo("en-PH"));
-
-            //if (menu.DiscountMenuRate != 0.00)
-            //{
-            //    off.Visible = true;
-            //    off.Text = (menu.DiscountMenuRate * 100).ToString() + "%";
-            //    stick.Visible = true;
-            //    newPrice.Visible = true;
-            //    newPrice.Text = menu.getPrice().ToString("C", new CultureInfo("en-PH"));
-            //}
-            //else
-            //{
-            //    stick.Visible = false;
-            //    newPrice.Visible = false;
-            //    off.Visible = false;
-            //}
-
             image.Image = menu.MenuImage;
             description.Text = menu.MenuDescription;
             menuName.ForeColor = Color.Black;

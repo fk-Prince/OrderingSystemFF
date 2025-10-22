@@ -42,9 +42,8 @@ namespace OrderingSystem.KioskApplication.Options
                 displayFlavor(menuDetails);
                 frequentlyOrderedOption.displayFrequentlyOrdered(menu);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 throw;
             }
         }
@@ -57,6 +56,7 @@ namespace OrderingSystem.KioskApplication.Options
                 .GroupBy(ex => ex.FlavorName)
                 .Select(group => group.First())
                 .ToList();
+
             if (x.Count > 1)
             {
                 FlavorLayout fl = new FlavorLayout(x);

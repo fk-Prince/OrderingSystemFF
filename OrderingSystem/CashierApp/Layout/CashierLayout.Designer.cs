@@ -77,7 +77,6 @@
             this.guna2Panel1.Name = "guna2Panel1";
             this.guna2Panel1.Size = new System.Drawing.Size(1366, 700);
             this.guna2Panel1.TabIndex = 0;
-            this.guna2Panel1.SizeChanged += new System.EventHandler(this.guna2Panel1_SizeChanged);
             // 
             // panel2
             // 
@@ -143,10 +142,10 @@
             this.guna2Button21.Name = "guna2Button21";
             this.guna2Button21.Size = new System.Drawing.Size(228, 45);
             this.guna2Button21.TabIndex = 12;
-            this.guna2Button21.Text = "Utilities";
+            this.guna2Button21.Text = "Staff";
             this.guna2Button21.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button21.TextOffset = new System.Drawing.Point(20, 0);
-            this.guna2Button21.Click += new System.EventHandler(this.utilitiesClicked);
+            this.guna2Button21.Click += new System.EventHandler(this.staffClicked);
             this.guna2Button21.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonClicked);
             // 
             // guna2Button20
@@ -391,7 +390,6 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(228, 282);
             this.panel3.TabIndex = 6;
-            this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
             // 
             // su
             // 
@@ -530,7 +528,6 @@
             this.mm.Name = "mm";
             this.mm.Size = new System.Drawing.Size(1130, 699);
             this.mm.TabIndex = 0;
-            this.mm.Paint += new System.Windows.Forms.PaintEventHandler(this.mm_Paint);
             // 
             // CashierLayout
             // 

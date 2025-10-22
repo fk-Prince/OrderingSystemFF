@@ -4,6 +4,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OrderingSystem.Model;
+using OrderingSystem.Repo.CashierMenuRepository;
 using OrderingSystem.Repository.Ingredients;
 
 namespace OrderingSystem.CashierApp.Components
@@ -30,7 +31,45 @@ namespace OrderingSystem.CashierApp.Components
             table.Columns.Add("Size");
             table.Columns.Add("Prep Estimated Time");
             table.Columns.Add("Price");
+            variants.ForEach(v => table.Rows.Add(v.FlavorName, v.SizeName, v.EstimatedTime, v.MenuPrice));
+            dataGrid.AutoGenerateColumns = false;
             dataGrid.DataSource = table;
+
+            dataGrid.Columns.Clear();
+
+
+            List<string> flavors = new MenuRepository().getFlavor();
+            List<string> sizes = new MenuRepository().getSize();
+            DataGridViewComboBoxColumn flavorCombo = new DataGridViewComboBoxColumn();
+            flavorCombo.Name = "Flavor";
+            flavorCombo.HeaderText = "Flavor";
+            flavorCombo.DataSource = flavors;
+            flavorCombo.DataPropertyName = "Flavor";
+            flavorCombo.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
+            dataGrid.Columns.Add(flavorCombo);
+
+
+            DataGridViewComboBoxColumn sizeCombo = new DataGridViewComboBoxColumn();
+            sizeCombo.Name = "Size";
+            sizeCombo.HeaderText = "Size";
+            sizeCombo.DataSource = sizes;
+            sizeCombo.DataPropertyName = "Size";
+            sizeCombo.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
+            dataGrid.Columns.Add(sizeCombo);
+
+
+            DataGridViewTextBoxColumn timeColumn = new DataGridViewTextBoxColumn();
+            timeColumn.Name = "Prep Estimated Time";
+            timeColumn.HeaderText = "Prep Estimated Time";
+            timeColumn.DataPropertyName = "Prep Estimated Time";
+            dataGrid.Columns.Add(timeColumn);
+
+
+            DataGridViewTextBoxColumn priceColumn = new DataGridViewTextBoxColumn();
+            priceColumn.Name = "Price";
+            priceColumn.HeaderText = "Price";
+            priceColumn.DataPropertyName = "Price";
+            dataGrid.Columns.Add(priceColumn);
 
 
             DataGridViewButtonColumn ingredientsButtonColumn = new DataGridViewButtonColumn();
@@ -40,7 +79,15 @@ namespace OrderingSystem.CashierApp.Components
             ingredientsButtonColumn.UseColumnTextForButtonValue = true;
             dataGrid.Columns.Add(ingredientsButtonColumn);
 
-            variants.ForEach(v => table.Rows.Add(v.FlavorName, v.SizeName, v.EstimatedTime, v.MenuPrice));
+            dataGrid.EditingControlShowing += (s, e) =>
+            {
+                if (e.Control is ComboBox cb)
+                {
+                    cb.DropDownStyle = ComboBoxStyle.DropDown;
+                    cb.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                    cb.AutoCompleteSource = AutoCompleteSource.ListItems;
+                }
+            };
 
             dataGrid.CellContentClick += (s, e) =>
             {
@@ -62,7 +109,6 @@ namespace OrderingSystem.CashierApp.Components
                             else
                             {
                                 MessageBox.Show("Ingredient ex.");
-
                             }
                         }
                     };

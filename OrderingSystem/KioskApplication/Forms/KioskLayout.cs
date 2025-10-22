@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using MySqlConnector;
 using OrderingSystem.KioskApplication;
 using OrderingSystem.KioskApplication.Cards;
 using OrderingSystem.KioskApplication.Component;
@@ -20,9 +21,9 @@ namespace OrderingSystem
     public partial class KioskLayout : Form
     {
         private IKioskMenuRepository _menuRepository;
-        private Dictionary<int, FlowLayoutPanel> _categoryPanels;
-        private Dictionary<int, Guna2Panel> _categoryCons;
-        private List<MenuModel> _orderList;
+        private Dictionary<int, FlowLayoutPanel> categoryPanels;
+        private Dictionary<int, Guna2Panel> categoryContainer;
+        private List<MenuModel> orderList;
         private List<Guna2Button> buttonListTop;
         private List<Guna2Button> buttonListSide;
         private List<MenuModel> _allMenus;
@@ -41,11 +42,11 @@ namespace OrderingSystem
         public KioskLayout()
         {
             InitializeComponent();
-            _orderList = new List<MenuModel>();
+            orderList = new List<MenuModel>();
             buttonListTop = new List<Guna2Button>();
             buttonListSide = new List<Guna2Button>();
-            _categoryPanels = new Dictionary<int, FlowLayoutPanel>();
-            _categoryCons = new Dictionary<int, Guna2Panel>();
+            categoryPanels = new Dictionary<int, FlowLayoutPanel>();
+            categoryContainer = new Dictionary<int, Guna2Panel>();
             cc.Start();
             dt.Start();
             flowMenu.MouseWheel += FlowMenu_MouseWheel;
@@ -90,9 +91,9 @@ namespace OrderingSystem
             Guna2Button b = sender as Guna2Button;
             int catId = (int)b.Tag;
 
-            if (_categoryPanels.ContainsKey(catId))
+            if (categoryPanels.ContainsKey(catId))
             {
-                FlowLayoutPanel p = _categoryPanels[catId];
+                FlowLayoutPanel p = categoryPanels[catId];
                 flowMenu.ScrollControlIntoView(p);
             }
             if (lastClickedTop != null && lastClickedTop != b)
@@ -105,9 +106,9 @@ namespace OrderingSystem
             Guna2Button b = (Guna2Button)sender;
             int catId = (int)b.Tag;
 
-            if (_categoryPanels.ContainsKey(catId))
+            if (categoryPanels.ContainsKey(catId))
             {
-                FlowLayoutPanel p = _categoryPanels[catId];
+                FlowLayoutPanel p = categoryPanels[catId];
                 flowMenu.ScrollControlIntoView(p);
             }
 
@@ -118,10 +119,10 @@ namespace OrderingSystem
         }
         private void displayMenu(List<MenuModel> mm)
         {
-            foreach (var p in _categoryPanels.Values)
+            foreach (var p in categoryPanels.Values)
                 p.Controls.Clear();
 
-            foreach (var p in _categoryCons)
+            foreach (var p in categoryContainer)
                 p.Value.Visible = !isFilter;
 
             MenuCard card = null;
@@ -161,7 +162,7 @@ namespace OrderingSystem
 
                 if (flowMenu.Controls.Count == 0)
                 {
-                    foreach (var panel in _categoryCons.Values)
+                    foreach (var panel in categoryContainer.Values)
                     {
                         flowMenu.Controls.Add(panel);
                     }
@@ -169,7 +170,7 @@ namespace OrderingSystem
 
                 foreach (MenuModel menu in mm)
                 {
-                    if (_categoryPanels.ContainsKey(menu.CategoryId))
+                    if (categoryPanels.ContainsKey(menu.CategoryId))
                     {
                         card = new MenuCard(_menuRepository, menu);
                         card.Margin = new Padding(20, 40, 20, 0);
@@ -185,7 +186,7 @@ namespace OrderingSystem
                                 MessageBox.Show(ex.Message);
                             }
                         };
-                        _categoryPanels[menu.CategoryId].Controls.Add(card);
+                        categoryPanels[menu.CategoryId].Controls.Add(card);
                     }
                 }
             }
@@ -218,8 +219,8 @@ namespace OrderingSystem
                 p.Controls.Add(flowCat);
                 flowMenu.Controls.Add(p);
 
-                _categoryPanels.Add(c.CategoryId, flowCat);
-                _categoryCons.Add(c.CategoryId, p);
+                categoryPanels.Add(c.CategoryId, flowCat);
+                categoryContainer.Add(c.CategoryId, p);
 
                 Guna2Button b = new Guna2Button();
                 b.Text = c.CategoryName;
@@ -268,8 +269,8 @@ namespace OrderingSystem
             vat.Text = cartServices.calculateVat().ToString("N2");
             cdiscount.Text = cartServices.calculateCoupon(couponSelected).ToString("N2");
             total.Text = cartServices.calculateTotalAmount().ToString("N2");
-            orderCount.Text = _orderList.Count.ToString();
-            count2.Text = _orderList.Count.ToString();
+            orderCount.Text = orderList.Count.ToString();
+            count2.Text = orderList.Count.ToString();
         }
         private void searchedMenu(object sender, EventArgs e)
         {
@@ -289,7 +290,7 @@ namespace OrderingSystem
         }
         private void confirmOrder(object sender, EventArgs e)
         {
-            if (_orderList.Count == 0)
+            if (orderList.Count == 0)
             {
                 MessageBox.Show("No items in the cart.");
                 return;
@@ -301,7 +302,7 @@ namespace OrderingSystem
                 string orderId = orderServices.getNewOrderId();
                 OrderModel om = OrderModel.Builder()
                                 .SetOrderId(orderId)
-                                .SetOrderList(_orderList)
+                                .SetOrderList(orderList)
                                 .SetCoupon(couponSelected)
                                 .Build();
                 bool suc = orderServices.confirmOrder(om);
@@ -310,7 +311,7 @@ namespace OrderingSystem
                     OrderReceipt or = new OrderReceipt(om);
                     or.Message("Proceed to the cashier \n    Within 30minutes");
                     or.d();
-                    _orderList.Clear();
+                    orderList.Clear();
                     flowCart.Controls.Clear();
                     displayTotal(this, EventArgs.Empty);
                 }
@@ -356,16 +357,19 @@ namespace OrderingSystem
         {
             try
             {
-                _menuRepository = new KioskMenuRepository(_orderList);
+                _menuRepository = new KioskMenuRepository(orderList);
                 ICategoryRepository categoryRepository = new CategoryRepository();
 
                 List<CategoryModel> cats = categoryRepository.getCategories();
                 displayCategory(cats);
                 _allMenus = _menuRepository.getMenu();
                 displayMenu(_allMenus);
-
-                cartServices = new CartServices(_menuRepository, flowCart, _orderList);
+                cartServices = new CartServices(_menuRepository, flowCart, orderList);
                 cartServices.quantityChanged += (s, b) => displayTotal(this, EventArgs.Empty);
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show(ex.Message);
             }
             catch (Exception)
             {
@@ -387,7 +391,7 @@ namespace OrderingSystem
                 isFilter = false;
                 flowMenu.Controls.Clear();
 
-                foreach (var panel in _categoryCons.Values)
+                foreach (var panel in categoryContainer.Values)
                 {
                     panel.Visible = true;
                     flowMenu.Controls.Add(panel);
@@ -415,7 +419,7 @@ namespace OrderingSystem
             if (isBottom)
             {
                 top = int.MinValue;
-                foreach (var v in _categoryPanels)
+                foreach (var v in categoryPanels)
                 {
                     var panel = v.Value;
                     Rectangle scren = panel.RectangleToScreen(panel.ClientRectangle);
@@ -431,7 +435,7 @@ namespace OrderingSystem
             }
             else
             {
-                foreach (var kvp in _categoryPanels)
+                foreach (var kvp in categoryPanels)
                 {
                     var panel = kvp.Value;
 
@@ -450,7 +454,7 @@ namespace OrderingSystem
             }
             if (onScren != null)
             {
-                int categoryId = _categoryPanels.FirstOrDefault(v => v.Value == onScren).Key;
+                int categoryId = categoryPanels.FirstOrDefault(v => v.Value == onScren).Key;
                 var b = buttonListSide.FirstOrDefault(b2 => (int)b2.Tag == categoryId);
 
                 if (b != null && b != lastActiveButtonSide) lastButton(b);

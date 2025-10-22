@@ -194,7 +194,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             try
             {
                 var con = db.getConnection();
-                using (var cmd = new MySqlCommand("SELECT DISTINCT flavor_name FROM flavor", con))
+                using (var cmd = new MySqlCommand("SELECT DISTINCT flavor_name FROM menu_detail", con))
                 {
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -210,6 +210,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                 throw ex;
             }
             finally
+
             {
                 db.closeConnection();
             }
@@ -222,7 +223,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             try
             {
                 var con = db.getConnection();
-                using (var cmd = new MySqlCommand("SELECT DISTINCT size_name FROM size", con))
+                using (var cmd = new MySqlCommand("SELECT DISTINCT size_name FROM menu_detail", con))
                 {
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -311,11 +312,9 @@ namespace OrderingSystem.Repo.CashierMenuRepository
         public List<MenuModel> getBundled(MenuModel menu)
         {
 
-            string query = @"SElECT m.menu_id, m.menu_name, md.menu_detail_id,md.price,md.estimated_time,s.size_name,f.flavor_name,mp.quantity,mp.package_type,mp.package_id FROM menu m 
+            string query = @"SElECT m.menu_id, m.menu_name, md.menu_detail_id,md.price,md.estimated_time,md.size_name,md.flavor_name,mp.quantity,mp.package_type,mp.package_id FROM menu m 
                                 INNER JOIN menu_detail md ON md.menu_id = m.menu_id 
                                 INNER JOIN menu_package mp ON md.menu_detail_id = mp.included_menu_detail_id
-                                INNER JOIN flavor f ON f.flavor_id = md.flavor_id
-                                INNER JOIN size s ON s.size_id = md.size_id
                                 WHERE mp.from_menu_detail_id = (	
 	                                SELECT menu_detail_id FROM menu_detail 
 	                                WHERE menu_id = @menu_id

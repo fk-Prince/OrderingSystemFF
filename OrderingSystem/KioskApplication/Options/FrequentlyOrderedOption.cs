@@ -29,6 +29,7 @@ namespace OrderingSystem.KioskApplication.Options
                     flowPanel.Controls.SetChildIndex(fot, flowPanel.Controls.Count - 1);
                     return;
                 }
+
                 if (md.Min(m => m.MaxOrder) <= 20) return;
 
 

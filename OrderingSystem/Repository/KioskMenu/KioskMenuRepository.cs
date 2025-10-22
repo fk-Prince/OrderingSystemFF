@@ -69,14 +69,12 @@ namespace OrderingSystem.Repository
                                       m.image,
                                       md.menu_detail_id,
                                       md.price,
-                                      f.flavor_name,
-                                      s.size_name,
+                                      md.flavor_name,
+                                      md.size_name,
                                       md.estimated_time
                                   FROM menu m
                                   LEFT JOIN category c ON m.category_id = c.category_id
-                                  LEFT JOIN menu_detail md ON m.menu_id = md.menu_id
-                                  LEFT JOIN flavor f ON f.flavor_id = md.flavor_id
-                                  LEFT JOIN size s ON s.size_id = md.size_id
+                                  LEFT JOIN menu_detail md ON m.menu_id = md.menu_id 
                                   WHERE m.isAvailable = 'Yes' 
                                     AND m.menu_id = @menu_id
                                     AND md.menu_detail_id NOT IN (SELECT from_menu_detail_id FROM menu_package)
@@ -107,7 +105,7 @@ namespace OrderingSystem.Repository
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message);
                 Console.WriteLine("error on getMenuDetailFlavor");
                 throw;
             }
@@ -204,13 +202,13 @@ namespace OrderingSystem.Repository
                     {
                         while (reader.Read())
                         {
-
                             var menu = MenuModel.Builder()
                                 .WithMenuId(reader.GetInt32("menu_id"))
                                 .WithMenuName(reader.GetString("menu_name"))
                                 .WithMenuDescription(reader.GetString("menu_description"))
                                 .WithMenuDetailId(reader.GetInt32("menu_detail_id"))
                                 .WithPrice(reader.GetDouble("price"))
+                                .WithMaxOrder(getMaxOrderRealTime2(menus.MenuId, reader.GetInt32("menu_detail_id"), orderList))
                                 .WithMenuImage(ImageHelper.GetImageFromBlob(reader, "menu"))
                                 .Build();
                             list.Add(menu);
@@ -260,19 +258,17 @@ namespace OrderingSystem.Repository
                                 md.menu_detail_id,
                                 m.menu_name,
                                 m.menu_description,
-                                f.flavor_name,
-                                s.size_name,
+                                md.flavor_name,
+                                md.size_name,
                                 md.price,
                                 pi.quantity,
                                 pi.package_type
                             FROM package_items pi
                             JOIN menu_detail md ON pi.included_menu_detail_id = md.menu_detail_id
                             LEFT JOIN menu m ON md.menu_id = m.menu_id
-                            LEFT JOIN flavor f ON f.flavor_id = md.flavor_id
-                            LEFT JOIN size s ON s.size_id = md.size_id
                             ORDER BY
                                 md.menu_id, 
-                                f.flavor_name;";
+                                md.flavor_name;";
                 var conn = db.getConnection();
 
                 using (var cmd = new MySqlCommand(query, conn))
@@ -322,14 +318,11 @@ namespace OrderingSystem.Repository
                                 md.menu_id,
                                 md.menu_detail_id,
                                 md.price,
-                                f.flavor_name,
-                                s.size_name,
+                                md.flavor_name,
+                                md.size_name,
                                 COALESCE(mp.package_type, 'Not-Fixed') AS package_type
-                            FROM menu m
-                         
+                            FROM menu m        
                             LEFT JOIN menu_detail md ON m.menu_id = md.menu_id
-                            LEFT JOIN flavor f ON f.flavor_id = md.flavor_id
-                            LEFT JOIN size s ON s.size_id = md.size_id
                             LEFT JOIN (SELECT from_menu_detail_id, package_type FROM menu_package) mp ON mp.from_menu_detail_id = md.menu_detail_id
                             WHERE m.menu_id = @menu_id
                              AND (
@@ -481,6 +474,43 @@ namespace OrderingSystem.Repository
             {
                 MessageBox.Show(ex.Message + "123");
                 Console.WriteLine("error on getNewPackagePrice");
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+            return 0;
+        }
+
+        public int getMaxOrderRealTime2(int menuDetailId, int menu_id, List<MenuModel> orderList)
+        {
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+
+                using (var cmd = new MySqlCommand("p_menu_max_order2", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    string json = JsonConvert.SerializeObject(orderList);
+                    cmd.Parameters.AddWithValue("@p_menu_detail_id", menuDetailId);
+                    cmd.Parameters.AddWithValue("@p_menu_id", menu_id);
+                    cmd.Parameters.AddWithValue("@p_json", json);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            return reader.GetInt32("max_order");
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+
+                Console.WriteLine("error on getMaxOrderRealTime");
                 throw;
             }
             finally

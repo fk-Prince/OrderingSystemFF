@@ -101,7 +101,7 @@ namespace OrderingSystem.CashierApp.Components
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Internal Server Error");
+                MessageBox.Show("Internal Server Error" + ex.Message);
                 Console.WriteLine(ex.Message + "displayTable ON menuinfroamtion");
             }
         }

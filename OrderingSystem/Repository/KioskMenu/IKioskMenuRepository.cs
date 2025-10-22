@@ -11,6 +11,7 @@ namespace OrderingSystem.Repository
         bool isMenuPackage(MenuModel menu);
         List<MenuModel> getFrequentlyOrderedTogether(MenuModel menu);
         int getMaxOrderRealTime(int menuDetailId, List<MenuModel> orderList);
+        int getMaxOrderRealTime2(int menuDetailId, int menu_id, List<MenuModel> orderList);
         List<MenuModel> getIncludedMenu(MenuModel menu);
         double getNewPackagePrice(int menuid, List<MenuModel> selectedMenus);
 

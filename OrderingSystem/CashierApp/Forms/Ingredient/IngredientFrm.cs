@@ -1,21 +1,22 @@
 ﻿using System.Windows.Forms;
-using OrderingSystem.CashierApp.Forms.Ingredient;
+using OrderingSystem.CashierApp.Forms.FactoryForm;
 
 namespace OrderingSystem.CashierApp.Forms
 {
     public partial class IngredientFrm : Form
     {
+        private IForms f;
         public IngredientFrm()
         {
             InitializeComponent();
-
+            f = new FormFactory();
         }
 
 
         public void showAddIngredient()
         {
-            AddIngredient add = new AddIngredient();
-            DialogResult rs = add.ShowDialog(this);
+            PopupForm add = new PopupForm();
+            DialogResult rs = f.selectForm(add, "add-ingredients").ShowDialog(this);
             if (rs == DialogResult.OK)
             {
                 add.Hide();
@@ -25,7 +26,7 @@ namespace OrderingSystem.CashierApp.Forms
 
         public void showDeductIngredient()
         {
-            DeductIngredient ded = new DeductIngredient();
+            PopupForm ded = new PopupForm();
             DialogResult rs = ded.ShowDialog(this);
             if (rs == DialogResult.OK)
             {
@@ -36,13 +37,12 @@ namespace OrderingSystem.CashierApp.Forms
 
         public void showRestockIngredient()
         {
-            RestockIngredient re = new RestockIngredient();
-            DialogResult rs = re.ShowDialog(this);
+            PopupForm add = new PopupForm();
+            DialogResult rs = f.selectForm(add, "restock-ingredients").ShowDialog(this);
             if (rs == DialogResult.OK)
             {
-                re.Hide();
+                add.Hide();
             }
-
         }
     }
 }
