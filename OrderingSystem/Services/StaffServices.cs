@@ -1,5 +1,6 @@
-﻿using System.Text.RegularExpressions;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Repository.Staff;
 
@@ -20,28 +21,23 @@ namespace OrderingSystem.Services
             string numberLetterRegex = @"^[A-Za-z0-9]+$";
             if (!string.IsNullOrWhiteSpace(staff.PhoneNumber) && !Regex.IsMatch(staff.PhoneNumber, numberRegex))
             {
-                MessageBox.Show("Invalid Phone number.");
-                return false;
+                throw new InvalidInput("Invalid Phone number.");
             }
             if (!Regex.IsMatch(staff.FirstName, letterRegex) || !Regex.IsMatch(staff.LastName, letterRegex))
             {
-                MessageBox.Show("Invalid Name.");
-                return false;
+                throw new InvalidInput("Invalid Name.");
             }
             if (!string.IsNullOrWhiteSpace(staff.Password) && !Regex.IsMatch(staff.Password, numberLetterRegex))
             {
-                MessageBox.Show("Password should not contain Special Characters.");
-                return false;
+                throw new InvalidInput("Password should not contain Special Characters.");
             }
 
             if (isUsernameExists(staff))
             {
-                MessageBox.Show("Username exists, Try another one");
-                return false;
+                throw new InvalidInput("Username exists, Try another one");
             }
             return true;
         }
-
         public bool updateStaff(StaffModel model)
         {
             return staffRepository.updateStaff(model);
@@ -50,24 +46,24 @@ namespace OrderingSystem.Services
         {
             if (model.StaffId == staffId)
             {
-                MessageBox.Show("You are unable to fire yourself");
-                return false;
+                throw new InvalidAction("You are unable to fire yourself");
             }
             return staffRepository.fireStaff(staffId);
         }
-
         public bool isUsernameExists(StaffModel staff)
         {
             return staffRepository.usernameExists(staff);
         }
-
+        public List<StaffModel> getStaffs()
+        {
+            return staffRepository.getStaff();
+        }
         public bool addStaff(StaffModel staff)
         {
             if (!isInputValidated(staff)) return false;
             if (isUsernameExists(staff))
             {
-                MessageBox.Show("Username exists, Try another one");
-                return false;
+                throw new InvalidInput("Username exists, Try another one");
             }
 
             return staffRepository.addStaff(staff);

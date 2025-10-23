@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Services;
 
@@ -14,13 +15,12 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
         private StaffModel viewingStaff;
         private StaffModel userStaff;
         public event EventHandler staffUpdated;
-        public StaffInformation(StaffModel userStaff)
+        public StaffInformation(StaffServices staffServices, StaffModel userStaff)
         {
             InitializeComponent();
-            staffServices = new StaffServices();
+            this.staffServices = staffServices;
             this.userStaff = userStaff;
         }
-
         private void allowType(bool isEditMode)
         {
             foreach (var xb in Controls)
@@ -62,7 +62,6 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
             cRole.SelectedItem = viewingStaff.Role.Substring(0, 1).ToUpper() + viewingStaff.Role.Substring(1).ToLower();
 
         }
-
         public void displayStaff(StaffModel viewingStaff)
         {
             this.viewingStaff = viewingStaff;
@@ -82,12 +81,12 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
             {
                 fb.Text = "Fired";
                 fb.Click -= b1_Click;
+                fb.Enabled = false;
             }
             if (viewingStaff.Image != null) image.BorderStyle = BorderStyle.None;
 
             allowType(isEditMode);
         }
-
         private void guna2PictureBox1_Click(object sender, System.EventArgs e)
         {
             DialogResult = DialogResult.OK;
@@ -99,12 +98,10 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
 
             cRole.SelectedIndex = 0;
         }
-
         private void b1_Click(object sender, System.EventArgs e)
         {
             if (b1.Text == "Add Staff") addStaffLogic();
             if (b1.Text == "Update" || b1.Text == "Save") updateStaffLogic();
-
         }
         private void updateStaffLogic()
         {
@@ -136,12 +133,16 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
                         if (upSuc)
                         {
                             fName.Text = firstName.Text.Substring(0, 1).ToUpper() + firstName.Text.Substring(1).ToLower() + "  " + lastName.Text.Substring(0, 1).ToUpper() + lastName.Text.Substring(1).ToLower();
-                            MessageBox.Show("Successfully updated");
+                            MessageBox.Show("Successfully updated", "Information Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                             staffUpdated.Invoke(this, EventArgs.Empty);
                         }
 
                     }
                 }
+            }
+            catch (InvalidInput ex)
+            {
+                MessageBox.Show(ex.Message, "Information Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -150,40 +151,45 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
         }
         private void addStaffLogic()
         {
-            foreach (var c in this.Controls)
+            try
             {
-                if (c is Guna2TextBox tb)
+                foreach (var c in this.Controls)
                 {
-                    if (tb.Visible && string.IsNullOrEmpty(tb.Text) && tb.Name != "phone")
+                    if (c is Guna2TextBox tb)
                     {
-                        MessageBox.Show("Fill * the fields.");
-                        return;
-                    }
+                        if (tb.Visible && string.IsNullOrEmpty(tb.Text) && tb.Name != "phone")
+                        {
+                            throw new InvalidInput("Fill * the fields.");
+                        }
 
-                    if (cRole.SelectedIndex == -1)
-                    {
-                        MessageBox.Show("Fill * the fields.");
-                        return;
+                        if (cRole.SelectedIndex == -1)
+                        {
+                            throw new InvalidInput("Fill * the fields.");
+                        }
                     }
                 }
-            }
-            StaffModel ss = StaffModel.Builder()
-                     .WithRole(cRole.Text)
-                     .WithFirstName(firstName.Text)
-                     .WithLastName(lastName.Text)
-                     .WithPhoneNumber(phone.Text)
-                     .WithUsername(username.Text)
-                     .WithPassword(password.Text)
-                     .WithImage(image.Image)
-                     .WithHiredDate(dt.Value)
-                     .Build();
-            bool succ = staffServices.addStaff(ss);
-            if (succ)
-            {
+                StaffModel ss = StaffModel.Builder()
+                         .WithRole(cRole.Text)
+                         .WithFirstName(firstName.Text)
+                         .WithLastName(lastName.Text)
+                         .WithPhoneNumber(phone.Text)
+                         .WithUsername(username.Text)
+                         .WithPassword(password.Text)
+                         .WithImage(image.Image)
+                         .WithHiredDate(dt.Value)
+                         .Build();
+                bool succ = staffServices.addStaff(ss);
+                if (succ)
+                {
 
-                MessageBox.Show("Successfully Added");
-                staffUpdated.Invoke(this, EventArgs.Empty);
-                DialogResult = DialogResult.OK;
+                    MessageBox.Show("Successfully Added", "New Staff", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    staffUpdated.Invoke(this, EventArgs.Empty);
+                    DialogResult = DialogResult.OK;
+                }
+            }
+            catch (InvalidInput ex)
+            {
+                MessageBox.Show(ex.Message, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void fireButton(object sender, System.EventArgs e)
@@ -197,7 +203,7 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
                     fb.Text = "Fired";
                     fb.Click -= b1_Click;
                     staffUpdated.Invoke(this, EventArgs.Empty);
-                    MessageBox.Show("Successfully fired.");
+                    MessageBox.Show("Successfully fired.", "Information Change", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                 }
             }
         }

@@ -21,11 +21,13 @@ namespace OrderingSystem.CashierApp.Forms
         private string order_id;
         private readonly OrderServices orderServices;
         private readonly StaffModel staff;
+        private IOrderRepository orderRepository;
 
-        public OrderFrm(IOrderRepository orderRepository, StaffModel staff)
+        public OrderFrm(StaffModel staff)
         {
             InitializeComponent();
             this.staff = staff;
+            orderRepository = new OrderRepository();
             orderServices = new OrderServices(orderRepository);
             initTable();
         }
@@ -47,11 +49,7 @@ namespace OrderingSystem.CashierApp.Forms
             table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
             table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
         }
-        public static OrderFrm OrderInstance(StaffModel staff)
-        {
-            IOrderRepository orderRepository = new OrderRepository();
-            return new OrderFrm(orderRepository, staff);
-        }
+
         private void displayOrders()
         {
             try
@@ -87,11 +85,11 @@ namespace OrderingSystem.CashierApp.Forms
             }
             catch (Exception ex) when (ex is OrderInvalid || ex is OrderNotFound)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Order", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Internal Server Error" + ex.Message);
+                MessageBox.Show("Internal Server Error" + ex.Message, "Order", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void reset(object sender, System.EventArgs e)
@@ -121,7 +119,7 @@ namespace OrderingSystem.CashierApp.Forms
             {
                 if (string.IsNullOrEmpty(order_id))
                 {
-                    MessageBox.Show("No Orders");
+                    MessageBox.Show("No Orders", "Order", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 bool result = orderServices.payOrder(order_id, staff.StaffId, payment_method);
@@ -130,14 +128,14 @@ namespace OrderingSystem.CashierApp.Forms
                 or.d();
                 if (result)
                 {
-                    MessageBox.Show("Payment Success");
+                    MessageBox.Show("Payment Success", "Payment Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     clear();
                 }
-                else MessageBox.Show("Payment Failed");
+                else MessageBox.Show("Payment Failed", "Payment Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Internal Server Error." + ex.Message);
+                MessageBox.Show("Internal Server Error." + ex.Message, "Payment Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void txt_MouseDown(object sender, MouseEventArgs e)
@@ -157,11 +155,6 @@ namespace OrderingSystem.CashierApp.Forms
                 displayOrders();
                 e.Handled = true;
             }
-        }
-
-        private void txt_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

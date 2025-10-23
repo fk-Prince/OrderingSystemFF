@@ -42,6 +42,7 @@
             this.dataGrid.Name = "dataGrid";
             this.dataGrid.Size = new System.Drawing.Size(661, 236);
             this.dataGrid.TabIndex = 0;
+            this.dataGrid.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGrid_CellValidating);
             // 
             // RegularTable
             // 

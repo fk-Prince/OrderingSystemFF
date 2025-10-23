@@ -4,11 +4,13 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Properties;
 using OrderingSystem.Repository.CategoryRepository;
 using OrderingSystem.Repository.Ingredients;
 using OrderingSystem.Services;
+using NotSupportedException = OrderingSystem.Exceptions.NotSupportedException;
 
 namespace OrderingSystem.CashierApp.Forms.Menu
 {
@@ -17,12 +19,12 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         private List<MenuModel> variantList;
         private DataTable table;
         private MenuService menuService;
-        private readonly IIngredientRepository ingredientRepository;
-        public NewMenu(MenuService menuService, IIngredientRepository ingredientRepository)
+        private readonly IngredientServices ingredientServices;
+        public NewMenu(MenuService menuService, IngredientServices ingredientServices)
         {
             InitializeComponent();
             this.menuService = menuService;
-            this.ingredientRepository = ingredientRepository;
+            this.ingredientServices = ingredientServices;
             variantList = new List<MenuModel>();
             initTable();
         }
@@ -95,22 +97,19 @@ namespace OrderingSystem.CashierApp.Forms.Menu
                     string.IsNullOrEmpty(menuDescription.Text.Trim()) ||
                     string.IsNullOrEmpty(cmbCat.Text.Trim()))
                 {
-                    MessageBox.Show("Please fill all * fields.");
-                    return;
+                    throw new InvalidInput("Please fill all * fields.");
                 }
 
                 if (variantList.Count <= 0)
                 {
-                    MessageBox.Show("No Selected Ingredient");
-                    return;
+                    throw new InvalidInput("No Selected Ingredient");
                 }
 
                 string name = menuName.Text.Trim();
 
                 if (menuService.isMenuNameExist(name))
                 {
-                    MessageBox.Show("Menu Name already exists, try different.");
-                    return;
+                    throw new InvalidInput("Menu Name already exists, try different.");
                 }
 
                 string desc = menuDescription.Text.Trim();
@@ -128,11 +127,15 @@ namespace OrderingSystem.CashierApp.Forms.Menu
                     .Build();
 
                 bool success = menuService.saveMenu(md, "Normal");
-                MessageBox.Show(success ? "New menu created successfully." : "Failed to create new menu.");
+                if (success)
+                    MessageBox.Show("New menu created successfully.", "Menu", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    MessageBox.Show("Failed to create new menu.", "Menu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             }
-            catch (NotSupportedException ex)
+            catch (Exception ex) when (ex is NotSupportedException || ex is InvalidInput)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Menu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception)
             {
@@ -142,7 +145,7 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         private void VariantPopupButton(object sender, System.EventArgs e)
         {
 
-            VariantMenuPopup p = new VariantMenuPopup(variantList, ingredientRepository);
+            VariantMenuPopup p = new VariantMenuPopup(variantList, ingredientServices);
             DialogResult rs = p.ShowDialog(this);
 
             if (rs == DialogResult.OK)

@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using OrderingSystem.CashierApp.Forms.Staffs;
 
 namespace OrderingSystem.CashierApp.Forms.FactoryForm
@@ -17,6 +18,14 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
                 f.l4.Text = "Description";
                 f.b1.Text = "Submit";
                 f.title.Text = "Generate Coupon";
+                f.dt1.MinDate = DateTime.Now;
+            }
+            else if (fx is TableLayout t && type.ToLower() == "view-coupon")
+            {
+                t.b1.Text = "Add Coupon";
+                t.cb.Text = "View Used Coupon";
+                t.title.Text = "Coupon";
+                t.search.Visible = false;
             }
             else if (fx is PopupForm f2 && type.ToLower() == "add-ingredients")
             {

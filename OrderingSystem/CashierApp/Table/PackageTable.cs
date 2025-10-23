@@ -29,7 +29,7 @@ namespace OrderingSystem.CashierApp.Table
                 if (!int.TryParse(quantityStr, out int quantity))
                 {
                     MessageBox.Show($"Invalid quantity for '{menuName}'", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return new List<MenuModel>();
+                    return null;
                 }
 
                 bool isFixed = fixedObj != null && Convert.ToBoolean(fixedObj);

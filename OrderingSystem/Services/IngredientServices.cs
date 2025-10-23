@@ -1,15 +1,32 @@
-﻿using OrderingSystem.Repository.Ingredients;
+﻿using System.Collections.Generic;
+using OrderingSystem.Model;
+using OrderingSystem.Repository.Ingredients;
 
 namespace OrderingSystem.Services
 {
     public class IngredientServices
     {
 
-        IIngredientRepository ingredientRepository;
+        private readonly IIngredientRepository ingredientRepository;
 
-        public IngredientServices()
+        public IngredientServices(IIngredientRepository ingredientRepository)
         {
-            ingredientRepository = new IngredientRepository();
+            this.ingredientRepository = ingredientRepository;
+        }
+
+        public List<IngredientModel> getIngredients()
+        {
+            return ingredientRepository.getIngredients();
+        }
+
+        public List<IngredientModel> getIngredientsOfMenu(MenuModel variantDetail)
+        {
+            return ingredientRepository.getIngredientsOfMenu(variantDetail);
+        }
+
+        public bool saveIngredientByMenu(int menuId, List<IngredientModel> ingredientSelected, string v)
+        {
+            return ingredientRepository.saveIngredientByMenu(menuId, ingredientSelected, v);
         }
     }
 }

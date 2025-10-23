@@ -36,8 +36,6 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
         private void guna2PictureBox1_Click(object sender, System.EventArgs e)
         {
             DialogResult = DialogResult.OK;
-
-
         }
     }
 }

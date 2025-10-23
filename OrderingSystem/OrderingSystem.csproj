@@ -121,7 +121,12 @@
     <Compile Include="CashierApp\Components\StaffCard.Designer.cs">
       <DependentUpon>StaffCard.cs</DependentUpon>
     </Compile>
-    <Compile Include="CashierApp\Forms\FactoryForm\FactoryFormServices.cs" />
+    <Compile Include="CashierApp\Forms\Coupon\CouponFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Forms\Coupon\CouponFrm.Designer.cs">
+      <DependentUpon>CouponFrm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CashierApp\Forms\FactoryForm\FormFactory.cs" />
     <Compile Include="CashierApp\Forms\FactoryForm\IForms.cs" />
     <Compile Include="CashierApp\Forms\FactoryForm\PopupForm.cs">
@@ -129,6 +134,12 @@
     </Compile>
     <Compile Include="CashierApp\Forms\FactoryForm\PopupForm.Designer.cs">
       <DependentUpon>PopupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CashierApp\Forms\FactoryForm\TableLayout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Forms\FactoryForm\TableLayout.Designer.cs">
+      <DependentUpon>TableLayout.cs</DependentUpon>
     </Compile>
     <Compile Include="CashierApp\Forms\Order\PaymentMethod.cs">
       <SubType>Form</SubType>
@@ -239,8 +250,9 @@
       <DependentUpon>CashierLayout.cs</DependentUpon>
     </Compile>
     <Compile Include="Exceptions\IncorrectCredentials.cs" />
+    <Compile Include="Exceptions\InvalidInput.cs" />
     <Compile Include="Exceptions\NotSupportedException.cs" />
-    <Compile Include="Exceptions\UnauthorizedPersonel.cs" />
+    <Compile Include="Exceptions\InvalidAction.cs" />
     <Compile Include="KioskApplication\Component\FrequentlyOrderedCard.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -258,7 +270,7 @@
     <Compile Include="KioskApplication\Component\MenuCard.Designer.cs">
       <DependentUpon>MenuCard.cs</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseConnection\DatabaseHandler.cs" />
+    <Compile Include="Infrastructure\DatabaseHandler.cs" />
     <Compile Include="KioskApplication\Component\MyRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -377,8 +389,14 @@
     <EmbeddedResource Include="CashierApp\Components\StaffCard.resx">
       <DependentUpon>StaffCard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CashierApp\Forms\Coupon\CouponFrm.resx">
+      <DependentUpon>CouponFrm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\FactoryForm\PopupForm.resx">
       <DependentUpon>PopupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CashierApp\Forms\FactoryForm\TableLayout.resx">
+      <DependentUpon>TableLayout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\Order\PaymentMethod.resx">
       <DependentUpon>PaymentMethod.cs</DependentUpon>

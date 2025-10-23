@@ -4,31 +4,45 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OrderingSystem.Model;
-using OrderingSystem.Repository.Ingredients;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Components
 {
     public partial class IngredientMenu : Form
     {
         private DataTable table;
-        private readonly IIngredientRepository ingredientRepository;
+        private readonly IngredientServices ingredientServices;
         private DataView view;
         private List<IngredientModel> ingredientList;
         private List<IngredientModel> ingredientSelected;
         public event EventHandler<List<IngredientModel>> IngredientSelectedEvent;
-        public IngredientMenu(IIngredientRepository ingredientRepository)
+        public IngredientMenu(IngredientServices ingredientServices)
         {
             InitializeComponent();
-            this.ingredientRepository = ingredientRepository;
+            this.ingredientServices = ingredientServices;
             ingredientSelected = new List<IngredientModel>();
         }
         public void getIngredientByMenu(MenuModel variantDetail)
         {
-            ingredientList = ingredientRepository.getIngredientsOfMenu(variantDetail);
+            try
+            {
+                ingredientList = ingredientServices.getIngredientsOfMenu(variantDetail);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         public void getIngredient()
         {
-            ingredientList = ingredientRepository.getIngredients();
+            try
+            {
+                ingredientList = ingredientServices.getIngredients();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         public void initTable1()
         {
@@ -100,7 +114,7 @@ namespace OrderingSystem.CashierApp.Components
 
                 if (!Regex.IsMatch(input, pattern))
                 {
-                    MessageBox.Show("Invalid iNptu");
+                    MessageBox.Show("Invalid Input", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     e.Cancel = true;
                 }
             }
@@ -142,7 +156,7 @@ namespace OrderingSystem.CashierApp.Components
                     }
                     else
                     {
-                        MessageBox.Show("There is an empty quantity field");
+                        MessageBox.Show("There is an empty quantity field", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }

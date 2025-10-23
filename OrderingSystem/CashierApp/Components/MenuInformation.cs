@@ -5,20 +5,19 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using Newtonsoft.Json;
 using OrderingSystem.CashierApp.Forms.Menu;
 using OrderingSystem.CashierApp.Table;
 using OrderingSystem.Model;
 using OrderingSystem.Repository.CategoryRepository;
-using OrderingSystem.Repository.Ingredients;
 using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Components
 {
     public partial class MenuInformation : Form
     {
-        //private readonly IMenuRepository menuRepository;
         private readonly ICategoryRepository categoryRepository;
-        private readonly IIngredientRepository ingredientRepository;
+        private readonly IngredientServices ingredientServices;
         private List<MenuModel> variantList;
         private List<MenuModel> included;
         private MenuService menuService;
@@ -29,13 +28,15 @@ namespace OrderingSystem.CashierApp.Components
         private bool isEditMode = false;
         private bool isPackaged = false;
         public event EventHandler menuUpdated;
-        public MenuInformation(MenuModel menu, MenuService menuService, ICategoryRepository categoryRepository, IIngredientRepository ingredientRepository)
+        private StaffModel userStaff;
+        public MenuInformation(MenuModel menu, MenuService menuService, ICategoryRepository categoryRepository, IngredientServices ingredientServices, StaffModel userStaff)
         {
             InitializeComponent();
             this.menu = menu;
             this.menuService = menuService;
             this.categoryRepository = categoryRepository;
-            this.ingredientRepository = ingredientRepository;
+            this.ingredientServices = ingredientServices;
+            this.userStaff = userStaff;
             displayMenuDetails();
             displayTable();
         }
@@ -49,10 +50,16 @@ namespace OrderingSystem.CashierApp.Components
             toggle.CheckedChanged -= guna2ToggleSwitch1_CheckedChanged;
             toggle.Checked = menu.isAvailable;
             toggle.CheckedChanged += guna2ToggleSwitch1_CheckedChanged;
+            if (userStaff.Role.ToLower() == "cashier")
+            {
+                b1.Visible = false;
+                b2.Visible = false;
+                b3.Visible = false;
+                b4.Visible = false;
+            }
             isAvailable();
             try
             {
-
                 List<CategoryModel> ca = categoryRepository.getCategories();
                 ca.ForEach(e => category.Items.Add(e.CategoryName));
                 category.SelectedItem = menu.CategoryName;
@@ -94,10 +101,8 @@ namespace OrderingSystem.CashierApp.Components
                 {
                     b3.Visible = false;
                     variantList = menuService.getMenuDetail().FindAll(e => e.MenuId == menu.MenuId);
-                    loadForm(regular = new RegularTable(variantList, ingredientRepository));
-
+                    loadForm(regular = new RegularTable(variantList, ingredientServices));
                 }
-
             }
             catch (Exception ex)
             {
@@ -160,6 +165,8 @@ namespace OrderingSystem.CashierApp.Components
                 string type = "";
                 if (package != null)
                 {
+                    if (package.getMenus() == null) return;
+
                     var builder = MenuPackageModel.Builder()
                                      .WithMenuId(menu.MenuId)
                                      .WithMenuName(name)
@@ -170,21 +177,26 @@ namespace OrderingSystem.CashierApp.Components
                                      .WithPackageIncluded(package.getMenus());
                     if (imagex != null) builder = builder.WithMenuImageByte(imagex);
                     menus = builder.Build();
-                    type = "package";
+                    type = "bundle";
                 }
                 else if (regular != null)
                 {
+                    if (regular.getMenus() == null) return;
                     var builder = MenuModel.Builder()
                                  .WithMenuId(menu.MenuId)
                                  .WithMenuName(name)
                                  .isAvailable(toggle.Checked)
                                  .WithMenuDescription(desc)
                                  .WithCategoryName(cat)
-                                 .WithVariant(regular.getValues());
+                                 .WithVariant(regular.getMenus());
                     if (imagex != null) builder = builder.WithMenuImageByte(imagex);
+
+                    string json = JsonConvert.SerializeObject(regular.getMenus());
+                    Console.WriteLine(json);
                     menus = builder.Build();
                     type = "regular";
                 }
+
                 suc = menuService.updateMenu(menus, type);
 
                 if (suc)
@@ -234,7 +246,7 @@ namespace OrderingSystem.CashierApp.Components
         private void newVariantButton(object sender, EventArgs e)
         {
             var cloneList = new List<MenuModel>(variantList);
-            VariantMenuPopup pop = new VariantMenuPopup(cloneList, ingredientRepository);
+            VariantMenuPopup pop = new VariantMenuPopup(cloneList, ingredientServices);
             DialogResult rs = pop.ShowDialog(this);
             if (rs == DialogResult.OK)
             {
@@ -262,14 +274,14 @@ namespace OrderingSystem.CashierApp.Components
         }
         private void b4_Click(object sender, EventArgs e)
         {
-            IngredientMenu pop = new IngredientMenu(ingredientRepository);
+            IngredientMenu pop = new IngredientMenu(ingredientServices);
             pop.IngredientSelectedEvent += (ss, ee) =>
             {
                 List<IngredientModel> ingredientSelected = ee;
                 if (ingredientSelected.Count > 0)
                 {
 
-                    bool suc = ingredientRepository.saveIngredientByMenu(menu.MenuId, ingredientSelected, "Package");
+                    bool suc = ingredientServices.saveIngredientByMenu(menu.MenuId, ingredientSelected, "Package");
                     if (suc)
                     {
                         MessageBox.Show("Ingredient Updated.");

@@ -7,7 +7,6 @@ using OrderingSystem.CashierApp.Components;
 using OrderingSystem.Model;
 using OrderingSystem.Properties;
 using OrderingSystem.Repository.CategoryRepository;
-using OrderingSystem.Repository.Ingredients;
 using OrderingSystem.Services;
 namespace OrderingSystem.CashierApp.Forms.Menu
 {
@@ -15,11 +14,13 @@ namespace OrderingSystem.CashierApp.Forms.Menu
     {
         private List<MenuModel> inclded = new List<MenuModel>();
         private List<IngredientModel> ingredientSelected = new List<IngredientModel>();
-        private MenuService menuService;
-        public MenuBundleFrm(MenuService menuService)
+        private readonly IngredientServices ingredientServices;
+        private readonly MenuService menuService;
+        public MenuBundleFrm(MenuService menuService, IngredientServices ingredientServices)
         {
             InitializeComponent();
             this.menuService = menuService;
+            this.ingredientServices = ingredientServices;
         }
 
 
@@ -106,8 +107,8 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         }
         private void ingredientListButton(object sender, EventArgs eb)
         {
-            IIngredientRepository ingredientRepository = new IngredientRepository();
-            IngredientMenu p = new IngredientMenu(ingredientRepository);
+
+            IngredientMenu p = new IngredientMenu(ingredientServices);
             p.getIngredient();
             p.initTable2();
             p.ingredientSelector(ingredientSelected);

@@ -5,21 +5,21 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OrderingSystem.Model;
 using OrderingSystem.Repo.CashierMenuRepository;
-using OrderingSystem.Repository.Ingredients;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Components
 {
     public partial class RegularTable : Form
     {
-        private List<MenuModel> variants;
+        private readonly List<MenuModel> variants;
         private DataTable table;
-        private readonly IIngredientRepository ingredientRepository;
+        private readonly IngredientServices ingredientServices;
 
-        public RegularTable(List<MenuModel> variants, IIngredientRepository ingredientRepository)
+        public RegularTable(List<MenuModel> variants, IngredientServices ingredientServices)
         {
             InitializeComponent();
             this.variants = variants;
-            this.ingredientRepository = ingredientRepository;
+            this.ingredientServices = ingredientServices;
             displayMenu();
         }
 
@@ -94,13 +94,13 @@ namespace OrderingSystem.CashierApp.Components
                 if (e.ColumnIndex == dataGrid.Columns["ViewIngredients"].Index && e.RowIndex >= 0)
                 {
                     var variantDetail = variants[e.RowIndex];
-                    IngredientMenu im = new IngredientMenu(ingredientRepository);
+                    IngredientMenu im = new IngredientMenu(ingredientServices);
                     im.IngredientSelectedEvent += (ss, ee) =>
                     {
                         List<IngredientModel> ingredientSelected = ee;
                         if (ingredientSelected.Count > 0)
                         {
-                            bool suc = ingredientRepository.saveIngredientByMenu(variantDetail.MenuDetailId, ingredientSelected, "Regular");
+                            bool suc = ingredientServices.saveIngredientByMenu(variantDetail.MenuDetailId, ingredientSelected, "Regular");
                             if (suc)
                             {
                                 MessageBox.Show("Ingredient Updated.");
@@ -108,7 +108,7 @@ namespace OrderingSystem.CashierApp.Components
                             }
                             else
                             {
-                                MessageBox.Show("Ingredient ex.");
+                                MessageBox.Show("Ingredient Failed to Update", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                     };
@@ -127,47 +127,104 @@ namespace OrderingSystem.CashierApp.Components
 
         private void dataGrid_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            if (dataGrid.Columns[e.ColumnIndex].Name == "Quantity")
+            //if (dataGrid.Columns[e.ColumnIndex].Name == "Quantity")
+            //{
+            //    string input = e.FormattedValue?.ToString().Trim();
+
+            //    if (string.IsNullOrEmpty(input))
+            //        return;
+
+            //    string pattern = @"^(?:\d{1,3}(?:,\d{3})*|\d+)?(?:\.\d+)?$";
+
+            //    if (!Regex.IsMatch(input, pattern))
+            //    {
+            //        MessageBox.Show("Invalid Input", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        e.Cancel = true;
+            //    }
+            //}
+            //if (dataGrid.Columns[e.ColumnIndex].Name == "Prep Estimated Time")
+            //{
+            //    string input = e.FormattedValue?.ToString().Trim();
+
+            //    if (string.IsNullOrEmpty(input))
+            //        return;
+            //    if (!TimeSpan.TryParse(input, out _))
+            //    {
+            //        MessageBox.Show("Invalid iNptu");
+            //        e.Cancel = true;
+            //    }
+            //}
+
+            //if (dataGrid.Columns[e.ColumnIndex].Name == "Size" || dataGrid.Columns[e.ColumnIndex].Name == "Flavor")
+            //{
+            //    string input = e.FormattedValue?.ToString().Trim();
+
+            //    if (string.IsNullOrEmpty(input))
+            //        return;
+
+            //    if (!Regex.IsMatch(input, @"^[a-zA-Z]+$"))
+            //    {
+            //        MessageBox.Show("Invalid Input", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        e.Cancel = true;
+            //    }
+            //}
+        }
+
+        public List<MenuModel> getMenus()
+        {
+
+            List<MenuModel> menus = new List<MenuModel>();
+            string patternNumber = @"^(?:\d{1,3}(?:,\d{3})*|\d+)?(?:\.\d+)?$";
+            string patternText = @"^[a-zA-Z]+$";
+
+            foreach (DataGridViewRow row in dataGrid.Rows)
             {
-                string input = e.FormattedValue?.ToString().Trim();
+                if (row.IsNewRow) continue;
 
-                if (string.IsNullOrEmpty(input))
-                    return;
+                string price = row.Cells["Price"].Value?.ToString().Trim();
+                string prepTimeText = row.Cells["Prep Estimated Time"].Value?.ToString().Trim();
+                string sizeText = row.Cells["Size"].Value?.ToString().Trim();
+                string flavorText = row.Cells["Flavor"].Value?.ToString().Trim();
 
-                string pattern = @"^(?:\d{1,3}(?:,\d{3})*|\d+)?(?:\.\d+)?$";
 
-                if (!Regex.IsMatch(input, pattern))
+                if (string.IsNullOrEmpty(price) || !Regex.IsMatch(price, patternNumber))
                 {
-                    MessageBox.Show("Invalid iNptu");
-                    e.Cancel = true;
+                    MessageBox.Show("Invalid Price", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
                 }
-            }
-            if (dataGrid.Columns[e.ColumnIndex].Name == "Prep Estimated Time")
-            {
-                string input = e.FormattedValue?.ToString().Trim();
 
-                if (string.IsNullOrEmpty(input))
-                    return;
-                if (!TimeSpan.TryParse(input, out _))
+                if (!string.IsNullOrEmpty(prepTimeText) && !TimeSpan.TryParse(prepTimeText, out _))
                 {
-                    MessageBox.Show("Invalid iNptu");
-                    e.Cancel = true;
+                    MessageBox.Show("Invalid Preparation Time", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
                 }
-            }
 
-            if (dataGrid.Columns[e.ColumnIndex].Name == "Size" || dataGrid.Columns[e.ColumnIndex].Name == "Flavor")
-            {
-                string input = e.FormattedValue?.ToString().Trim();
 
-                if (string.IsNullOrEmpty(input))
-                    return;
-
-                if (!Regex.IsMatch(input, @"^[a-zA-Z]+$"))
+                if (!string.IsNullOrEmpty(sizeText) && !Regex.IsMatch(sizeText, patternText))
                 {
-                    MessageBox.Show("Invalid iNptu");
-                    e.Cancel = true;
+                    MessageBox.Show("Invalid Size", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
                 }
+
+
+                if (!string.IsNullOrEmpty(flavorText) && !Regex.IsMatch(flavorText, patternText))
+                {
+                    MessageBox.Show("Invalid Flavor", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
+                }
+
+                var menu = MenuModel.Builder()
+                    .WithMenuDetailId(variants[row.Index].MenuDetailId)
+                    .WithFlavorName(flavorText)
+                    .WithSizeName(sizeText)
+                    .WithEstimatedTime(TimeSpan.Parse(prepTimeText))
+                    .WithPrice(double.Parse(price))
+                    .Build();
+
+                menus.Add(menu);
             }
+
+            return menus;
         }
 
 

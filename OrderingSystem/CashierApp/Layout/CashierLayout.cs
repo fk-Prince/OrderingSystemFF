@@ -1,10 +1,12 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using OrderingSystem.CashierApp.Forms.Coupon;
 using OrderingSystem.CashierApp.Forms.FactoryForm;
 using OrderingSystem.CashierApp.Forms.Staffs;
 using OrderingSystem.CashierApp.Layout;
 using OrderingSystem.Model;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Forms
 {
@@ -14,15 +16,20 @@ namespace OrderingSystem.CashierApp.Forms
         private MenuFrm menuIntance;
         private Guna2Button lastClicked;
         private StaffModel staff;
-        private CashierLayout instance;
+        private IForms iForms;
         public CashierLayout(StaffModel staff)
         {
             InitializeComponent();
-            if (instance == null)
-                instance = this;
             this.staff = staff;
-            loadForm(OrderFrm.OrderInstance(staff));
+            iForms = new FormFactory();
+
             lastClicked = orderButton;
+            loadForm(new OrderFrm(staff));
+            displayStaffDetails();
+        }
+
+        private void displayStaffDetails()
+        {
             if (staff.Role.ToLower() != "manager")
             {
                 nm.Visible = false;
@@ -38,21 +45,19 @@ namespace OrderingSystem.CashierApp.Forms
 
         public void loadForm(Form f)
         {
-
             if (mm.Tag is Form ff && ff.Name == f.Name) return;
             if (mm.Controls.Count > 0) mm.Controls.Clear();
-
             f.TopLevel = false;
             f.Dock = DockStyle.Fill;
             mm.Controls.Add(f);
             mm.Tag = f;
             f.Show();
         }
-        private void showSub(Panel panel)
+        private void showSubPanel(Panel panel)
         {
             if (panel.Visible == false && staff.Role.ToLower() == "manager")
             {
-                hideSubMenu();
+                hideSubPanel();
                 panel.Visible = true;
             }
             else
@@ -60,21 +65,20 @@ namespace OrderingSystem.CashierApp.Forms
                 panel.Visible = false;
             }
         }
-
-        private void hideSubMenu()
+        private void hideSubPanel()
         {
             if (s1.Visible == true && staff.Role.ToLower() == "manager") s1.Visible = false;
             if (s2.Visible == true && staff.Role.ToLower() == "manager") s2.Visible = false;
         }
-        private void guna2Button14_Click(object sender, System.EventArgs e)
+        private void viewOrder(object sender, System.EventArgs e)
         {
-            loadForm(OrderFrm.OrderInstance(staff));
-            hideSubMenu();
+            loadForm(new OrderFrm(staff));
+            hideSubPanel();
         }
         private void showMenu(object sender, System.EventArgs e)
         {
-            loadForm(menuIntance = new MenuFrm());
-            showSub(s1);
+            loadForm(menuIntance = new MenuFrm(staff));
+            showSubPanel(s1);
         }
         private void newMenu(object sender, System.EventArgs e)
         {
@@ -89,46 +93,44 @@ namespace OrderingSystem.CashierApp.Forms
             if (menuIntance == null) return;
             menuIntance.showBundle();
         }
-        private void showIngredient(object sender, System.EventArgs e)
+        private void viewIngredient(object sender, System.EventArgs e)
         {
-            showSub(s2);
+            showSubPanel(s2);
             loadForm(ingredientInstance = new IngredientFrm());
         }
-        private void restockIngredient(object sender, System.EventArgs e)
+        private void viewRestockIngredient(object sender, System.EventArgs e)
         {
-            IForms f = new FormFactory();
             PopupForm p = new PopupForm();
             p.buttonClicked += (ss, ee) =>
             {
-                FactoryFormServices.saveFormData((PopupForm)ss, "restock-ingredients");
+                //FactoryFormServices.saveFormData((PopupForm)ss, "restock-ingredients");
             };
-            DialogResult rs = f.selectForm(p, "restock-ingredients").ShowDialog(this);
+            DialogResult rs = iForms.selectForm(p, "restock-ingredients").ShowDialog(this);
             if (rs == DialogResult.OK)
             {
                 p.Hide();
             }
         }
-        private void addIngredient(object sender, System.EventArgs e)
+        private void viewAddIngredients(object sender, System.EventArgs e)
         {
-            IForms f = new FormFactory();
+
             PopupForm p = new PopupForm();
             p.buttonClicked += (ss, ee) =>
             {
-                FactoryFormServices.saveFormData((PopupForm)ss, "add-ingredients");
+                //FactoryFormServices.saveFormData((PopupForm)ss, "add-ingredients");
             };
-            DialogResult rs = f.selectForm(p, "add-ingredients").ShowDialog(this);
+            DialogResult rs = iForms.selectForm(p, "add-ingredients").ShowDialog(this);
             if (rs == DialogResult.OK)
             {
                 p.Hide();
             }
         }
-        private void deductIngredient(object sender, System.EventArgs e)
+        private void viewDeductIngredient(object sender, System.EventArgs e)
         {
             if (ingredientInstance == null) return;
             ingredientInstance.showDeductIngredient();
         }
-
-        private void buttonClicked(object sender, MouseEventArgs e)
+        private void primaryButtonClickedSide(object sender, MouseEventArgs e)
         {
             Guna2Button b = sender as Guna2Button;
             if (lastClicked != b)
@@ -144,30 +146,23 @@ namespace OrderingSystem.CashierApp.Forms
                 lastClicked = b;
             }
         }
-
-        private void inventoryClicked(object sender, System.EventArgs e)
+        private void viewInventory(object sender, System.EventArgs e)
         {
-            hideSubMenu();
+            hideSubPanel();
         }
-
-        private void staffClicked(object sender, System.EventArgs e)
+        private void viewStaff(object sender, System.EventArgs e)
         {
-            hideSubMenu();
+            hideSubPanel();
             loadForm(new StaffFrm(staff));
         }
-
-
-
-        private void signout_Click(object sender, System.EventArgs e)
+        private void signoutUser(object sender, System.EventArgs e)
         {
             Hide();
             LoginLayout ll = new LoginLayout();
             ll.Show();
         }
-
-        private void su_Click(object sender, System.EventArgs e)
+        private void switchUser(object sender, System.EventArgs e)
         {
-
             LoginLayout ll = new LoginLayout();
             ll.isPopup = true;
             DialogResult rs = ll.ShowDialog(this);
@@ -181,19 +176,10 @@ namespace OrderingSystem.CashierApp.Forms
                 ll.Hide();
             }
         }
-        private void couponCodeButton(object sender, System.EventArgs e)
+        private void viewCoupon(object sender, System.EventArgs e)
         {
-            IForms f = new FormFactory();
-            PopupForm p = new PopupForm();
-            p.buttonClicked += (ss, ee) =>
-            {
-                FactoryFormServices.saveFormData((PopupForm)ss, "Coupon");
-            };
-            DialogResult rs = f.selectForm(p, "coupon").ShowDialog(this);
-            if (rs == DialogResult.OK)
-            {
-                p.Hide();
-            }
+            CouponFrm c = new CouponFrm(iForms, new CouponServices(), staff);
+            loadForm(c);
         }
     }
 }

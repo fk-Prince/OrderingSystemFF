@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using OrderingSystem.CashierApp.Components;
 using OrderingSystem.Model;
 using OrderingSystem.Repo.CashierMenuRepository;
-using OrderingSystem.Repository.Ingredients;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Forms.Menu
 {
@@ -14,14 +14,14 @@ namespace OrderingSystem.CashierApp.Forms.Menu
     {
 
         private List<IngredientModel> ingredientSelected;
-        private List<MenuModel> variantList;
-        private readonly IIngredientRepository ingredientRepository;
+        private readonly List<MenuModel> variantList;
+        private readonly IngredientServices ingredientServices;
 
-        public VariantMenuPopup(List<MenuModel> variantList, IIngredientRepository ingredientRepository)
+        public VariantMenuPopup(List<MenuModel> variantList, IngredientServices ingredientServices)
         {
             InitializeComponent();
             this.variantList = variantList;
-            this.ingredientRepository = ingredientRepository;
+            this.ingredientServices = ingredientServices;
             ingredientSelected = new List<IngredientModel>();
 
             displayIngredient();
@@ -116,7 +116,7 @@ namespace OrderingSystem.CashierApp.Forms.Menu
                 mm.Controls.RemoveAt(0);
             }
 
-            IngredientMenu im = new IngredientMenu(ingredientRepository);
+            IngredientMenu im = new IngredientMenu(ingredientServices);
             im.getIngredient();
             im.initTable2();
             im.confirmButton.Visible = true;

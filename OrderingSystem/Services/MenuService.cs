@@ -59,6 +59,5 @@ namespace OrderingSystem.Services
         {
             return menuRepository.newMenuVariant(id, m);
         }
-
     }
 }

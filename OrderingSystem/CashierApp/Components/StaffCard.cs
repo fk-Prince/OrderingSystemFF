@@ -4,6 +4,7 @@ using Guna.UI2.WinForms;
 using OrderingSystem.CashierApp.Forms.FactoryForm;
 using OrderingSystem.CashierApp.Forms.Staffs;
 using OrderingSystem.Model;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Components
 {
@@ -12,11 +13,13 @@ namespace OrderingSystem.CashierApp.Components
         private StaffModel staff;
         private StaffModel user;
         public event EventHandler staffUpdated;
+        private StaffServices staffServices;
         private IForms iForms;
-        public StaffCard(StaffModel staff, IForms iForms)
+        public StaffCard(StaffModel staff, IForms iForms, StaffServices staffServices)
         {
             InitializeComponent();
             this.staff = staff;
+            this.staffServices = staffServices;
             BorderRadius = 3;
             id.Text = staff.StaffId.ToString();
             image.Image = staff.Image;
@@ -44,7 +47,7 @@ namespace OrderingSystem.CashierApp.Components
 
         private void xd(object sender, EventArgs e)
         {
-            StaffInformation s = new StaffInformation(user);
+            StaffInformation s = new StaffInformation(staffServices, user);
             s.staffUpdated += (ss, ee) => staffUpdated.Invoke(this, EventArgs.Empty);
             s.displayStaff(staff);
             DialogResult rs = iForms.selectForm(s, "view-staff").ShowDialog(this);

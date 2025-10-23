@@ -14,16 +14,18 @@ namespace OrderingSystem.CashierApp.Forms
 {
     public partial class MenuFrm : Form
     {
-        private IMenuRepository menuRepository;
-        private IIngredientRepository ingredientRepository;
-        private ICategoryRepository categoryRepository;
-        private MenuService menuService;
-        public MenuFrm()
+
+        private readonly IngredientServices ingredientServices;
+        private readonly ICategoryRepository categoryRepository;
+        private readonly MenuService menuService;
+        private readonly StaffModel staff;
+        public MenuFrm(StaffModel staff)
         {
             InitializeComponent();
-            menuRepository = new MenuRepository();
-            menuService = new MenuService(menuRepository);
-            ingredientRepository = new IngredientRepository();
+            this.staff = staff;
+
+            menuService = new MenuService(new MenuRepository());
+            ingredientServices = new IngredientServices(new IngredientRepository());
             categoryRepository = new CategoryRepository();
 
             displayMenu();
@@ -32,8 +34,6 @@ namespace OrderingSystem.CashierApp.Forms
         {
             try
             {
-
-
                 flowMenu.Controls.Clear();
                 List<MenuModel> list = menuService.getMenus();
                 foreach (var i in list)
@@ -59,7 +59,7 @@ namespace OrderingSystem.CashierApp.Forms
         {
             c.Click += (s, e) =>
             {
-                MenuInformation mi = new MenuInformation(i, menuService, categoryRepository, ingredientRepository);
+                MenuInformation mi = new MenuInformation(i, menuService, categoryRepository, ingredientServices, staff);
                 mi.menuUpdated += (ss, ee) => displayMenu();
                 DialogResult rs = mi.ShowDialog(this);
                 if (rs == DialogResult.OK)
@@ -75,7 +75,7 @@ namespace OrderingSystem.CashierApp.Forms
         }
         public void showBundle()
         {
-            MenuBundleFrm f = new MenuBundleFrm(menuService);
+            MenuBundleFrm f = new MenuBundleFrm(menuService, ingredientServices);
             DialogResult rs = f.ShowDialog(this);
             if (rs == DialogResult.OK)
             {
@@ -84,7 +84,7 @@ namespace OrderingSystem.CashierApp.Forms
         }
         public void showNewMenu()
         {
-            NewMenu f = new NewMenu(menuService, ingredientRepository);
+            NewMenu f = new NewMenu(menuService, ingredientServices);
             DialogResult rs = f.ShowDialog(this);
             if (rs == DialogResult.OK)
             {

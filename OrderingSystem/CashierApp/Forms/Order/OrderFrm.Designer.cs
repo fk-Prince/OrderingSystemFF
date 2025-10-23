@@ -344,7 +344,6 @@
             this.txt.Size = new System.Drawing.Size(469, 47);
             this.txt.TabIndex = 9;
             this.txt.TextOffset = new System.Drawing.Point(10, 0);
-            this.txt.TextChanged += new System.EventHandler(this.txt_TextChanged);
             this.txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             this.txt.MouseDown += new System.Windows.Forms.MouseEventHandler(this.txt_MouseDown);
             // 

@@ -120,8 +120,8 @@
             this.guna2Button1.Text = "Coupon";
             this.guna2Button1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button1.TextOffset = new System.Drawing.Point(20, 0);
-            this.guna2Button1.Click += new System.EventHandler(this.couponCodeButton);
-            this.guna2Button1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonClicked);
+            this.guna2Button1.Click += new System.EventHandler(this.viewCoupon);
+            this.guna2Button1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.primaryButtonClickedSide);
             // 
             // guna2Button21
             // 
@@ -145,8 +145,8 @@
             this.guna2Button21.Text = "Staff";
             this.guna2Button21.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button21.TextOffset = new System.Drawing.Point(20, 0);
-            this.guna2Button21.Click += new System.EventHandler(this.staffClicked);
-            this.guna2Button21.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonClicked);
+            this.guna2Button21.Click += new System.EventHandler(this.viewStaff);
+            this.guna2Button21.MouseClick += new System.Windows.Forms.MouseEventHandler(this.primaryButtonClickedSide);
             // 
             // guna2Button20
             // 
@@ -170,8 +170,8 @@
             this.guna2Button20.Text = "Inventory";
             this.guna2Button20.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button20.TextOffset = new System.Drawing.Point(20, 0);
-            this.guna2Button20.Click += new System.EventHandler(this.inventoryClicked);
-            this.guna2Button20.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonClicked);
+            this.guna2Button20.Click += new System.EventHandler(this.viewInventory);
+            this.guna2Button20.MouseClick += new System.Windows.Forms.MouseEventHandler(this.primaryButtonClickedSide);
             // 
             // s2
             // 
@@ -203,7 +203,7 @@
             this.di.Text = "Deduct Ingredient";
             this.di.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.di.TextOffset = new System.Drawing.Point(50, 0);
-            this.di.Click += new System.EventHandler(this.deductIngredient);
+            this.di.Click += new System.EventHandler(this.viewDeductIngredient);
             // 
             // ri
             // 
@@ -223,7 +223,7 @@
             this.ri.Text = "Re-stock Ingredient";
             this.ri.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.ri.TextOffset = new System.Drawing.Point(50, 0);
-            this.ri.Click += new System.EventHandler(this.restockIngredient);
+            this.ri.Click += new System.EventHandler(this.viewRestockIngredient);
             // 
             // ai
             // 
@@ -243,7 +243,7 @@
             this.ai.Text = "Add Ingredient";
             this.ai.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.ai.TextOffset = new System.Drawing.Point(50, 0);
-            this.ai.Click += new System.EventHandler(this.addIngredient);
+            this.ai.Click += new System.EventHandler(this.viewAddIngredients);
             // 
             // guna2Button12
             // 
@@ -267,8 +267,8 @@
             this.guna2Button12.Text = "Ingredients";
             this.guna2Button12.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button12.TextOffset = new System.Drawing.Point(20, 0);
-            this.guna2Button12.Click += new System.EventHandler(this.showIngredient);
-            this.guna2Button12.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonClicked);
+            this.guna2Button12.Click += new System.EventHandler(this.viewIngredient);
+            this.guna2Button12.MouseClick += new System.Windows.Forms.MouseEventHandler(this.primaryButtonClickedSide);
             // 
             // s1
             // 
@@ -344,7 +344,7 @@
             this.guna2Button6.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button6.TextOffset = new System.Drawing.Point(20, 0);
             this.guna2Button6.Click += new System.EventHandler(this.showMenu);
-            this.guna2Button6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonClicked);
+            this.guna2Button6.MouseClick += new System.Windows.Forms.MouseEventHandler(this.primaryButtonClickedSide);
             // 
             // orderButton
             // 
@@ -369,8 +369,8 @@
             this.orderButton.Text = "Orders";
             this.orderButton.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.orderButton.TextOffset = new System.Drawing.Point(20, 0);
-            this.orderButton.Click += new System.EventHandler(this.guna2Button14_Click);
-            this.orderButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonClicked);
+            this.orderButton.Click += new System.EventHandler(this.viewOrder);
+            this.orderButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.primaryButtonClickedSide);
             // 
             // panel3
             // 
@@ -406,7 +406,7 @@
             this.su.Size = new System.Drawing.Size(100, 23);
             this.su.TabIndex = 16;
             this.su.Text = "Switch User";
-            this.su.Click += new System.EventHandler(this.su_Click);
+            this.su.Click += new System.EventHandler(this.switchUser);
             // 
             // guna2PictureBox3
             // 
@@ -435,7 +435,7 @@
             this.signout.Size = new System.Drawing.Size(100, 23);
             this.signout.TabIndex = 15;
             this.signout.Text = "Signout";
-            this.signout.Click += new System.EventHandler(this.signout_Click);
+            this.signout.Click += new System.EventHandler(this.signoutUser);
             // 
             // label2
             // 

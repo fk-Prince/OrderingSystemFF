@@ -4,48 +4,48 @@ using System.Windows.Forms;
 using OrderingSystem.CashierApp.Components;
 using OrderingSystem.CashierApp.Forms.FactoryForm;
 using OrderingSystem.Model;
-using OrderingSystem.Repository.Staff;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Forms.Staffs
 {
     public partial class StaffFrm : Form
     {
-        private IStaffRepository staffRepository;
-        private StaffModel staff;
-        private IForms iForms;
+        private readonly StaffServices staffServices;
+        private readonly StaffModel staff;
+        private readonly IForms iForms;
         public StaffFrm(StaffModel staff)
         {
             InitializeComponent();
+            this.staff = staff;
             iForms = new FormFactory();
-            staffRepository = new StaffRepository();
+            staffServices = new StaffServices();
 
-            List<StaffModel> staffList = staffRepository.getStaff();
-
-            foreach (var st in staffList)
-            {
-                StaffCard s = new StaffCard(st, iForms);
-                s.staffUpdated += refreshList;
-                s.userStaff(staff);
-                flowPanel.Controls.Add(s);
-            }
+            refreshList(null, EventArgs.Empty);
         }
 
         private void refreshList(object sender, EventArgs e)
         {
-            flowPanel.Controls.Clear();
-            List<StaffModel> staffList = staffRepository.getStaff();
-            foreach (var st in staffList)
+            try
             {
-                StaffCard s = new StaffCard(st, iForms);
-                s.staffUpdated += refreshList;
-                s.userStaff(staff);
-                flowPanel.Controls.Add(s);
+                flowPanel.Controls.Clear();
+                List<StaffModel> staffList = staffServices.getStaffs();
+                foreach (var st in staffList)
+                {
+                    StaffCard s = new StaffCard(st, iForms, staffServices);
+                    s.staffUpdated += refreshList;
+                    s.userStaff(staff);
+                    flowPanel.Controls.Add(s);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Staff", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            StaffInformation s = new StaffInformation(staff);
+            StaffInformation s = new StaffInformation(staffServices, staff);
             s.staffUpdated += (ss, ee) => refreshList(this, EventArgs.Empty);
             DialogResult rs = iForms.selectForm(s, "add-staff").ShowDialog(this);
             if (rs == DialogResult.OK)

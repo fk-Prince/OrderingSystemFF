@@ -440,7 +440,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                     cmd.Parameters.AddWithValue("@p_menu_name", m.MenuName);
                     cmd.Parameters.AddWithValue("@p_category_name", m.CategoryName);
                     cmd.Parameters.AddWithValue("@p_description", m.MenuDescription);
-                    cmd.Parameters.AddWithValue("@p_available", m.isAvailable);
+                    cmd.Parameters.AddWithValue("@p_isAvailable", m.isAvailable);
                     if (m.MenuImageByte == null) cmd.Parameters.AddWithValue("@p_image", DBNull.Value);
                     else cmd.Parameters.AddWithValue("@p_image", m.MenuImageByte);
                     string json = JsonConvert.SerializeObject(m.MenuIncluded);
