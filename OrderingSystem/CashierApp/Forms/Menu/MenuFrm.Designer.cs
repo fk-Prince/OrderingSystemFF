@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.flowMenu = new System.Windows.Forms.FlowLayoutPanel();
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.txt = new Guna.UI2.WinForms.Guna2TextBox();
+            this.debouncing = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // flowMenu
@@ -83,6 +85,12 @@
             this.txt.Size = new System.Drawing.Size(469, 42);
             this.txt.TabIndex = 10;
             this.txt.TextOffset = new System.Drawing.Point(10, 0);
+            this.txt.TextChanged += new System.EventHandler(this.txt_TextChanged);
+            // 
+            // debouncing
+            // 
+            this.debouncing.Interval = 500;
+            this.debouncing.Tick += new System.EventHandler(this.debouncing_Tick);
             // 
             // MenuFrm
             // 
@@ -105,5 +113,6 @@
         private System.Windows.Forms.FlowLayoutPanel flowMenu;
         private System.Windows.Forms.OpenFileDialog ofd;
         private Guna.UI2.WinForms.Guna2TextBox txt;
+        private System.Windows.Forms.Timer debouncing;
     }
 }

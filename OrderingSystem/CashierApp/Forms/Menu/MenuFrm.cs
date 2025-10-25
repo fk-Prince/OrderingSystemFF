@@ -38,7 +38,6 @@ namespace OrderingSystem.CashierApp.Forms
                 List<MenuModel> list = menuService.getMenus();
                 foreach (var i in list)
                 {
-
                     MenuCard m = new MenuCard(i);
                     m.Margin = new Padding(10, 10, 10, 10);
                     m.Tag = i;
@@ -48,11 +47,11 @@ namespace OrderingSystem.CashierApp.Forms
             }
             catch (NotSupportedException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Menu Not Supported", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception)
             {
-                MessageBox.Show("Internal Server Error.");
+                MessageBox.Show("Internal Server Error.", "Server Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void hover(Control c, MenuModel i)
@@ -92,6 +91,26 @@ namespace OrderingSystem.CashierApp.Forms
             }
         }
 
+        private void txt_TextChanged(object sender, EventArgs e)
+        {
 
+            debouncing.Stop();
+            debouncing.Start();
+        }
+
+        private void debouncing_Tick(object sender, EventArgs e)
+        {
+            debouncing.Stop();
+            string txtx = txt.Text.Trim().ToLower();
+
+            foreach (Control control in flowMenu.Controls)
+            {
+                if (control is MenuCard card)
+                {
+                    MenuModel cz = (MenuModel)card?.Tag;
+                    card.Visible = string.IsNullOrEmpty(txtx) ? true : cz.MenuName.ToLower().StartsWith(txtx);
+                }
+            }
+        }
     }
 }

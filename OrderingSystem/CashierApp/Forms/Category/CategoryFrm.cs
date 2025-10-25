@@ -41,10 +41,9 @@ namespace OrderingSystem.CashierApp.Forms.Category
             }
             catch (Exception)
             {
-                MessageBox.Show("Internal Server Error.");
+                MessageBox.Show("Internal Server Error.", "Server Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void addNewCategory(object sender, EventArgs eb)
         {
             CategoryPopup cat = new CategoryPopup("Add New Category");
@@ -78,33 +77,22 @@ namespace OrderingSystem.CashierApp.Forms.Category
                 cat.Hide();
             }
         }
-
         private void search_TextChanged(object sender, EventArgs e)
         {
             debouncing.Stop();
             debouncing.Start();
         }
-
         private void debouncing_Tick(object sender, EventArgs e)
         {
             debouncing.Stop();
             string txt = search.Text.Trim().ToLower();
 
-
-
             foreach (Control control in flow.Controls)
             {
                 if (control is CategoryCard card)
                 {
-                    if (string.IsNullOrEmpty(txt))
-                    {
-                        card.Visible = true;
-                    }
-                    else
-                    {
-                        CategoryModel cz = (CategoryModel)card.Tag;
-                        card.Visible = cz.CategoryName.ToLower().StartsWith(txt);
-                    }
+                    CategoryModel cz = (CategoryModel)card?.Tag;
+                    card.Visible = string.IsNullOrEmpty(txt) ? true : cz.CategoryName.ToLower().StartsWith(txt);
                 }
             }
         }
