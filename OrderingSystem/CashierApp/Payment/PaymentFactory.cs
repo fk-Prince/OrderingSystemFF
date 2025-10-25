@@ -12,19 +12,12 @@ namespace OrderingSystem.CashierApp.Payment
         }
         public IPayment paymentType(string type)
         {
-
             if (type.ToLower() == "cash")
-            {
                 return new CashPayment(orderServices);
-            }
             else if (type.ToLower() == "creditcard" || type.ToLower() == "credit-card")
-            {
                 return new CreditCardPayment(orderServices);
-            }
             else
-            {
                 throw new InvalidPayment("Payment Not Supported Yet.");
-            }
         }
     }
 }
