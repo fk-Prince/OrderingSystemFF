@@ -25,7 +25,6 @@ namespace OrderingSystem.CashierApp.Forms
             string s = cb.Text;
             if (s == "Track Quantity In/Out")
             {
-
                 string staffFilter = string.IsNullOrEmpty(txt.Text) ? "" : $"[Staff Incharge] LIKE '%{txt.Text}%'";
                 string ingredientFilter = string.IsNullOrEmpty(txt.Text) ? "" : $"[Ingredient Name] LIKE '%{txt.Text}%'";
                 string dateFilter = $"[Date-Action] >= #{dtFrom.Value:yyyy-MM-dd}# AND [Date-Action] <= #{dtTo.Value:yyyy-MM-dd}#";
@@ -77,29 +76,37 @@ namespace OrderingSystem.CashierApp.Forms
 
             if (s == "Track Quantity In/Out")
             {
+                txt.PlaceholderText = "Search Staff, Ingredient";
                 view = inventoryServices.getTrackingIngredients();
             }
             else if (s == "Expiry Tracking")
             {
+                txt.PlaceholderText = "Search Ingredient";
                 view = inventoryServices.getIngredientExpiry();
             }
             else if (s == "Inventory Reports")
             {
+                txt.PlaceholderText = "Search Staff, Ingredient";
                 view = inventoryServices.getInventorySummaryReports();
             }
             else if (s == "Ingredient Usage")
             {
+                txt.PlaceholderText = "Search Ingredient";
                 view = inventoryServices.getIngredientsUsage();
             }
             else if (s == "Menu Popular's")
             {
+                txt.PlaceholderText = "Search Menu";
                 view = inventoryServices.getMenuPopularity();
             }
             else if (s == "Menu Performance")
             {
+                txt.PlaceholderText = "Search Menu, Flavor, Size, Price";
                 view = inventoryServices.getMenuPerformance();
             }
             dataGrid.DataSource = view;
+            dataGrid.Refresh();
+
         }
 
 

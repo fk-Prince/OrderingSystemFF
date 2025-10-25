@@ -28,40 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGrid = new System.Windows.Forms.DataGridView();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cb = new Guna.UI2.WinForms.Guna2CheckBox();
             this.search = new Guna.UI2.WinForms.Guna2TextBox();
             this.b1 = new Guna.UI2.WinForms.Guna2Button();
             this.title = new System.Windows.Forms.Label();
+            this.dataGrid = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dataGrid
-            // 
-            this.dataGrid.AllowUserToAddRows = false;
-            this.dataGrid.AllowUserToDeleteRows = false;
-            this.dataGrid.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.dataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGrid.ColumnHeadersHeight = 35;
-            this.dataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dataGrid.Location = new System.Drawing.Point(98, 97);
-            this.dataGrid.MaximumSize = new System.Drawing.Size(907, 504);
-            this.dataGrid.MinimumSize = new System.Drawing.Size(907, 504);
-            this.dataGrid.Name = "dataGrid";
-            this.dataGrid.Size = new System.Drawing.Size(907, 504);
-            this.dataGrid.TabIndex = 0;
             // 
             // cb
             // 
             this.cb.AccessibleDescription = "c";
-            this.cb.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cb.AutoSize = true;
             this.cb.CheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.cb.CheckedState.BorderRadius = 2;
             this.cb.CheckedState.BorderThickness = 0;
             this.cb.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.cb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.cb.Location = new System.Drawing.Point(889, 70);
+            this.cb.Location = new System.Drawing.Point(889, 140);
             this.cb.MaximumSize = new System.Drawing.Size(116, 17);
             this.cb.MinimumSize = new System.Drawing.Size(116, 17);
             this.cb.Name = "cb";
@@ -76,7 +62,6 @@
             // 
             // search
             // 
-            this.search.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.search.AutoRoundedCorners = true;
             this.search.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.search.DefaultText = "";
@@ -87,7 +72,7 @@
             this.search.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.search.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.search.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.search.Location = new System.Drawing.Point(98, 51);
+            this.search.Location = new System.Drawing.Point(98, 121);
             this.search.MaximumSize = new System.Drawing.Size(300, 36);
             this.search.MinimumSize = new System.Drawing.Size(300, 36);
             this.search.Name = "search";
@@ -99,7 +84,7 @@
             // 
             // b1
             // 
-            this.b1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.b1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.b1.BorderRadius = 5;
             this.b1.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
             this.b1.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
@@ -107,7 +92,7 @@
             this.b1.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
             this.b1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.b1.ForeColor = System.Drawing.Color.White;
-            this.b1.Location = new System.Drawing.Point(805, 607);
+            this.b1.Location = new System.Drawing.Point(805, 603);
             this.b1.Name = "b1";
             this.b1.Size = new System.Drawing.Size(200, 35);
             this.b1.TabIndex = 6;
@@ -120,24 +105,50 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.title.Font = new System.Drawing.Font("Segoe UI Black", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.title.Location = new System.Drawing.Point(0, 9);
-            this.title.MaximumSize = new System.Drawing.Size(1920, 100);
-            this.title.MinimumSize = new System.Drawing.Size(1121, 23);
+            this.title.Location = new System.Drawing.Point(-1, 9);
+            this.title.MaximumSize = new System.Drawing.Size(1920, 81);
+            this.title.MinimumSize = new System.Drawing.Size(1121, 81);
             this.title.Name = "title";
-            this.title.Size = new System.Drawing.Size(1121, 39);
+            this.title.Size = new System.Drawing.Size(1121, 81);
             this.title.TabIndex = 7;
             this.title.Text = "Coupons";
             this.title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.title.Click += new System.EventHandler(this.title_Click);
+            // 
+            // dataGrid
+            // 
+            this.dataGrid.AllowUserToAddRows = false;
+            this.dataGrid.AllowUserToDeleteRows = false;
+            this.dataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGrid.ColumnHeadersHeight = 35;
+            this.dataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGrid.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dataGrid.Location = new System.Drawing.Point(98, 163);
+            this.dataGrid.MaximumSize = new System.Drawing.Size(1920, 1080);
+            this.dataGrid.Name = "dataGrid";
+            this.dataGrid.RowTemplate.Height = 25;
+            this.dataGrid.Size = new System.Drawing.Size(907, 434);
+            this.dataGrid.TabIndex = 8;
             // 
             // TableLayout
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1121, 660);
+            this.Controls.Add(this.dataGrid);
             this.Controls.Add(this.title);
             this.Controls.Add(this.b1);
             this.Controls.Add(this.cb);
             this.Controls.Add(this.search);
-            this.Controls.Add(this.dataGrid);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximumSize = new System.Drawing.Size(1920, 1080);
             this.MinimumSize = new System.Drawing.Size(1121, 660);
@@ -152,9 +163,9 @@
         #endregion
 
         public Guna.UI2.WinForms.Guna2Button b1;
-        public System.Windows.Forms.DataGridView dataGrid;
         public Guna.UI2.WinForms.Guna2CheckBox cb;
         public Guna.UI2.WinForms.Guna2TextBox search;
         public System.Windows.Forms.Label title;
+        public System.Windows.Forms.DataGridView dataGrid;
     }
 }
