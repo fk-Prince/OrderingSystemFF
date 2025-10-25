@@ -65,7 +65,7 @@ namespace OrderingSystem.CashierApp.Layout
 
                 if (loginStaff != null)
                 {
-                    MessageBox.Show("Successfully Login");
+                    MessageBox.Show("Successfully Login", "Authorized", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     DialogResult = DialogResult.OK;
                     isLogin = true;
                     CashierLayout ca = new CashierLayout(loginStaff);
@@ -73,17 +73,15 @@ namespace OrderingSystem.CashierApp.Layout
                     ca.Show();
                 }
                 else
-                {
                     throw new IncorrectCredentials("Incorrect Username or Password.");
-                }
             }
             catch (IncorrectCredentials ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

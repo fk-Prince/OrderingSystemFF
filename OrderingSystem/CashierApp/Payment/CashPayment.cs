@@ -20,6 +20,8 @@ namespace OrderingSystem.CashierApp.Payment
             return this.amount = amount;
         }
 
+
+
         public bool processPayment(StaffModel staff, string orderId, double cash)
         {
             if (staff == null)
@@ -36,5 +38,7 @@ namespace OrderingSystem.CashierApp.Payment
 
             return orderServices.payOrder(orderId, staff.StaffId, PaymentName);
         }
+
+
     }
 }

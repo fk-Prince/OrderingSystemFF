@@ -109,9 +109,15 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void cashPayment(object sender, System.EventArgs e)
         {
-            PaymentMethod p = new PaymentMethod(orderServices);
+            PaymentMethod p = new PaymentMethod(staff, orderServices);
             p.displayTotal(total.Text, txt.Text.Trim());
-            p.ShowDialog(this);
+            DialogResult rs = p.ShowDialog(this);
+
+            if (rs == DialogResult.OK)
+            {
+                p.Hide();
+                clear();
+            }
         }
 
         private void txt_MouseDown(object sender, MouseEventArgs e)

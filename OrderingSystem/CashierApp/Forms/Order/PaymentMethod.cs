@@ -36,6 +36,24 @@ namespace OrderingSystem.CashierApp.Forms.Order
             Hide();
         }
 
+        private void calculateChange(double cash)
+        {
+            if (double.TryParse(this.total.Text, out double total))
+            {
+                if (cash < total)
+                {
+                    t2.Text = "0.00";
+                }
+                else
+                {
+                    t2.Text = (cash - total).ToString("N2");
+                }
+            }
+            else
+            {
+                t2.Text = "0.00";
+            }
+        }
         private void guna2Button1_Click_1(object sender, EventArgs e)
         {
             try
@@ -46,10 +64,18 @@ namespace OrderingSystem.CashierApp.Forms.Order
                 IPaymentFactoryType factory = new PaymentFactory(orderServices);
                 IPayment payment = factory.paymentType(cb.SelectedItem.ToString());
 
-                double totalD = payment.calculateFee(double.Parse(total.Text));
-                bool suc = payment.processPayment(staff, orderId, totalD);
+                if (!isCashValid(t1.Text.ToString().Trim()) && t1.Visible)
+                    throw new InvalidPayment("Cash amount is invalid.");
+
+
+
+                payment.calculateFee(double.Parse(total.Text));
+                bool suc = payment.processPayment(staff, orderId, double.Parse(t1.Text));
                 if (suc)
+                {
                     MessageBox.Show("Successfull Payment", "Payment Method", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                }
                 else
                     MessageBox.Show("Failed to Proceed Payment", "Payment Method", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -57,6 +83,11 @@ namespace OrderingSystem.CashierApp.Forms.Order
             {
                 MessageBox.Show(ex.Message, "Payment Method", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private bool isCashValid(string v)
+        {
+            return double.TryParse(v, out double value) && value >= 0;
         }
 
         private void cb_SelectedIndexChanged(object sender, EventArgs e)
@@ -67,11 +98,15 @@ namespace OrderingSystem.CashierApp.Forms.Order
             {
                 t1.Visible = true;
                 l1.Visible = true;
+                t2.Visible = true;
+                l2.Visible = true;
             }
             else
             {
                 t1.Visible = false;
                 l1.Visible = false;
+                t2.Visible = false;
+                l2.Visible = false;
             }
         }
 
@@ -81,6 +116,16 @@ namespace OrderingSystem.CashierApp.Forms.Order
         {
             total.Text = text;
             this.orderId = orderId;
+        }
+
+
+
+        private void t1_TextChanged(object sender, EventArgs e)
+        {
+            if (double.TryParse(t1.Text, out double p))
+            {
+                calculateChange(p);
+            }
         }
     }
 }
