@@ -66,6 +66,11 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
             {
                 f6.b1.Text = "Update";
             }
+            else if (fx is TableLayout f7 && type.ToLower() == "category")
+            {
+                f7.cb.Visible = false;
+                f7.title.Text = "Category";
+            }
             return fx;
         }
     }

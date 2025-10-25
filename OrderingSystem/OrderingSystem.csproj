@@ -97,6 +97,12 @@
     <Compile Include="CashierApp\Components\BundleMenuPopup.Designer.cs">
       <DependentUpon>BundleMenuPopup.cs</DependentUpon>
     </Compile>
+    <Compile Include="CashierApp\Forms\Category\CategoryCard.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Forms\Category\CategoryCard.Designer.cs">
+      <DependentUpon>CategoryCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="CashierApp\Components\IngredientMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,11 +121,23 @@
     <Compile Include="CashierApp\Components\MenuInformation.Designer.cs">
       <DependentUpon>MenuInformation.cs</DependentUpon>
     </Compile>
-    <Compile Include="CashierApp\Components\StaffCard.cs">
+    <Compile Include="CashierApp\Forms\Staffs\StaffCard.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CashierApp\Components\StaffCard.Designer.cs">
+    <Compile Include="CashierApp\Forms\Staffs\StaffCard.Designer.cs">
       <DependentUpon>StaffCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CashierApp\Forms\Category\CategoryFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Forms\Category\CategoryFrm.Designer.cs">
+      <DependentUpon>CategoryFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CashierApp\Forms\Category\CategoryPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CashierApp\Forms\Category\CategoryPopup.Designer.cs">
+      <DependentUpon>CategoryPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="CashierApp\Forms\Coupon\CouponFrm.cs">
       <SubType>Form</SubType>
@@ -127,18 +145,18 @@
     <Compile Include="CashierApp\Forms\Coupon\CouponFrm.Designer.cs">
       <DependentUpon>CouponFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CashierApp\Forms\FactoryForm\FormFactory.cs" />
-    <Compile Include="CashierApp\Forms\FactoryForm\IForms.cs" />
-    <Compile Include="CashierApp\Forms\FactoryForm\PopupForm.cs">
+    <Compile Include="CashierApp\FactoryForm\FormFactory.cs" />
+    <Compile Include="CashierApp\FactoryForm\IForms.cs" />
+    <Compile Include="CashierApp\FactoryForm\PopupForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CashierApp\Forms\FactoryForm\PopupForm.Designer.cs">
+    <Compile Include="CashierApp\FactoryForm\PopupForm.Designer.cs">
       <DependentUpon>PopupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CashierApp\Forms\FactoryForm\TableLayout.cs">
+    <Compile Include="CashierApp\FactoryForm\TableLayout.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CashierApp\Forms\FactoryForm\TableLayout.Designer.cs">
+    <Compile Include="CashierApp\FactoryForm\TableLayout.Designer.cs">
       <DependentUpon>TableLayout.cs</DependentUpon>
     </Compile>
     <Compile Include="CashierApp\Forms\Order\PaymentMethod.cs">
@@ -249,6 +267,7 @@
     <Compile Include="CashierApp\Layout\CashierLayout.Designer.cs">
       <DependentUpon>CashierLayout.cs</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\DuplicateException.cs" />
     <Compile Include="Exceptions\IncorrectCredentials.cs" />
     <Compile Include="Exceptions\InvalidInput.cs" />
     <Compile Include="Exceptions\NotSupportedException.cs" />
@@ -370,6 +389,7 @@
     <Compile Include="Repository\Staff\IStaffRepository.cs" />
     <Compile Include="Repository\Staff\StaffRepository.cs" />
     <Compile Include="Services\CartServices.cs" />
+    <Compile Include="Services\CategoryServices.cs" />
     <Compile Include="Services\CouponServices.cs" />
     <Compile Include="Services\IngredientServices.cs" />
     <Compile Include="Services\InventoryServices.cs" />
@@ -380,6 +400,9 @@
     <EmbeddedResource Include="CashierApp\Components\BundleMenuPopup.resx">
       <DependentUpon>BundleMenuPopup.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CashierApp\Forms\Category\CategoryCard.resx">
+      <DependentUpon>CategoryCard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Components\IngredientMenu.resx">
       <DependentUpon>IngredientMenu.cs</DependentUpon>
     </EmbeddedResource>
@@ -389,16 +412,22 @@
     <EmbeddedResource Include="CashierApp\Components\MenuInformation.resx">
       <DependentUpon>MenuInformation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Components\StaffCard.resx">
+    <EmbeddedResource Include="CashierApp\Forms\Staffs\StaffCard.resx">
       <DependentUpon>StaffCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CashierApp\Forms\Category\CategoryFrm.resx">
+      <DependentUpon>CategoryFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CashierApp\Forms\Category\CategoryPopup.resx">
+      <DependentUpon>CategoryPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\Coupon\CouponFrm.resx">
       <DependentUpon>CouponFrm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Forms\FactoryForm\PopupForm.resx">
+    <EmbeddedResource Include="CashierApp\FactoryForm\PopupForm.resx">
       <DependentUpon>PopupForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Forms\FactoryForm\TableLayout.resx">
+    <EmbeddedResource Include="CashierApp\FactoryForm\TableLayout.resx">
       <DependentUpon>TableLayout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\Order\PaymentMethod.resx">
@@ -554,8 +583,6 @@
   <ItemGroup>
     <None Include="Resources\staff.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CashierApp\Forms\Category\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

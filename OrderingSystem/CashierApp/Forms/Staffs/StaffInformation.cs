@@ -181,7 +181,6 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
                 bool succ = staffServices.addStaff(ss);
                 if (succ)
                 {
-
                     MessageBox.Show("Successfully Added", "New Staff", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     staffUpdated.Invoke(this, EventArgs.Empty);
                     DialogResult = DialogResult.OK;

@@ -60,7 +60,7 @@ namespace OrderingSystem.CashierApp.Components
             isAvailable();
             try
             {
-                List<CategoryModel> ca = categoryRepository.getCategories();
+                List<CategoryModel> ca = categoryRepository.getCategoriesByMenu();
                 ca.ForEach(e => category.Items.Add(e.CategoryName));
                 category.SelectedItem = menu.CategoryName;
             }

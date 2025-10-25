@@ -26,9 +26,7 @@ namespace OrderingSystem.Receipt
             this.menus = om.OrderList;
             this.om = om;
         }
-        private int baseHeight;
-        private int itemHeight;
-        private int totalHeight;
+
         public void d()
         {
             int baseHeight = 700;

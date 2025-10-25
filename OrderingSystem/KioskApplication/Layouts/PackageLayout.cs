@@ -83,7 +83,7 @@ namespace OrderingSystem.KioskApplication.Layouts
                 selectedFlavor = x[0];
                 filterSizeByFlavor(menuDetails, menuDetail.MenuId, menuDetail.FlavorName);
             }
-            catch (Exception xe)
+            catch (Exception)
             {
                 Console.WriteLine("Error on PackageLayout displayFlavor");
                 throw;

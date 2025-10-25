@@ -55,7 +55,7 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         }
         private void NewMenu_Load(object sender, System.EventArgs e)
         {
-            List<CategoryModel> cat = new CategoryRepository().getCategories();
+            List<CategoryModel> cat = new CategoryRepository().getCategoriesByMenu();
             cat.ForEach(c => cmbCat.Items.Add(c.CategoryName));
         }
         private void ImageButton1(object sender, System.EventArgs e)

@@ -145,7 +145,7 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         private void MenuBundleFrm_Load(object sender, EventArgs e)
         {
             ICategoryRepository categoryRepository = new CategoryRepository();
-            List<CategoryModel> cat = categoryRepository.getCategories();
+            List<CategoryModel> cat = categoryRepository.getCategoriesByMenu();
             cat.ForEach(ex => cmbCat.Items.Add(ex.CategoryName));
         }
     }

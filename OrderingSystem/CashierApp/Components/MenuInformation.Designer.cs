@@ -167,7 +167,8 @@
             // category
             // 
             this.category.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(241)))), ((int)(((byte)(241)))));
-            this.category.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.category.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.category.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.category.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.category.FormattingEnabled = true;
             this.category.Location = new System.Drawing.Point(26, 144);
@@ -193,7 +194,7 @@
             this.catTxt.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.catTxt.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.catTxt.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.catTxt.Location = new System.Drawing.Point(26, 141);
+            this.catTxt.Location = new System.Drawing.Point(26, 144);
             this.catTxt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.catTxt.Name = "catTxt";
             this.catTxt.PlaceholderText = "";

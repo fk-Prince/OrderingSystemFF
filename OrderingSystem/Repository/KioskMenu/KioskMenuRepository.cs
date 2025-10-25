@@ -138,7 +138,7 @@ namespace OrderingSystem.Repository
                     }
                 }
             }
-            catch (MySqlException ex)
+            catch (MySqlException)
             {
 
                 Console.WriteLine("error on getMaxOrderRealTime");
@@ -507,7 +507,7 @@ namespace OrderingSystem.Repository
                     }
                 }
             }
-            catch (MySqlException ex)
+            catch (MySqlException)
             {
 
                 Console.WriteLine("error on getMaxOrderRealTime");
@@ -564,7 +564,7 @@ namespace OrderingSystem.Repository
             {
                 db.closeConnection();
             }
-            return false;
+
         }
     }
 }

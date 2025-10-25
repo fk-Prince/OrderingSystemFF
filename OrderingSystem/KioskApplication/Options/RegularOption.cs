@@ -25,7 +25,6 @@ namespace OrderingSystem.KioskApplication.Options
 
 
         private List<MenuModel> menuDetails;
-        public event EventHandler<MenuModel> OneMenu;
 
         public RegularOption(IKioskMenuRepository _menuRepository, FlowLayoutPanel flowPanel)
         {

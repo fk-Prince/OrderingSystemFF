@@ -360,7 +360,7 @@ namespace OrderingSystem
                 _menuRepository = new KioskMenuRepository(orderList);
                 ICategoryRepository categoryRepository = new CategoryRepository();
 
-                List<CategoryModel> cats = categoryRepository.getCategories();
+                List<CategoryModel> cats = categoryRepository.getCategoriesByMenu();
                 displayCategory(cats);
                 _allMenus = _menuRepository.getMenu();
                 displayMenu(_allMenus);

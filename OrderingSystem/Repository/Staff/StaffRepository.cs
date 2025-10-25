@@ -39,7 +39,6 @@ namespace OrderingSystem.Repository.Staff
                 throw;
             }
 
-            return false;
         }
         public bool fireStaff(int staffId)
         {
@@ -58,8 +57,6 @@ namespace OrderingSystem.Repository.Staff
             {
                 throw;
             }
-
-            return false;
         }
         public List<StaffModel> getStaff()
         {
@@ -165,8 +162,6 @@ namespace OrderingSystem.Repository.Staff
             {
                 throw;
             }
-
-            return false;
         }
 
         public bool usernameExists(StaffModel staff)
@@ -196,7 +191,7 @@ namespace OrderingSystem.Repository.Staff
                 throw;
             }
 
-            return false;
+
         }
     }
 }

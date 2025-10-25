@@ -1,11 +1,13 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using OrderingSystem.CashierApp.Forms.Category;
 using OrderingSystem.CashierApp.Forms.Coupon;
 using OrderingSystem.CashierApp.Forms.FactoryForm;
 using OrderingSystem.CashierApp.Forms.Staffs;
 using OrderingSystem.CashierApp.Layout;
 using OrderingSystem.Model;
+using OrderingSystem.Repository.CategoryRepository;
 using OrderingSystem.Repository.Reports;
 using OrderingSystem.Services;
 
@@ -181,6 +183,12 @@ namespace OrderingSystem.CashierApp.Forms
         private void viewCoupon(object sender, System.EventArgs e)
         {
             CouponFrm c = new CouponFrm(iForms, new CouponServices(), staff);
+            loadForm(c);
+        }
+
+        private void guna2Button2_Click(object sender, System.EventArgs e)
+        {
+            CategoryFrm c = new CategoryFrm(new CategoryServices(new CategoryRepository()), staff);
             loadForm(c);
         }
     }
