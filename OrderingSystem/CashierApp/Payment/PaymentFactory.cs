@@ -19,7 +19,7 @@ namespace OrderingSystem.CashierApp.Payment
             }
             else if (type.ToLower() == "creditcard" || type.ToLower() == "credit-card")
             {
-                return new CreditCardPayment();
+                return new CreditCardPayment(orderServices);
             }
             else
             {
