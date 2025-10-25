@@ -519,5 +519,52 @@ namespace OrderingSystem.Repository
             }
             return 0;
         }
+
+        public bool getDetailCount(MenuModel menu)
+        {
+            var db = DatabaseHandler.getInstance();
+            List<MenuModel> mds = new List<MenuModel>();
+            try
+            {
+                var conn = db.getConnection();
+                string query = @"                        
+                                  SELECT 
+                                      md.menu_id,
+                                      m.menu_name,
+                                      m.image,
+                                      md.menu_detail_id,
+                                      md.price,
+                                      md.flavor_name,
+                                      md.size_name,
+                                      md.estimated_time
+                                  FROM menu m
+                                  LEFT JOIN category c ON m.category_id = c.category_id
+                                  LEFT JOIN menu_detail md ON m.menu_id = md.menu_id 
+                                  WHERE m.isAvailable = 'Yes' 
+                                    AND m.menu_id = @menu_id
+                                    AND md.menu_detail_id NOT IN (SELECT from_menu_detail_id FROM menu_package)
+                                  ORDER BY md.price ASC;
+                     ";
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@menu_id", menu.MenuId);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        return reader.Read();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Console.WriteLine("error on getMenuDetailFlavor");
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+            return false;
+        }
     }
 }

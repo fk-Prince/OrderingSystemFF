@@ -8,63 +8,63 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
     {
         public Form selectForm(Form fx, string type)
         {
-            if (fx is PopupForm f && type.ToLower() == "coupon")
+            if (fx is PopupForm f1 && type.ToLower() == "coupon")
             {
-                f.dt1.Visible = true;
-                f.t2.Visible = false;
-                f.l1.Text = "Rate %";
-                f.l2.Text = "Expiry Date";
-                f.l3.Text = "Number of Times";
-                f.l4.Text = "Description";
-                f.b1.Text = "Submit";
-                f.title.Text = "Generate Coupon";
-                f.dt1.MinDate = DateTime.Now;
+                f1.dt1.Visible = true;
+                f1.t2.Visible = false;
+                f1.l1.Text = "Rate %";
+                f1.l2.Text = "Expiry Date";
+                f1.l3.Text = "Number of Times";
+                f1.l4.Text = "Description";
+                f1.b1.Text = "Submit";
+                f1.title.Text = "Generate Coupon";
+                f1.dt1.MinDate = DateTime.Now;
             }
-            else if (fx is TableLayout t && type.ToLower() == "view-coupon")
+            else if (fx is TableLayout f2 && type.ToLower() == "view-coupon")
             {
-                t.b1.Text = "Add Coupon";
-                t.cb.Text = "View Used Coupon";
-                t.title.Text = "Coupon";
-                t.search.Visible = false;
+                f2.b1.Text = "Add Coupon";
+                f2.cb.Text = "View Used Coupon";
+                f2.title.Text = "Coupon";
+                f2.search.Visible = false;
             }
-            else if (fx is PopupForm f2 && type.ToLower() == "add-ingredients")
+            else if (fx is PopupForm f3 && type.ToLower() == "add-ingredients")
             {
-                f2.l1.Text = "Ingredient Name";
-                f2.l2.Text = "Initial-Stock";
-                f2.l3.Text = "Expiry-Date";
-                f2.l4.Text = "Unit";
-                f2.b1.Text = "Submit";
-                f2.title.Text = "Add Ingredients";
-            }
-            else if (fx is PopupForm f3 && type.ToLower() == "restock-ingredients")
-            {
-                f3.l1.Text = "Ingredient Id";
-                f3.l2.Text = "Quantity";
+                f3.l1.Text = "Ingredient Name";
+                f3.l2.Text = "Initial-Stock";
                 f3.l3.Text = "Expiry-Date";
-                f3.t4.Visible = false;
-                f3.l4.Visible = false;
+                f3.l4.Text = "Unit";
                 f3.b1.Text = "Submit";
-                f3.title.Text = "Restock Ingredients";
+                f3.title.Text = "Add Ingredients";
             }
-            else if (fx is StaffInformation z && type.ToLower() == "add-staff")
+            else if (fx is PopupForm f4 && type.ToLower() == "restock-ingredients")
             {
-                z.fb.Visible = false;
-                z.b1.Text = "Add Staff";
-                z.cRolePanel.Visible = false;
-                z.cRole.Visible = true;
-                z.ll.Visible = true;
-                z.fn.Visible = true;
-                z.firstName.Visible = true;
-                z.lastName.Visible = true;
-                z.fName.Visible = false;
-                z.ffn.Visible = false;
-                z.dt.Visible = true;
-                z.rr.Visible = true;
-                z.hired.Visible = false;
+                f4.l1.Text = "Ingredient Id";
+                f4.l2.Text = "Quantity";
+                f4.l3.Text = "Expiry-Date";
+                f4.t4.Visible = false;
+                f4.l4.Visible = false;
+                f4.b1.Text = "Submit";
+                f4.title.Text = "Restock Ingredients";
             }
-            else if (fx is StaffInformation x && type.ToLower() == "view-staff")
+            else if (fx is StaffInformation f5 && type.ToLower() == "add-staff")
             {
-                x.b1.Text = "Update";
+                f5.fb.Visible = false;
+                f5.b1.Text = "Add Staff";
+                f5.cRolePanel.Visible = false;
+                f5.cRole.Visible = true;
+                f5.ll.Visible = true;
+                f5.fn.Visible = true;
+                f5.firstName.Visible = true;
+                f5.lastName.Visible = true;
+                f5.fName.Visible = false;
+                f5.ffn.Visible = false;
+                f5.dt.Visible = true;
+                f5.rr.Visible = true;
+                f5.hired.Visible = false;
+            }
+            else if (fx is StaffInformation f6 && type.ToLower() == "view-staff")
+            {
+                f6.b1.Text = "Update";
             }
             return fx;
         }

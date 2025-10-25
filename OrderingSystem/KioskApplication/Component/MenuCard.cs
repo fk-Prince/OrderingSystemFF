@@ -53,10 +53,18 @@ namespace OrderingSystem.KioskApplication.Cards
 
         private void menuClicked(object sender, EventArgs b)
         {
+            List<MenuModel> single = _menuRepository.getDetails(menu);
+            if (single.Count == 1)
+            {
+                single[0].PurchaseQty++;
+                orderListEvent?.Invoke(this, single);
+                return;
+            }
             PopupOption popup = new PopupOption(_menuRepository, menu, orderList);
             popup.orderListEvent += (s, e) =>
             {
                 orderListEvent?.Invoke(this, e);
+
             };
             DialogResult res = popup.ShowDialog(this);
 

@@ -107,9 +107,9 @@ namespace OrderingSystem.Receipt
 
             y += 20;
             SizeF size1;
-            double subtotald = menus.Sum(o => o.MenuPrice);
-            double couponRated = menus.Sum(o => o.MenuPrice * om.CouponRate);
-            double vatd = menus.Sum(o => (o.MenuPrice - om.CouponRate) * 0.12);
+            double subtotald = menus.Sum(o => o.GetTotal());
+            double couponRated = menus.Sum(o => o.GetTotal() * om.CouponRate);
+            double vatd = menus.Sum(o => (o.GetTotal() - om.CouponRate) * 0.12);
             double rated = om.CouponRate * 100;
             double totald = (subtotald - couponRated) + vatd;
 

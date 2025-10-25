@@ -6,6 +6,7 @@ using OrderingSystem.CashierApp.Forms.FactoryForm;
 using OrderingSystem.CashierApp.Forms.Staffs;
 using OrderingSystem.CashierApp.Layout;
 using OrderingSystem.Model;
+using OrderingSystem.Repository.Reports;
 using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Forms
@@ -15,8 +16,8 @@ namespace OrderingSystem.CashierApp.Forms
         private IngredientFrm ingredientInstance;
         private MenuFrm menuIntance;
         private Guna2Button lastClicked;
-        private StaffModel staff;
-        private IForms iForms;
+        private readonly StaffModel staff;
+        private readonly IForms iForms;
         public CashierLayout(StaffModel staff)
         {
             InitializeComponent();
@@ -149,6 +150,7 @@ namespace OrderingSystem.CashierApp.Forms
         private void viewInventory(object sender, System.EventArgs e)
         {
             hideSubPanel();
+            loadForm(new InventoryFrm(staff, new InventoryServices(new InventoryReportsRepository())));
         }
         private void viewStaff(object sender, System.EventArgs e)
         {

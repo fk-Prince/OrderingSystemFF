@@ -90,8 +90,7 @@ namespace OrderingSystem.Repository.Coupon
                         reader.GetString("status"),
                         reader.GetDouble("rate"),
                         reader.GetDateTime("expiry_Date"),
-                         reader.IsDBNull(reader.GetOrdinal("description")) ? "" : reader.GetString(reader.GetOrdinal("description"))
-
+                        reader.IsDBNull(reader.GetOrdinal("coupon_description")) ? "" : reader.GetString(reader.GetOrdinal("coupon_description"))
                        );
                 }
             }

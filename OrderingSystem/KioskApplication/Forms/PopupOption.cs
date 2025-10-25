@@ -17,7 +17,6 @@ namespace OrderingSystem.KioskApplication
         private List<MenuModel> orderList;
         private IMenuOptions menuOptions;
 
-
         public PopupOption(IKioskMenuRepository _menuRepository, MenuModel menu, List<MenuModel> orderList)
         {
             InitializeComponent();
@@ -28,11 +27,12 @@ namespace OrderingSystem.KioskApplication
             displayDetails(menu);
             diisplayOptions();
         }
-        private void diisplayOptions()
+
+
+        public void diisplayOptions()
         {
             try
             {
-
                 if (_menuRepository.isMenuPackage(menu))
                 {
                     menuOptions = new PackageOption(_menuRepository, flowPanel);
@@ -48,6 +48,7 @@ namespace OrderingSystem.KioskApplication
                         bb.Enabled = false;
                     };
                 }
+
                 menuOptions.displayMenuOptions(menu);
 
 
@@ -57,6 +58,7 @@ namespace OrderingSystem.KioskApplication
                 MessageBox.Show("Internal Server Error. 3" + ex.Message);
             }
         }
+
         private void displayDetails(MenuModel menu)
         {
             image.Image = menu.MenuImage;
@@ -65,15 +67,18 @@ namespace OrderingSystem.KioskApplication
         }
         private void addToOrder(object sender, System.EventArgs e)
         {
+            List<MenuModel> order = new List<MenuModel>();
             try
             {
                 if (menuOptions != null)
                 {
                     if (menuOptions is ISelectedFrequentlyOrdered freqOrdered)
                     {
+
                         var frequentlyOrdered = freqOrdered.getFrequentlyOrdered();
                         if (frequentlyOrdered != null)
-                            orderList.AddRange(frequentlyOrdered);
+                            order.AddRange(frequentlyOrdered);
+
                     }
 
                     var orders = menuOptions.confirmOrder();
@@ -81,9 +86,10 @@ namespace OrderingSystem.KioskApplication
                         return;
 
 
-                    orderList.AddRange(orders);
-                    orderListEvent?.Invoke(this, orders);
+                    order.AddRange(orders);
+                    orderListEvent?.Invoke(this, order);
                     DialogResult = DialogResult.OK;
+
                 }
             }
             catch (Exception ex) when (ex is OutOfOrder || ex is NoSelectedMenu)

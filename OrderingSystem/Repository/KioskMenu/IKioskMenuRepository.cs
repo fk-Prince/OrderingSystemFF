@@ -7,6 +7,7 @@ namespace OrderingSystem.Repository
     {
         List<MenuModel> getMenu();
         List<MenuModel> getDetails(MenuModel menu);
+        bool getDetailCount(MenuModel menu);
         List<MenuModel> getDetailsByPackage(MenuModel menu);
         bool isMenuPackage(MenuModel menu);
         List<MenuModel> getFrequentlyOrderedTogether(MenuModel menu);

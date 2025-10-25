@@ -9,7 +9,7 @@ namespace OrderingSystem.KioskApplication.Components
         private MenuModel menu;
         public event EventHandler<MenuModel> checkedMenu;
         public event EventHandler<MenuModel> unCheckedMenu;
-        private MenuModel selectedMenu;
+
         public FrequentlyOrderedCard(MenuModel menu)
         {
             InitializeComponent();
@@ -28,14 +28,15 @@ namespace OrderingSystem.KioskApplication.Components
                 {
                     BorderColor = Color.FromArgb(94, 148, 255);
                     BorderThickness = 2;
-                    checkedMenu.Invoke(this, selectedMenu);
+                    menu.PurchaseQty++;
+                    checkedMenu.Invoke(this, menu);
                 }
                 else
                 {
                     BorderColor = Color.DarkGray;
                     BorderThickness = 1;
-                    unCheckedMenu.Invoke(this, selectedMenu);
-                    selectedMenu = null;
+                    unCheckedMenu.Invoke(this, menu);
+                    menu = null;
                 }
             };
         }
@@ -59,7 +60,7 @@ namespace OrderingSystem.KioskApplication.Components
 
         private void checkBoxChanged(object sender, EventArgs e)
         {
-            selectedMenu = menu;
+
         }
 
         private void price_Click(object sender, EventArgs e)

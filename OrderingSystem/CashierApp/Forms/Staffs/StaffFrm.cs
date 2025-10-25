@@ -53,5 +53,10 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
                 s.Hide();
             }
         }
+
+        private void StaffFrm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

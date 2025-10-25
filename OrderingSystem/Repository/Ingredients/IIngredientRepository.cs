@@ -8,6 +8,7 @@ namespace OrderingSystem.Repository.Ingredients
         List<IngredientModel> getIngredientsOfMenu(MenuModel menu);
 
         List<IngredientModel> getIngredients();
+
         bool saveIngredientByMenu(int menudetail_id, List<IngredientModel> menu, string type);
     }
 }

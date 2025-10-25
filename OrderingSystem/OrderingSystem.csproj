@@ -365,11 +365,14 @@
     <Compile Include="Repository\KioskMenu\KioskMenuRepository.cs" />
     <Compile Include="Repository\Orders\IOrderRepository.cs" />
     <Compile Include="Repository\Orders\OrderRepository.cs" />
+    <Compile Include="Repository\Reports\IInventoryReportsRepository.cs" />
+    <Compile Include="Repository\Reports\InventoryReportsRepository.cs" />
     <Compile Include="Repository\Staff\IStaffRepository.cs" />
     <Compile Include="Repository\Staff\StaffRepository.cs" />
     <Compile Include="Services\CartServices.cs" />
     <Compile Include="Services\CouponServices.cs" />
     <Compile Include="Services\IngredientServices.cs" />
+    <Compile Include="Services\InventoryServices.cs" />
     <Compile Include="Services\MenuService.cs" />
     <Compile Include="Services\OrderServices.cs" />
     <Compile Include="Services\StaffServices.cs" />

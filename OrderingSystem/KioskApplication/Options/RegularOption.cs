@@ -25,11 +25,13 @@ namespace OrderingSystem.KioskApplication.Options
 
 
         private List<MenuModel> menuDetails;
+        public event EventHandler<MenuModel> OneMenu;
 
         public RegularOption(IKioskMenuRepository _menuRepository, FlowLayoutPanel flowPanel)
         {
             this._menuRepository = _menuRepository;
             this.flowPanel = flowPanel;
+
             frequentlyOrderedOption = new FrequentlyOrderedOption(_menuRepository, flowPanel);
         }
 
@@ -132,7 +134,16 @@ namespace OrderingSystem.KioskApplication.Options
                 throw new OutOfOrder("This menu is out of order.");
             }
 
-            var purchaseMenu = MenuModel.Builder()
+            var purchaseMenu = getMenuPurchase(selectedMenu);
+
+
+            return new List<MenuModel> { purchaseMenu };
+
+        }
+
+        public MenuModel getMenuPurchase(MenuModel selectedMenu)
+        {
+            var m = MenuModel.Builder()
                          .WithMenuName(selectedMenu.MenuName)
                          .WithMenuId(selectedMenu.MenuId)
                          .WithMenuDetailId(selectedMenu.MenuDetailId)
@@ -142,11 +153,8 @@ namespace OrderingSystem.KioskApplication.Options
                          .WithMenuImage(selectedMenu.MenuImage)
                          .WithPrice(selectedMenu.getPrice())
                          .Build();
-            purchaseMenu.PurchaseQty++;
-
-
-            return new List<MenuModel> { purchaseMenu };
-
+            m.PurchaseQty += 1;
+            return m;
         }
     }
 }
