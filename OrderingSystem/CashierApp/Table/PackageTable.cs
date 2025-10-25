@@ -120,5 +120,10 @@ namespace OrderingSystem.CashierApp.Table
             //}
             //DialogResult = DialogResult.OK;
         }
+
+        private void dataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

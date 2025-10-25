@@ -554,5 +554,8 @@
   <ItemGroup>
     <None Include="Resources\staff.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CashierApp\Forms\Category\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
