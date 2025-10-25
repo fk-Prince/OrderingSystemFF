@@ -323,11 +323,11 @@
         private Guna.UI2.WinForms.Guna2PictureBox guna2PictureBox1;
         public System.Windows.Forms.Label l4;
         public Guna.UI2.WinForms.Guna2TextBox t4;
-        private System.Windows.Forms.ComboBox c1;
         private System.Windows.Forms.ComboBox c2;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox comboBox2;
         private Guna.UI2.WinForms.Guna2BorderlessForm guna2BorderlessForm1;
         public Guna.UI2.WinForms.Guna2DateTimePicker dt1;
+        public System.Windows.Forms.ComboBox c1;
     }
 }

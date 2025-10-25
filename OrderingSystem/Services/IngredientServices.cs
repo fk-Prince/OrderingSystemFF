@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using OrderingSystem.Model;
 using OrderingSystem.Repository.Ingredients;
 
@@ -17,6 +18,10 @@ namespace OrderingSystem.Services
         public List<IngredientModel> getIngredients()
         {
             return ingredientRepository.getIngredients();
+        }
+        public DataView getIngredientsView()
+        {
+            return ingredientRepository.getIngredientsView();
         }
 
         public List<IngredientModel> getIngredientsOfMenu(MenuModel variantDetail)

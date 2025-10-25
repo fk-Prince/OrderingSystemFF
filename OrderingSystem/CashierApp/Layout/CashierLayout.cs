@@ -130,8 +130,17 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void viewDeductIngredient(object sender, System.EventArgs e)
         {
-            if (ingredientInstance == null) return;
-            ingredientInstance.showDeductIngredient();
+            PopupForm p = new PopupForm();
+            p.buttonClicked += (ss, ee) =>
+            {
+                //FactoryFormServices.saveFormData((PopupForm)ss, "add-ingredients");
+            };
+            //p.c1.Items.Add
+            DialogResult rs = iForms.selectForm(p, "deduct-ingredients").ShowDialog(this);
+            if (rs == DialogResult.OK)
+            {
+                p.Hide();
+            }
         }
         private void primaryButtonClickedSide(object sender, MouseEventArgs e)
         {

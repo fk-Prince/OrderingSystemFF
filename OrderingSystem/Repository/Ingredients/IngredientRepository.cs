@@ -17,7 +17,7 @@ namespace OrderingSystem.Repository.Ingredients
             try
             {
                 var conn = db.getConnection();
-                using (var cmd = new MySqlCommand("SELECT i.ingredient_id, i.ingredient_name,i.unit FROM ingredients i", conn))
+                using (var cmd = new MySqlCommand("SELECT i.ingredient_id, i.ingredient_name, i.unit FROM ingredients i", conn))
                 {
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -99,6 +99,40 @@ namespace OrderingSystem.Repository.Ingredients
             }
             return im;
         }
+
+        public DataView getIngredientsView()
+        {
+
+            string query = @"
+                        SELECT 
+                            s.ingredient_stock_id AS 'Stock ID' ,
+                            i.ingredient_name AS 'Ingredient Name',
+                            i.unit AS Unit,
+                            s.current_stock AS 'Current Stock',
+                            s.expiry_date AS 'Expiry Date',
+                            s.created_at AS 'Inserted At'
+                        FROM ingredient_stock s
+                        JOIN ingredients i ON s.ingredient_id = i.ingredient_id";
+            try
+            {
+                var db = DatabaseHandler.getInstance();
+                using (var cmd = new MySqlCommand(query, db.getConnection()))
+                {
+
+                    using (var adapter = new MySqlDataAdapter(cmd))
+                    {
+                        var dt = new DataTable();
+                        adapter.Fill(dt);
+                        return new DataView(dt);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public bool saveIngredientByMenu(int id, List<IngredientModel> ingredient, string type)
         {
             var db = DatabaseHandler.getInstance();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using OrderingSystem.Model;
 
 namespace OrderingSystem.Repository.Ingredients
@@ -8,6 +9,7 @@ namespace OrderingSystem.Repository.Ingredients
         List<IngredientModel> getIngredientsOfMenu(MenuModel menu);
 
         List<IngredientModel> getIngredients();
+        DataView getIngredientsView();
 
         bool saveIngredientByMenu(int menudetail_id, List<IngredientModel> menu, string type);
     }

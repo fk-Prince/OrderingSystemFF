@@ -84,5 +84,16 @@ namespace OrderingSystem.CashierApp.Layout
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void guna2Button2_Click(object sender, EventArgs e)
+        {
+            KioskLayout k = new KioskLayout();
+            k.Show();
+        }
+
+        private void LoginLayout_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
