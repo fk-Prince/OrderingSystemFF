@@ -18,6 +18,10 @@ namespace OrderingSystem.Services
         {
             return categoryRepository.getCategories();
         }
+        public List<CategoryModel> getCategoriesByMenu()
+        {
+            return categoryRepository.getCategoriesByMenu();
+        }
 
         public bool createCategory(string name, Image image)
         {

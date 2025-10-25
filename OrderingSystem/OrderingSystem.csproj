@@ -109,12 +109,6 @@
     <Compile Include="CashierApp\Components\IngredientMenu.Designer.cs">
       <DependentUpon>IngredientMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="CashierApp\Components\IngredientPopup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CashierApp\Components\IngredientPopup.Designer.cs">
-      <DependentUpon>IngredientPopup.cs</DependentUpon>
-    </Compile>
     <Compile Include="CashierApp\Components\MenuInformation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -183,6 +177,11 @@
     <Compile Include="CashierApp\Layout\LoginLayout.Designer.cs">
       <DependentUpon>LoginLayout.cs</DependentUpon>
     </Compile>
+    <Compile Include="CashierApp\Payment\CashPayment.cs" />
+    <Compile Include="CashierApp\Payment\CreditCardPayment.cs" />
+    <Compile Include="CashierApp\Payment\IPayment.cs" />
+    <Compile Include="CashierApp\Payment\IPaymentFactoryType.cs" />
+    <Compile Include="CashierApp\Payment\PaymentFactory.cs" />
     <Compile Include="CashierApp\Table\PackageTable.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -269,7 +268,9 @@
     </Compile>
     <Compile Include="Exceptions\DuplicateException.cs" />
     <Compile Include="Exceptions\IncorrectCredentials.cs" />
+    <Compile Include="Exceptions\InsuffiecientAmount.cs" />
     <Compile Include="Exceptions\InvalidInput.cs" />
+    <Compile Include="Exceptions\InvalidPayment.cs" />
     <Compile Include="Exceptions\NotSupportedException.cs" />
     <Compile Include="Exceptions\InvalidAction.cs" />
     <Compile Include="KioskApplication\Component\FrequentlyOrderedCard.cs">
@@ -405,9 +406,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Components\IngredientMenu.resx">
       <DependentUpon>IngredientMenu.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Components\IngredientPopup.resx">
-      <DependentUpon>IngredientPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Components\MenuInformation.resx">
       <DependentUpon>MenuInformation.cs</DependentUpon>

@@ -29,30 +29,30 @@ namespace OrderingSystem.CashierApp.Forms.Menu
             try
             {
                 if (string.IsNullOrEmpty(menuName.Text.Trim()) ||
-               string.IsNullOrEmpty(menuDescription.Text.Trim()) ||
-               string.IsNullOrEmpty(menuPrice.Text.Trim()) ||
-               string.IsNullOrEmpty(cmbCat.Text.Trim()) ||
-               string.IsNullOrWhiteSpace(estimatedTime.Text.Trim()))
+                string.IsNullOrEmpty(menuDescription.Text.Trim()) ||
+                string.IsNullOrEmpty(menuPrice.Text.Trim()) ||
+                string.IsNullOrEmpty(cmbCat.Text.Trim()) ||
+                string.IsNullOrWhiteSpace(estimatedTime.Text.Trim()))
                 {
-                    MessageBox.Show("Please fill all * fields.");
+                    MessageBox.Show("Please fill all * fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 if (inclded.Count <= 1)
                 {
-                    MessageBox.Show("It should atleast contain 2 Existing Menu.");
+                    MessageBox.Show("It should atleast contain 2 Existing Menu.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 if (!isPriceValid(menuPrice.Text.Trim()))
                 {
-                    MessageBox.Show("Invalid price .");
+                    MessageBox.Show("Invalid price .", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 if (!TimeSpan.TryParse(estimatedTime.Text.Trim(), out TimeSpan est))
                 {
-                    MessageBox.Show("Invalid estimated time format.");
+                    MessageBox.Show("Invalid estimated time format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -60,7 +60,7 @@ namespace OrderingSystem.CashierApp.Forms.Menu
 
                 if (menuService.isMenuNameExist(name))
                 {
-                    MessageBox.Show("Menu Name already exists, try different.");
+                    MessageBox.Show("Menu Name already exists, try different.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -84,21 +84,21 @@ namespace OrderingSystem.CashierApp.Forms.Menu
 
                 if (menuService.saveMenu(md, "Bundle"))
                 {
-                    MessageBox.Show("New menu created successfully.");
+                    MessageBox.Show("New menu created successfully.", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Hide();
                 }
                 else
                 {
-                    MessageBox.Show("Failed to create new menu.");
+                    MessageBox.Show("Failed to create new menu.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (NotSupportedException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (MySqlException)
             {
-                MessageBox.Show("Internal Server Error");
+                MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private bool isPriceValid(string text)

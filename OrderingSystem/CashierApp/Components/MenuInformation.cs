@@ -9,14 +9,13 @@ using Newtonsoft.Json;
 using OrderingSystem.CashierApp.Forms.Menu;
 using OrderingSystem.CashierApp.Table;
 using OrderingSystem.Model;
-using OrderingSystem.Repository.CategoryRepository;
 using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Components
 {
     public partial class MenuInformation : Form
     {
-        private readonly ICategoryRepository categoryRepository;
+        private readonly CategoryServices categoryServices;
         private readonly IngredientServices ingredientServices;
         private List<MenuModel> variantList;
         private List<MenuModel> included;
@@ -29,12 +28,12 @@ namespace OrderingSystem.CashierApp.Components
         private bool isPackaged = false;
         public event EventHandler menuUpdated;
         private StaffModel userStaff;
-        public MenuInformation(MenuModel menu, MenuService menuService, ICategoryRepository categoryRepository, IngredientServices ingredientServices, StaffModel userStaff)
+        public MenuInformation(MenuModel menu, MenuService menuService, CategoryServices categoryServices, IngredientServices ingredientServices, StaffModel userStaff)
         {
             InitializeComponent();
             this.menu = menu;
             this.menuService = menuService;
-            this.categoryRepository = categoryRepository;
+            this.categoryServices = categoryServices;
             this.ingredientServices = ingredientServices;
             this.userStaff = userStaff;
             displayMenuDetails();
@@ -57,16 +56,16 @@ namespace OrderingSystem.CashierApp.Components
                 b3.Visible = false;
                 b4.Visible = false;
             }
-            isAvailable();
             try
             {
-                List<CategoryModel> ca = categoryRepository.getCategoriesByMenu();
+                isAvailable();
+                List<CategoryModel> ca = categoryServices.getCategoriesByMenu();
                 ca.ForEach(e => category.Items.Add(e.CategoryName));
                 category.SelectedItem = menu.CategoryName;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void loadForm(Form f)
@@ -104,10 +103,9 @@ namespace OrderingSystem.CashierApp.Components
                     loadForm(regular = new RegularTable(variantList, ingredientServices));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Internal Server Error" + ex.Message);
-                Console.WriteLine(ex.Message + "displayTable ON menuinfroamtion");
+                MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void changeMode(object sender, EventArgs e)
@@ -134,25 +132,27 @@ namespace OrderingSystem.CashierApp.Components
         {
             try
             {
-                string name = menuName.Text.Trim();
-                string cat = category.Text.Trim();
-                string desc = description.Text.Trim();
-                string pricex = price.Text.Trim();
-
-                DialogResult rs = MessageBox.Show("Do you want to proceed to update this menu?", "Update", MessageBoxButtons.YesNo);
+                DialogResult rs = MessageBox.Show("Do you want to proceed to update this menu?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (rs == DialogResult.No)
                 {
                     return;
                 }
 
+                string name = menuName.Text.Trim();
+                string cat = category.Text.Trim();
+                string desc = description.Text.Trim();
+                string pricex = price.Text.Trim();
+
+
+
                 if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(desc) || string.IsNullOrEmpty(cat) || (isPackaged && string.IsNullOrEmpty(pricex)))
                 {
-                    MessageBox.Show("Emty Field");
+                    MessageBox.Show("Emty Field", "Invalid Input", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                     return;
                 }
                 if (!isPriceValid(pricex) && isPackaged)
                 {
-                    MessageBox.Show("Invalid price");
+                    MessageBox.Show("Invalid price", "Invalid Input", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -178,6 +178,7 @@ namespace OrderingSystem.CashierApp.Components
                     if (imagex != null) builder = builder.WithMenuImageByte(imagex);
                     menus = builder.Build();
                     type = "bundle";
+
                 }
                 else if (regular != null)
                 {
@@ -201,10 +202,10 @@ namespace OrderingSystem.CashierApp.Components
 
                 if (suc)
                 {
-                    MessageBox.Show("Updated Successfully");
+                    MessageBox.Show("Updated Successfully", "Update Scucessfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     menuUpdated.Invoke(this, EventArgs.Empty);
                 }
-                else MessageBox.Show("Failed to update");
+                else MessageBox.Show("Failed to update", "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -284,12 +285,12 @@ namespace OrderingSystem.CashierApp.Components
                     bool suc = ingredientServices.saveIngredientByMenu(menu.MenuId, ingredientSelected, "Package");
                     if (suc)
                     {
-                        MessageBox.Show("Ingredient Updated.");
+                        MessageBox.Show("Ingredient Updated.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         pop.Hide();
                     }
                     else
                     {
-                        MessageBox.Show("Ingredient ex.");
+                        MessageBox.Show("Failed to update ingredient", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             };
@@ -302,7 +303,6 @@ namespace OrderingSystem.CashierApp.Components
                 pop.Hide();
             }
         }
-
         private void guna2ToggleSwitch1_CheckedChanged(object sender, EventArgs e)
         {
             toggle.CheckedChanged -= guna2ToggleSwitch1_CheckedChanged;
@@ -319,7 +319,6 @@ namespace OrderingSystem.CashierApp.Components
 
             isAvailable();
         }
-
         private void isAvailable()
         {
             if (toggle.Checked || !isEditMode)

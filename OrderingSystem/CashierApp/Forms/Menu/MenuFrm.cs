@@ -16,7 +16,6 @@ namespace OrderingSystem.CashierApp.Forms
     {
 
         private readonly IngredientServices ingredientServices;
-        private readonly ICategoryRepository categoryRepository;
         private readonly MenuService menuService;
         private readonly StaffModel staff;
         public MenuFrm(StaffModel staff)
@@ -26,7 +25,6 @@ namespace OrderingSystem.CashierApp.Forms
 
             menuService = new MenuService(new MenuRepository());
             ingredientServices = new IngredientServices(new IngredientRepository());
-            categoryRepository = new CategoryRepository();
 
             displayMenu();
         }
@@ -58,7 +56,7 @@ namespace OrderingSystem.CashierApp.Forms
         {
             c.Click += (s, e) =>
             {
-                MenuInformation mi = new MenuInformation(i, menuService, categoryRepository, ingredientServices, staff);
+                MenuInformation mi = new MenuInformation(i, menuService, new CategoryServices(new CategoryRepository()), ingredientServices, staff);
                 mi.menuUpdated += (ss, ee) => displayMenu();
                 DialogResult rs = mi.ShowDialog(this);
                 if (rs == DialogResult.OK)
@@ -93,7 +91,6 @@ namespace OrderingSystem.CashierApp.Forms
 
         private void txt_TextChanged(object sender, EventArgs e)
         {
-
             debouncing.Stop();
             debouncing.Start();
         }

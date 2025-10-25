@@ -8,7 +8,6 @@ using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Properties;
 using OrderingSystem.Repository.CategoryRepository;
-using OrderingSystem.Repository.Ingredients;
 using OrderingSystem.Services;
 using NotSupportedException = OrderingSystem.Exceptions.NotSupportedException;
 

@@ -1,4 +1,5 @@
-﻿using OrderingSystem.Model;
+﻿using System.Collections.Generic;
+using OrderingSystem.Model;
 
 namespace OrderingSystem.Repository
 {
@@ -11,5 +12,6 @@ namespace OrderingSystem.Repository
         bool saveNewOrder(OrderModel order);
         bool payOrder(string order_id, int staff_id, string payment_method);
         string getOrderId();
+        List<string> getAvailablePayments();
     }
 }

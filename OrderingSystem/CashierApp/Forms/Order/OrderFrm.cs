@@ -8,7 +8,6 @@ using OrderingSystem.CashierApp.Forms.Order;
 using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication.Services;
 using OrderingSystem.Model;
-using OrderingSystem.Receipt;
 using OrderingSystem.Repository;
 using OrderingSystem.Repository.Order;
 
@@ -71,11 +70,12 @@ namespace OrderingSystem.CashierApp.Forms
                         row["Total Amount"] = order.GetTotal();
                         table.Rows.Add(row);
                     }
-                    double subtotald = om.OrderList.Sum(o => o.MenuPrice);
-                    double couponRated = om.OrderList.Sum(o => o.MenuPrice * om.CouponRate);
-                    double vatd = om.OrderList.Sum(o => (o.MenuPrice - om.CouponRate) * 0.12);
-                    double rated = om.CouponRate * 100;
+                    double subtotald = om.OrderList.Sum(o => o.MenuPrice * o.PurchaseQty);
+                    double couponRated = subtotald * om.CouponRate;
+                    double vatd = (subtotald - couponRated) * 0.12;
                     double totald = (subtotald - couponRated) + vatd;
+
+                    double rated = om.CouponRate * 100;
                     subtotal.Text = subtotald.ToString("N2");
                     coupon.Text = couponRated.ToString("N2");
                     rate.Text = rated != 0 ? rated.ToString() + "%" : "";
@@ -109,35 +109,11 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void cashPayment(object sender, System.EventArgs e)
         {
-            PaymentMethod p = new PaymentMethod();
-            p.PaymentMethodChanged += (s, ee) => payment(ee);
+            PaymentMethod p = new PaymentMethod(orderServices);
+            p.displayTotal(total.Text, txt.Text.Trim());
             p.ShowDialog(this);
         }
-        private void payment(string payment_method)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(order_id))
-                {
-                    MessageBox.Show("No Orders", "Order", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                bool result = orderServices.payOrder(order_id, staff.StaffId, payment_method);
-                OrderReceipt or = new OrderReceipt(om);
-                or.Message("Thank you for coming");
-                or.d();
-                if (result)
-                {
-                    MessageBox.Show("Payment Success", "Payment Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    clear();
-                }
-                else MessageBox.Show("Payment Failed", "Payment Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Internal Server Error." + ex.Message, "Payment Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+
         private void txt_MouseDown(object sender, MouseEventArgs e)
         {
             var txt = sender as Guna2TextBox;

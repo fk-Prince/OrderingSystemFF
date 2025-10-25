@@ -185,7 +185,7 @@ namespace OrderingSystem.CashierApp.Components
 
                 if (!Regex.IsMatch(txt, reegx))
                 {
-                    MessageBox.Show("Invalid iNptu");
+                    MessageBox.Show("Invalid Input.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     e.Cancel = true;
                 }
             }

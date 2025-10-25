@@ -50,18 +50,18 @@ namespace OrderingSystem.CashierApp.Forms.Menu
                  string.Equals(ee.SizeName, size, StringComparison.OrdinalIgnoreCase));
             if (exist)
             {
-                MessageBox.Show($"This pair of Size: {size} & Flavor: {flavor}, is already exists");
+                MessageBox.Show($"This pair of Size: {size} & Flavor: {flavor}, is already exists", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (!TimeSpan.TryParse(estimatedTime.Text.Trim(), out TimeSpan ex))
             {
-                MessageBox.Show("Invalid Time Format.");
+                MessageBox.Show("Invalid Time Format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (ingredientSelected.Count <= 0)
             {
-                MessageBox.Show("No Selected Ingredient");
+                MessageBox.Show("No Selected Ingredient", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -106,7 +106,7 @@ namespace OrderingSystem.CashierApp.Forms.Menu
             }
             catch (Exception)
             {
-                MessageBox.Show("Internal Server Error.");
+                MessageBox.Show("Internal Server Error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         public void displayIngredient()

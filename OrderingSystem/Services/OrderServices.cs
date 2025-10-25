@@ -1,4 +1,5 @@
-﻿using OrderingSystem.Exceptions;
+﻿using System.Collections.Generic;
+using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Repository;
 
@@ -42,6 +43,11 @@ namespace OrderingSystem.KioskApplication.Services
         public bool payOrder(string order_id, int staff_id, string payment_method)
         {
             return orderRepository.payOrder(order_id, staff_id, payment_method);
+        }
+
+        public List<string> getAvailablePayments()
+        {
+            return orderRepository.getAvailablePayments();
         }
     }
 }

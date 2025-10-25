@@ -230,5 +230,36 @@ namespace OrderingSystem.Repository.Order
                 db.closeConnection();
             }
         }
+
+        public List<string> getAvailablePayments()
+        {
+            List<string> p = new List<string>();
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+                using (var cmd = new MySqlCommand("SELECT * FROM payment_method WHERE isActive = 'Active'", conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            p.Add(reader.GetString("payment_type"));
+                        }
+                        return p;
+                    }
+                }
+            }
+            catch (MySqlException)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+
+            return null;
+        }
     }
 }

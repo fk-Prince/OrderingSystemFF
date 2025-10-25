@@ -31,6 +31,9 @@ namespace OrderingSystem.Services
             else
                 throw new NotSupportedException("Not Supported.");
         }
+
+
+
         public bool isMenuNameExist(string name)
         {
             return menuRepository.isMenuNameExist(name);
@@ -59,5 +62,7 @@ namespace OrderingSystem.Services
         {
             return menuRepository.newMenuVariant(id, m);
         }
+
+
     }
 }
