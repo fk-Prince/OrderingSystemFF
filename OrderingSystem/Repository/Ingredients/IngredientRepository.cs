@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 using MySqlConnector;
 using Newtonsoft.Json;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.DatabaseConnection;
 using OrderingSystem.Model;
 
@@ -10,6 +12,7 @@ namespace OrderingSystem.Repository.Ingredients
 {
     public class IngredientRepository : IIngredientRepository
     {
+
         public List<IngredientModel> getIngredients()
         {
             List<IngredientModel> im = new List<IngredientModel>();
@@ -99,7 +102,44 @@ namespace OrderingSystem.Repository.Ingredients
             }
             return im;
         }
+        public List<IngredientStockModel> getIngredientsStock()
+        {
+            string query = @"SELECT iss.*, i.ingredient_name FROM ingredient_stock iss
+                             INNER JOIN ingredients i ON i.ingredient_id = iss.ingredient_id
+                              WHERE iss.current_stock > 0";
+            List<IngredientStockModel> l = new List<IngredientStockModel>();
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            IngredientStockModel m = IngredientStockModel.Builder()
+                                .SetIngredientStockId(reader.GetInt32("ingredient_stock_id"))
+                                .SetIngredientName(reader.GetString("ingredient_name"))
+                                .SetIngredientQuantity(reader.GetInt32("current_stock"))
+                                .Build();
+                            l.Add(m);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+            return l;
 
+
+        }
         public DataView getIngredientsView()
         {
 
@@ -132,7 +172,6 @@ namespace OrderingSystem.Repository.Ingredients
                 throw;
             }
         }
-
         public bool saveIngredientByMenu(int id, List<IngredientModel> ingredient, string type)
         {
             var db = DatabaseHandler.getInstance();
@@ -159,6 +198,58 @@ namespace OrderingSystem.Repository.Ingredients
                 db.closeConnection();
             }
 
+        }
+        public bool deductIngredient(int id, int quantity, string reason)
+        {
+            string query = @"
+                        UPDATE ingredient_stock
+                        SET current_stock = current_stock - @qty
+                        WHERE ingredient_stock_id = @id AND current_stock >= @qty";
+
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+                using (var transaction = conn.BeginTransaction())
+                {
+                    using (var cmd = new MySqlCommand(query, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.Parameters.AddWithValue("@qty", quantity);
+                        cmd.ExecuteNonQuery();
+                    }
+                    monitorInventory(id, quantity, reason, transaction, conn);
+                    transaction.Commit();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                //throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+
+            return false;
+        }
+
+        public void monitorInventory(int id, int quantity, string reason, MySqlTransaction trans, MySqlConnection conn)
+        {
+            string query2 = @"INSERT INTO monitor_inventory 
+                     (staff_id, ingredient_stock_id, quantity, type,reason, created_at)
+                     VALUES (@staff_id, @ingredient_stock_id, @quantity, 'Deduct',@reason,  NOW())";
+
+            using (var cmd = new MySqlCommand(query2, conn, trans))
+            {
+                cmd.Parameters.AddWithValue("@staff_id", SessionStaffData.StaffId);
+                cmd.Parameters.AddWithValue("@ingredient_stock_id", id);
+                cmd.Parameters.AddWithValue("@quantity", quantity);
+                cmd.Parameters.AddWithValue("@reason", reason);
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }

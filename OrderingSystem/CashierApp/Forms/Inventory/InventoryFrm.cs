@@ -2,7 +2,6 @@
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using OrderingSystem.Model;
 using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Forms
@@ -12,7 +11,7 @@ namespace OrderingSystem.CashierApp.Forms
 
         private DataView view;
         private InventoryServices inventoryServices;
-        public InventoryFrm(StaffModel staff, InventoryServices inventoryServices)
+        public InventoryFrm(InventoryServices inventoryServices)
         {
             InitializeComponent();
             this.inventoryServices = inventoryServices;

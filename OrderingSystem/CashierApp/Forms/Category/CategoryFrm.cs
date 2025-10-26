@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using OrderingSystem.CashierApp.Components;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Services;
@@ -10,16 +11,14 @@ namespace OrderingSystem.CashierApp.Forms.Category
 {
     public partial class CategoryFrm : Form
     {
-        private StaffModel staff;
+
         private CategoryServices categoryServices;
 
-        public CategoryFrm(CategoryServices categoryServices, StaffModel staff)
+        public CategoryFrm(CategoryServices categoryServices)
         {
             InitializeComponent();
-            this.staff = staff;
             this.categoryServices = categoryServices;
-
-            b1.Visible = staff.Role.ToLower() != "cashier";
+            b1.Visible = SessionStaffData.Role.ToLower() != "cashier";
             loadCategory();
         }
 

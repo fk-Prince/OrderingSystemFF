@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using Newtonsoft.Json;
 using OrderingSystem.CashierApp.Forms.Menu;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.CashierApp.Table;
 using OrderingSystem.Model;
 using OrderingSystem.Services;
@@ -27,15 +28,13 @@ namespace OrderingSystem.CashierApp.Components
         private bool isEditMode = false;
         private bool isPackaged = false;
         public event EventHandler menuUpdated;
-        private StaffModel userStaff;
-        public MenuInformation(MenuModel menu, MenuService menuService, CategoryServices categoryServices, IngredientServices ingredientServices, StaffModel userStaff)
+        public MenuInformation(MenuModel menu, MenuService menuService, CategoryServices categoryServices, IngredientServices ingredientServices)
         {
             InitializeComponent();
             this.menu = menu;
             this.menuService = menuService;
             this.categoryServices = categoryServices;
             this.ingredientServices = ingredientServices;
-            this.userStaff = userStaff;
             displayMenuDetails();
             displayTable();
         }
@@ -49,7 +48,7 @@ namespace OrderingSystem.CashierApp.Components
             toggle.CheckedChanged -= guna2ToggleSwitch1_CheckedChanged;
             toggle.Checked = menu.isAvailable;
             toggle.CheckedChanged += guna2ToggleSwitch1_CheckedChanged;
-            if (userStaff.Role.ToLower() == "cashier")
+            if (SessionStaffData.Role.ToLower() == "cashier")
             {
                 b1.Visible = false;
                 b2.Visible = false;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using OrderingSystem.CashierApp.Forms.FactoryForm;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.Model;
 using OrderingSystem.Services;
 
@@ -10,15 +11,13 @@ namespace OrderingSystem.CashierApp.Forms.Coupon
 {
     public partial class CouponFrm : Form
     {
-        private readonly StaffModel staff;
         private readonly CouponServices couponServices;
         private readonly TableLayout tableLayout;
         private DataView view;
         private readonly IForms f;
-        public CouponFrm(IForms f, CouponServices couponServices, StaffModel staff)
+        public CouponFrm(IForms f, CouponServices couponServices)
         {
             InitializeComponent();
-            this.staff = staff;
             this.f = f;
             this.couponServices = couponServices;
 
@@ -71,7 +70,7 @@ namespace OrderingSystem.CashierApp.Forms.Coupon
             tableLayout.dataGrid.DataSource = view;
 
 
-            if (staff.Role.ToLower() == "cashier")
+            if (SessionStaffData.Role.ToLower() == "cashier")
                 tableLayout.b1.Visible = false;
         }
         private void checkedChanged(object sender, bool e)
@@ -87,7 +86,7 @@ namespace OrderingSystem.CashierApp.Forms.Coupon
         private void loadForm(Form f)
         {
             if (mm.Controls.Count > 0) mm.Controls.Clear();
-            if (staff.Role.ToLower() == "cashier" && f is TableLayout t) t.b1.Visible = false;
+            if (SessionStaffData.Role.ToLower() == "cashier" && f is TableLayout t) t.b1.Visible = false;
             f.TopLevel = false;
             f.Dock = DockStyle.Fill;
 
@@ -95,5 +94,6 @@ namespace OrderingSystem.CashierApp.Forms.Coupon
             mm.Tag = f;
             f.Show();
         }
+
     }
 }

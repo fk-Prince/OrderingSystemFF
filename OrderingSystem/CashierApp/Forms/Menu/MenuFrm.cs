@@ -17,12 +17,10 @@ namespace OrderingSystem.CashierApp.Forms
 
         private readonly IngredientServices ingredientServices;
         private readonly MenuService menuService;
-        private readonly StaffModel staff;
-        public MenuFrm(StaffModel staff)
+
+        public MenuFrm()
         {
             InitializeComponent();
-            this.staff = staff;
-
             menuService = new MenuService(new MenuRepository());
             ingredientServices = new IngredientServices(new IngredientRepository());
 
@@ -56,7 +54,7 @@ namespace OrderingSystem.CashierApp.Forms
         {
             c.Click += (s, e) =>
             {
-                MenuInformation mi = new MenuInformation(i, menuService, new CategoryServices(new CategoryRepository()), ingredientServices, staff);
+                MenuInformation mi = new MenuInformation(i, menuService, new CategoryServices(new CategoryRepository()), ingredientServices);
                 mi.menuUpdated += (ss, ee) => displayMenu();
                 DialogResult rs = mi.ShowDialog(this);
                 if (rs == DialogResult.OK)

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using OrderingSystem.CashierApp.Forms;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Repository.Staff;
@@ -65,10 +66,17 @@ namespace OrderingSystem.CashierApp.Layout
 
                 if (loginStaff != null)
                 {
+                    SessionStaffData.StaffData = loginStaff;
+                    SessionStaffData.StaffId = loginStaff.StaffId;
+                    SessionStaffData.FirstName = loginStaff.FirstName;
+                    SessionStaffData.LastName = loginStaff.FirstName;
+                    SessionStaffData.Role = loginStaff.Role;
+                    SessionStaffData.Image = loginStaff.Image;
+
                     MessageBox.Show("Successfully Login", "Authorized", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     DialogResult = DialogResult.OK;
                     isLogin = true;
-                    CashierLayout ca = new CashierLayout(loginStaff);
+                    CashierLayout ca = new CashierLayout();
                     Hide();
                     ca.Show();
                 }

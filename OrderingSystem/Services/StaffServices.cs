@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Repository.Staff;
@@ -42,13 +43,13 @@ namespace OrderingSystem.Services
         {
             return staffRepository.updateStaff(model);
         }
-        public bool fireStaff(StaffModel model, int staffId)
+        public bool fireStaff(int staffIdFire)
         {
-            if (model.StaffId == staffId)
+            if (staffIdFire == SessionStaffData.StaffId)
             {
                 throw new InvalidAction("You are unable to fire yourself");
             }
-            return staffRepository.fireStaff(staffId);
+            return staffRepository.fireStaff(staffIdFire);
         }
         public bool isUsernameExists(StaffModel staff)
         {

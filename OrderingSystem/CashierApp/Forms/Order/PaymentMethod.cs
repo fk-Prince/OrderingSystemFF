@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using OrderingSystem.CashierApp.Payment;
 using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication.Services;
-using OrderingSystem.Model;
 
 namespace OrderingSystem.CashierApp.Forms.Order
 {
@@ -12,13 +11,11 @@ namespace OrderingSystem.CashierApp.Forms.Order
     {
         private string orderId;
         private OrderServices orderServices;
-        private StaffModel staff;
 
-        public PaymentMethod(StaffModel staff, OrderServices orderServices)
+        public PaymentMethod(OrderServices orderServices)
         {
             InitializeComponent();
             this.orderServices = orderServices;
-            this.staff = staff;
 
             List<string> x = orderServices.getAvailablePayments();
             x.ForEach(e => cb.Items.Add(e));
@@ -70,7 +67,7 @@ namespace OrderingSystem.CashierApp.Forms.Order
 
 
                 payment.calculateFee(double.Parse(total.Text));
-                bool suc = payment.processPayment(staff, orderId, double.Parse(t1.Text));
+                bool suc = payment.processPayment(orderId, double.Parse(t1.Text));
                 if (suc)
                 {
                     MessageBox.Show("Successfull Payment", "Payment Method", MessageBoxButtons.OK, MessageBoxIcon.Information);

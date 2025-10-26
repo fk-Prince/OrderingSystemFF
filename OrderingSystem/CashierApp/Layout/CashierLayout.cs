@@ -4,9 +4,10 @@ using Guna.UI2.WinForms;
 using OrderingSystem.CashierApp.Forms.Category;
 using OrderingSystem.CashierApp.Forms.Coupon;
 using OrderingSystem.CashierApp.Forms.FactoryForm;
+using OrderingSystem.CashierApp.Forms.Ingredient;
 using OrderingSystem.CashierApp.Forms.Staffs;
 using OrderingSystem.CashierApp.Layout;
-using OrderingSystem.Model;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.Repository.CategoryRepository;
 using OrderingSystem.Repository.Reports;
 using OrderingSystem.Services;
@@ -15,25 +16,28 @@ namespace OrderingSystem.CashierApp.Forms
 {
     public partial class CashierLayout : Form
     {
-        private IngredientFrm ingredientInstance;
+        private IngredientPanel ingredientPanel;
+        private IngredientFrm instance;
         private MenuFrm menuIntance;
         private Guna2Button lastClicked;
-        private readonly StaffModel staff;
+
         private readonly IForms iForms;
-        public CashierLayout(StaffModel staff)
+        public CashierLayout()
         {
             InitializeComponent();
-            this.staff = staff;
+
             iForms = new FormFactory();
+            ingredientPanel = new IngredientPanel(iForms);
+
 
             lastClicked = orderButton;
-            loadForm(new OrderFrm(staff));
+            loadForm(new OrderFrm());
             displayStaffDetails();
         }
 
         private void displayStaffDetails()
         {
-            if (staff.Role.ToLower() != "manager")
+            if (SessionStaffData.Role.ToLower() != "manager")
             {
                 nm.Visible = false;
                 nb.Visible = false;
@@ -41,11 +45,10 @@ namespace OrderingSystem.CashierApp.Forms
                 ai.Visible = false;
                 ri.Visible = false;
             }
-            image.Image = staff.Image;
-            name.Text = staff.FirstName.Substring(0, 1).ToUpper() + staff.FirstName.Substring(1).ToLower() + "  " + staff.LastName.Substring(0, 1).ToUpper() + staff.LastName.Substring(1).ToLower();
-            role.Text = staff.Role.Substring(0, 1).ToUpper() + staff.Role.Substring(1);
+            image.Image = SessionStaffData.Image;
+            name.Text = SessionStaffData.FirstName.Substring(0, 1).ToUpper() + SessionStaffData.FirstName.Substring(1).ToLower() + "  " + SessionStaffData.LastName.Substring(0, 1).ToUpper() + SessionStaffData.LastName.Substring(1).ToLower();
+            role.Text = SessionStaffData.Role.Substring(0, 1).ToUpper() + SessionStaffData.Role.Substring(1);
         }
-
         public void loadForm(Form f)
         {
             if (mm.Tag is Form ff && ff.Name == f.Name) return;
@@ -58,7 +61,7 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void showSubPanel(Panel panel)
         {
-            if (panel.Visible == false && staff.Role.ToLower() == "manager")
+            if (panel.Visible == false && SessionStaffData.Role.ToLower() == "manager")
             {
                 hideSubPanel();
                 panel.Visible = true;
@@ -70,17 +73,17 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void hideSubPanel()
         {
-            if (s1.Visible == true && staff.Role.ToLower() == "manager") s1.Visible = false;
-            if (s2.Visible == true && staff.Role.ToLower() == "manager") s2.Visible = false;
+            if (s1.Visible == true && SessionStaffData.Role.ToLower() == "manager") s1.Visible = false;
+            if (s2.Visible == true && SessionStaffData.Role.ToLower() == "manager") s2.Visible = false;
         }
         private void viewOrder(object sender, System.EventArgs e)
         {
-            loadForm(new OrderFrm(staff));
+            loadForm(new OrderFrm());
             hideSubPanel();
         }
         private void showMenu(object sender, System.EventArgs e)
         {
-            loadForm(menuIntance = new MenuFrm(staff));
+            loadForm(menuIntance = new MenuFrm());
             showSubPanel(s1);
         }
         private void newMenu(object sender, System.EventArgs e)
@@ -96,52 +99,45 @@ namespace OrderingSystem.CashierApp.Forms
             if (menuIntance == null) return;
             menuIntance.showBundle();
         }
+
         private void viewIngredient(object sender, System.EventArgs e)
         {
             showSubPanel(s2);
-            loadForm(ingredientInstance = new IngredientFrm());
+            loadForm(instance = new IngredientFrm());
         }
         private void viewRestockIngredient(object sender, System.EventArgs e)
         {
-            PopupForm p = new PopupForm();
-            p.buttonClicked += (ss, ee) =>
-            {
-                //FactoryFormServices.saveFormData((PopupForm)ss, "restock-ingredients");
-            };
-            DialogResult rs = iForms.selectForm(p, "restock-ingredients").ShowDialog(this);
-            if (rs == DialogResult.OK)
-            {
-                p.Hide();
-            }
+            //PopupForm p = new PopupForm();
+            //p.buttonClicked += (ss, ee) =>
+            //{
+            //    //FactoryFormServices.saveFormData((PopupForm)ss, "restock-ingredients");
+            //};
+            //DialogResult rs = iForms.selectForm(p, "restock-ingredients").ShowDialog(this);
+            //if (rs == DialogResult.OK)
+            //{
+            //    p.Hide();
+            //}
         }
         private void viewAddIngredients(object sender, System.EventArgs e)
         {
 
-            PopupForm p = new PopupForm();
-            p.buttonClicked += (ss, ee) =>
-            {
-                //FactoryFormServices.saveFormData((PopupForm)ss, "add-ingredients");
-            };
-            DialogResult rs = iForms.selectForm(p, "add-ingredients").ShowDialog(this);
-            if (rs == DialogResult.OK)
-            {
-                p.Hide();
-            }
+            //PopupForm p = new PopupForm();
+            //p.buttonClicked += (ss, ee) =>
+            //{
+            //    //FactoryFormServices.saveFormData((PopupForm)ss, "add-ingredients");
+            //};
+            //DialogResult rs = iForms.selectForm(p, "add-ingredients").ShowDialog(this);
+            //if (rs == DialogResult.OK)
+            //{
+            //    p.Hide();
+            //}
         }
         private void viewDeductIngredient(object sender, System.EventArgs e)
         {
-            PopupForm p = new PopupForm();
-            p.buttonClicked += (ss, ee) =>
-            {
-                //FactoryFormServices.saveFormData((PopupForm)ss, "add-ingredients");
-            };
-            //p.c1.Items.Add
-            DialogResult rs = iForms.selectForm(p, "deduct-ingredients").ShowDialog(this);
-            if (rs == DialogResult.OK)
-            {
-                p.Hide();
-            }
+            ingredientPanel.ingredientUpdated += (ss, ee) => instance.updateTable();
+            ingredientPanel.popupDeductIngredient(this);
         }
+
         private void primaryButtonClickedSide(object sender, MouseEventArgs e)
         {
             Guna2Button b = sender as Guna2Button;
@@ -161,12 +157,12 @@ namespace OrderingSystem.CashierApp.Forms
         private void viewInventory(object sender, System.EventArgs e)
         {
             hideSubPanel();
-            loadForm(new InventoryFrm(staff, new InventoryServices(new InventoryReportsRepository())));
+            loadForm(new InventoryFrm(new InventoryServices(new InventoryReportsRepository())));
         }
         private void viewStaff(object sender, System.EventArgs e)
         {
             hideSubPanel();
-            loadForm(new StaffFrm(staff));
+            loadForm(new StaffFrm());
         }
         private void signoutUser(object sender, System.EventArgs e)
         {
@@ -191,13 +187,12 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void viewCoupon(object sender, System.EventArgs e)
         {
-            CouponFrm c = new CouponFrm(iForms, new CouponServices(), staff);
+            CouponFrm c = new CouponFrm(iForms, new CouponServices());
             loadForm(c);
         }
-
         private void guna2Button2_Click(object sender, System.EventArgs e)
         {
-            CategoryFrm c = new CategoryFrm(new CategoryServices(new CategoryRepository()), staff);
+            CategoryFrm c = new CategoryFrm(new CategoryServices(new CategoryRepository()));
             loadForm(c);
         }
     }

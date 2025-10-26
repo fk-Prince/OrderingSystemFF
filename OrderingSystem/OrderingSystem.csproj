@@ -115,6 +115,7 @@
     <Compile Include="CashierApp\Components\MenuInformation.Designer.cs">
       <DependentUpon>MenuInformation.cs</DependentUpon>
     </Compile>
+    <Compile Include="CashierApp\Forms\Ingredient\IngredientPanel.cs" />
     <Compile Include="CashierApp\Forms\Staffs\StaffCard.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -182,6 +183,7 @@
     <Compile Include="CashierApp\Payment\IPayment.cs" />
     <Compile Include="CashierApp\Payment\IPaymentFactoryType.cs" />
     <Compile Include="CashierApp\Payment\PaymentFactory.cs" />
+    <Compile Include="CashierApp\SessionData\SessionStaffData.cs" />
     <Compile Include="CashierApp\Table\PackageTable.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -361,6 +363,7 @@
     <Compile Include="Model\CategoryModel.cs" />
     <Compile Include="Model\CouponModel.cs" />
     <Compile Include="Model\IngredientModel.cs" />
+    <Compile Include="Model\IngredientStockModel.cs" />
     <Compile Include="Model\MenuModel.cs" />
     <Compile Include="Model\MenuPackageModel.cs" />
     <Compile Include="Model\OrderModel.cs" />

@@ -11,12 +11,11 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
     public partial class StaffFrm : Form
     {
         private readonly StaffServices staffServices;
-        private readonly StaffModel staff;
         private readonly IForms iForms;
-        public StaffFrm(StaffModel staff)
+        public StaffFrm()
         {
             InitializeComponent();
-            this.staff = staff;
+
             iForms = new FormFactory();
             staffServices = new StaffServices();
 
@@ -33,7 +32,7 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
                 {
                     StaffCard s = new StaffCard(st, iForms, staffServices);
                     s.staffUpdated += refreshList;
-                    s.userStaff(staff);
+
                     flowPanel.Controls.Add(s);
                 }
             }
@@ -45,7 +44,7 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            StaffInformation s = new StaffInformation(staffServices, staff);
+            StaffInformation s = new StaffInformation(staffServices);
             s.staffUpdated += (ss, ee) => refreshList(this, EventArgs.Empty);
             DialogResult rs = iForms.selectForm(s, "add-staff").ShowDialog(this);
             if (rs == DialogResult.OK)

@@ -2,10 +2,10 @@
 {
     public class IngredientModel
     {
-        private int ingredientId;
-        private int ingredientQuantity;
-        private string ingredientName;
-        private string ingredientUnit;
+        protected int ingredientId;
+        protected int ingredientQuantity;
+        protected string ingredientName;
+        protected string ingredientUnit;
 
         public string IngredientName { get => ingredientName; }
         public string IngredientUnit { get => ingredientUnit; }
@@ -18,6 +18,7 @@
             IngredientBuilder SetIngredient_id(int ingredient_id);
             IngredientBuilder SetIngredientQuantity(int ingredientQuantity);
             IngredientBuilder SetIngredientUnit(string ingredientUnit);
+
             IngredientModel Build();
         }
 
@@ -53,6 +54,7 @@
                 ingredientModel.ingredientQuantity = ingredientQuantity;
                 return this;
             }
+
         }
 
     }

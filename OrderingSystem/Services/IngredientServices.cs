@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Repository.Ingredients;
 
@@ -23,6 +24,10 @@ namespace OrderingSystem.Services
         {
             return ingredientRepository.getIngredientsView();
         }
+        public List<IngredientStockModel> getIngredientStock()
+        {
+            return ingredientRepository.getIngredientsStock();
+        }
 
         public List<IngredientModel> getIngredientsOfMenu(MenuModel variantDetail)
         {
@@ -35,6 +40,18 @@ namespace OrderingSystem.Services
         }
 
 
+        public bool validateDeductionIngredientStock(int stockId, int quantity, string reason, IngredientModel orig)
+        {
 
+            if (quantity <= 0)
+            {
+                throw new InvalidInput("Invalid Quantity must be greater than zero.");
+            }
+            if (quantity > orig.IngredientQuantity)
+            {
+                throw new InvalidInput("Insufficient stock to deduct the requested quantity.");
+            }
+            return ingredientRepository.deductIngredient(stockId, quantity, reason);
+        }
     }
 }

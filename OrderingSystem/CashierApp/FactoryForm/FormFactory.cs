@@ -73,11 +73,13 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
             }
             else if (fx is PopupForm f8 && type.ToLower() == "deduct-ingredients")
             {
+                f8.t2.Enabled = false;
+                f8.c1.Visible = true;
+                f8.t1.Visible = false;
                 f8.l1.Text = "Ingredient Stock Id";
                 f8.l2.Text = "Ingredient Name";
                 f8.l3.Text = "Quantity to remove";
-                f8.t4.Visible = false;
-                f8.l4.Visible = false;
+                f8.l4.Text = "Reason";
                 f8.b1.Text = "Submit";
                 f8.title.Text = "Deduct Ingredients";
             }

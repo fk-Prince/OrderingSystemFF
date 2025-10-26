@@ -2,7 +2,6 @@
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using OrderingSystem.CashierApp.Forms.FactoryForm;
 using OrderingSystem.Repository.Ingredients;
 using OrderingSystem.Services;
 
@@ -10,46 +9,20 @@ namespace OrderingSystem.CashierApp.Forms
 {
     public partial class IngredientFrm : Form
     {
-        private IForms f;
         private DataView view;
         public IngredientFrm()
         {
             InitializeComponent();
-            f = new FormFactory();
+            updateTable();
+        }
+
+        public void updateTable()
+        {
+            check.Checked = false;
+            txt.Text = "";
             view = new IngredientServices(new IngredientRepository()).getIngredientsView();
             dataGrid.DataSource = view;
         }
-
-        public void showAddIngredient()
-        {
-            PopupForm add = new PopupForm();
-            DialogResult rs = f.selectForm(add, "add-ingredients").ShowDialog(this);
-            if (rs == DialogResult.OK)
-            {
-                add.Hide();
-            }
-
-        }
-        public void showDeductIngredient()
-        {
-            PopupForm ded = new PopupForm();
-            DialogResult rs = ded.ShowDialog(this);
-            if (rs == DialogResult.OK)
-            {
-                ded.Hide();
-            }
-
-        }
-        public void showRestockIngredient()
-        {
-            PopupForm add = new PopupForm();
-            DialogResult rs = f.selectForm(add, "restock-ingredients").ShowDialog(this);
-            if (rs == DialogResult.OK)
-            {
-                add.Hide();
-            }
-        }
-
         private void textChanged(object sender, System.EventArgs e)
         {
             loadIngredientData();

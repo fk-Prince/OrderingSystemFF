@@ -8,6 +8,7 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
     {
 
         public event EventHandler buttonClicked;
+        public event EventHandler comboChanged1;
         public PopupForm()
         {
             InitializeComponent();
@@ -30,12 +31,17 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
                 }
             }
 
+
             buttonClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void guna2PictureBox1_Click(object sender, System.EventArgs e)
         {
             DialogResult = DialogResult.OK;
+        }
+        private void c1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboChanged1?.Invoke(c1, EventArgs.Empty);
         }
     }
 }

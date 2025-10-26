@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Services;
@@ -11,15 +12,16 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
     public partial class StaffInformation : Form
     {
         private bool isEditMode = false;
-        private StaffServices staffServices;
+        private readonly StaffServices staffServices;
         private StaffModel viewingStaff;
-        private StaffModel userStaff;
         public event EventHandler staffUpdated;
-        public StaffInformation(StaffServices staffServices, StaffModel userStaff)
+        public StaffInformation(StaffServices staffServices)
         {
             InitializeComponent();
             this.staffServices = staffServices;
-            this.userStaff = userStaff;
+            if (SessionStaffData.Role.ToLower() == "cashier")
+                fb.Visible = false;
+
         }
         private void allowType(bool isEditMode)
         {
@@ -196,13 +198,13 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
             DialogResult rs = MessageBox.Show("Are sure you want to fire this staff?", "Information Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (rs == DialogResult.Yes)
             {
-                bool upSuc = staffServices.fireStaff(userStaff, viewingStaff.StaffId);
+                bool upSuc = staffServices.fireStaff(viewingStaff.StaffId);
                 if (upSuc)
                 {
                     fb.Text = "Fired";
                     fb.Click -= b1_Click;
                     staffUpdated.Invoke(this, EventArgs.Empty);
-                    MessageBox.Show("Successfully fired.", "Information Change", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    MessageBox.Show("Successfully fired.", "Information Change", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }

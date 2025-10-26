@@ -4,9 +4,8 @@ using System.Drawing;
 namespace OrderingSystem.Model
 {
     public class StaffModel
-
     {
-        public int StaffId { get; protected set; }
+        public int StaffId { get; set; }
         public string Username { get; protected set; }
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }

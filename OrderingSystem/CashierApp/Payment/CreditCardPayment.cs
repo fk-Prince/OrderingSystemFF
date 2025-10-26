@@ -1,6 +1,6 @@
 ﻿using System;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.KioskApplication.Services;
-using OrderingSystem.Model;
 
 namespace OrderingSystem.CashierApp.Payment
 {
@@ -23,15 +23,15 @@ namespace OrderingSystem.CashierApp.Payment
 
 
 
-        public bool processPayment(StaffModel staff, string orderId, double cash)
+        public bool processPayment(string orderId, double cash)
         {
-            if (staff == null)
+            if (SessionStaffData.StaffData == null)
                 throw new ArgumentNullException("Staff information is required.");
 
             if (string.IsNullOrWhiteSpace(orderId))
                 throw new ArgumentException("Invalid order ID.");
 
-            return orderServices.payOrder(orderId, staff.StaffId, PaymentName);
+            return orderServices.payOrder(orderId, SessionStaffData.StaffId, PaymentName);
         }
     }
 }

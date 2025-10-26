@@ -11,7 +11,6 @@ namespace OrderingSystem.CashierApp.Components
     public partial class StaffCard : Guna2Panel
     {
         private StaffModel staff;
-        private StaffModel user;
         public event EventHandler staffUpdated;
         private StaffServices staffServices;
         private IForms iForms;
@@ -30,10 +29,7 @@ namespace OrderingSystem.CashierApp.Components
             this.iForms = iForms;
         }
 
-        public void userStaff(StaffModel user)
-        {
-            this.user = user;
-        }
+
 
         private void effects(Control c)
         {
@@ -47,7 +43,7 @@ namespace OrderingSystem.CashierApp.Components
 
         private void xd(object sender, EventArgs e)
         {
-            StaffInformation s = new StaffInformation(staffServices, user);
+            StaffInformation s = new StaffInformation(staffServices);
             s.staffUpdated += (ss, ee) => staffUpdated.Invoke(this, EventArgs.Empty);
             s.displayStaff(staff);
             DialogResult rs = iForms.selectForm(s, "view-staff").ShowDialog(this);

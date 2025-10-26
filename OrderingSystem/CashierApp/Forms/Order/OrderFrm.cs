@@ -17,15 +17,12 @@ namespace OrderingSystem.CashierApp.Forms
     {
         private DataTable table;
         private OrderModel om;
-        private string order_id;
         private readonly OrderServices orderServices;
-        private readonly StaffModel staff;
-        private IOrderRepository orderRepository;
+        private readonly IOrderRepository orderRepository;
 
-        public OrderFrm(StaffModel staff)
+        public OrderFrm()
         {
             InitializeComponent();
-            this.staff = staff;
             orderRepository = new OrderRepository();
             orderServices = new OrderServices(orderRepository);
             initTable();
@@ -59,7 +56,7 @@ namespace OrderingSystem.CashierApp.Forms
                 DialogResult = DialogResult.OK;
                 if (om.OrderList.Count > 0)
                 {
-                    order_id = om.Order_id;
+
                     foreach (var order in om.OrderList)
                     {
                         DataRow row = table.NewRow();
@@ -101,7 +98,6 @@ namespace OrderingSystem.CashierApp.Forms
             table.Clear();
             txt.Text = "";
             subtotal.Text = "0.00";
-            order_id = "";
             coupon.Text = "0.00";
             vat.Text = "0.00";
             total.Text = "0.00";
@@ -109,7 +105,7 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void cashPayment(object sender, System.EventArgs e)
         {
-            PaymentMethod p = new PaymentMethod(staff, orderServices);
+            PaymentMethod p = new PaymentMethod(orderServices);
             p.displayTotal(total.Text, txt.Text.Trim());
             DialogResult rs = p.ShowDialog(this);
 
