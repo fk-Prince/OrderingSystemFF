@@ -120,17 +120,8 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void viewAddIngredients(object sender, System.EventArgs e)
         {
-
-            //PopupForm p = new PopupForm();
-            //p.buttonClicked += (ss, ee) =>
-            //{
-            //    //FactoryFormServices.saveFormData((PopupForm)ss, "add-ingredients");
-            //};
-            //DialogResult rs = iForms.selectForm(p, "add-ingredients").ShowDialog(this);
-            //if (rs == DialogResult.OK)
-            //{
-            //    p.Hide();
-            //}
+            ingredientPanel.ingredientUpdated += (ss, ee) => instance.updateTable();
+            ingredientPanel.popupAddIngredient(this);
         }
         private void viewDeductIngredient(object sender, System.EventArgs e)
         {

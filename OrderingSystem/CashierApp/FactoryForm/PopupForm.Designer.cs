@@ -41,8 +41,8 @@
             this.t4 = new Guna.UI2.WinForms.Guna2TextBox();
             this.c1 = new System.Windows.Forms.ComboBox();
             this.c2 = new System.Windows.Forms.ComboBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.c3 = new System.Windows.Forms.ComboBox();
+            this.c4 = new System.Windows.Forms.ComboBox();
             this.guna2BorderlessForm1 = new Guna.UI2.WinForms.Guna2BorderlessForm(this.components);
             this.guna2PictureBox1 = new Guna.UI2.WinForms.Guna2PictureBox();
             this.dt1 = new Guna.UI2.WinForms.Guna2DateTimePicker();
@@ -221,25 +221,24 @@
             this.c2.TabIndex = 64;
             this.c2.Visible = false;
             // 
-            // comboBox1
+            // c3
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(64, 258);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(304, 21);
-            this.comboBox1.TabIndex = 65;
-            this.comboBox1.Visible = false;
+            this.c3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.c3.FormattingEnabled = true;
+            this.c3.Location = new System.Drawing.Point(64, 258);
+            this.c3.Name = "c3";
+            this.c3.Size = new System.Drawing.Size(304, 21);
+            this.c3.TabIndex = 65;
+            this.c3.Visible = false;
             // 
-            // comboBox2
+            // c4
             // 
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(64, 320);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(304, 21);
-            this.comboBox2.TabIndex = 66;
-            this.comboBox2.Visible = false;
+            this.c4.FormattingEnabled = true;
+            this.c4.Location = new System.Drawing.Point(64, 320);
+            this.c4.Name = "c4";
+            this.c4.Size = new System.Drawing.Size(304, 21);
+            this.c4.TabIndex = 66;
+            this.c4.Visible = false;
             // 
             // guna2BorderlessForm1
             // 
@@ -287,8 +286,8 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(425, 484);
             this.Controls.Add(this.dt1);
-            this.Controls.Add(this.comboBox2);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.c4);
+            this.Controls.Add(this.c3);
             this.Controls.Add(this.c2);
             this.Controls.Add(this.c1);
             this.Controls.Add(this.l4);
@@ -325,10 +324,10 @@
         public System.Windows.Forms.Label l4;
         public Guna.UI2.WinForms.Guna2TextBox t4;
         private System.Windows.Forms.ComboBox c2;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.ComboBox comboBox2;
         private Guna.UI2.WinForms.Guna2BorderlessForm guna2BorderlessForm1;
         public Guna.UI2.WinForms.Guna2DateTimePicker dt1;
         public System.Windows.Forms.ComboBox c1;
+        public System.Windows.Forms.ComboBox c3;
+        public System.Windows.Forms.ComboBox c4;
     }
 }

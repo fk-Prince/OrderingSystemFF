@@ -18,20 +18,42 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
             this.iForms = iForms;
             ingredientServices = new IngredientServices(new IngredientRepository());
         }
+        public void popupAddIngredient(Form parentForm)
+        {
+            PopupForm p = new PopupForm();
+            p.buttonClicked += (ss, ee) =>
+            {
+                try
+                {
+                    MessageBox.Show("Successful", "Add", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ingredientUpdated.Invoke(this, EventArgs.Empty);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
 
+            DialogResult rs = iForms.selectForm(p, "add-ingredients").ShowDialog(parentForm);
+            if (rs == DialogResult.OK)
+            {
+                p.Hide();
+            }
+        }
         public void popupDeductIngredient(Form parentForm)
         {
             PopupForm p = new PopupForm();
 
             var stocks = ingredientServices.getIngredientStock();
             stocks.ForEach(i => p.c1.Items.Add(i.IngredientStockId));
-
+            var reasons = ingredientServices.getReasons("deduct");
+            p.c4.Items.AddRange(reasons.ToArray());
             p.buttonClicked += (ss, ee) =>
             {
                 try
                 {
                     var selected = stocks.FirstOrDefault(i => i.IngredientStockId == (int)p.c1.SelectedItem);
-                    bool suc = ingredientServices.validateDeductionIngredientStock((int)p.c1.SelectedItem, int.Parse(p.t3.Text.Trim()), p.t4.Text.Trim(), selected);
+                    bool suc = ingredientServices.validateDeductionIngredientStock((int)p.c1.SelectedItem, int.Parse(p.t3.Text.Trim()), p.c4.Text.Trim(), selected);
                     if (suc)
                     {
                         MessageBox.Show("Successful", "Deduct", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -33,6 +33,7 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
 
 
             buttonClicked?.Invoke(this, EventArgs.Empty);
+            DialogResult = DialogResult.OK;
         }
 
         private void guna2PictureBox1_Click(object sender, System.EventArgs e)

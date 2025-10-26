@@ -214,12 +214,6 @@
     <Compile Include="CashierApp\Forms\Ingredient\AddIngredient.Designer.cs">
       <DependentUpon>AddIngredient.cs</DependentUpon>
     </Compile>
-    <Compile Include="CashierApp\Forms\Ingredient\DeductIngredient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CashierApp\Forms\Ingredient\DeductIngredient.Designer.cs">
-      <DependentUpon>DeductIngredient.cs</DependentUpon>
-    </Compile>
     <Compile Include="CashierApp\Forms\Ingredient\IngredientFrm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -457,9 +451,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\Ingredient\AddIngredient.resx">
       <DependentUpon>AddIngredient.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Forms\Ingredient\DeductIngredient.resx">
-      <DependentUpon>DeductIngredient.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\Ingredient\IngredientFrm.resx">
       <DependentUpon>IngredientFrm.cs</DependentUpon>

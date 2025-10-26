@@ -14,5 +14,6 @@ namespace OrderingSystem.Repository.Ingredients
 
         bool saveIngredientByMenu(int menudetail_id, List<IngredientModel> menu, string type);
         bool deductIngredient(int id, int quantity, string reason);
+        List<string> getInventoryReasons(string type);
     }
 }

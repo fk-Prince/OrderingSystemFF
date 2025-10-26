@@ -39,6 +39,11 @@ namespace OrderingSystem.Services
             return ingredientRepository.saveIngredientByMenu(menuId, ingredientSelected, v);
         }
 
+        public List<string> getReasons(string type)
+        {
+            return ingredientRepository.getInventoryReasons(type);
+        }
+
 
         public bool validateDeductionIngredientStock(int stockId, int quantity, string reason, IngredientModel orig)
         {

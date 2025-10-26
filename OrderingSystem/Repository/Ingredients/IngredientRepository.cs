@@ -235,7 +235,6 @@ namespace OrderingSystem.Repository.Ingredients
 
             return false;
         }
-
         public void monitorInventory(int id, int quantity, string reason, MySqlTransaction trans, MySqlConnection conn)
         {
             string query2 = @"INSERT INTO monitor_inventory 
@@ -250,6 +249,36 @@ namespace OrderingSystem.Repository.Ingredients
                 cmd.Parameters.AddWithValue("@reason", reason);
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        public List<string> getInventoryReasons(string type)
+        {
+            List<string> im = new List<string>();
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+                using (var cmd = new MySqlCommand("SELECT DISTINCT reason FROM monitor_inventory WHERE type = @type", conn))
+                {
+                    cmd.Parameters.AddWithValue("@type", type);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            im.Add(reader.GetString("reason"));
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+            return im;
         }
     }
 }

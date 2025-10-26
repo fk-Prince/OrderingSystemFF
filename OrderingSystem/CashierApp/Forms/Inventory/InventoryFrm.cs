@@ -66,6 +66,8 @@ namespace OrderingSystem.CashierApp.Forms
                 string finalFilter = string.Join(" OR ", new[] { menuFilter, sizeFilter, flavorFilter, priceFilter }.Where(f => !string.IsNullOrEmpty(f)));
                 view.RowFilter = finalFilter;
             }
+            dataGrid.Refresh();
+
         }
 
         private void cb_SelectedIndexChanged(object sender, EventArgs e)
