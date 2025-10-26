@@ -14,7 +14,6 @@ namespace OrderingSystem.Receipt
         private string orderId;
         private int y = 200;
         private int x = 10;
-        private int page = 1;
         private static int lastRead = 0;
         private List<MenuModel> menus;
         private OrderModel om;

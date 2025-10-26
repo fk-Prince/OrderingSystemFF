@@ -258,8 +258,6 @@ namespace OrderingSystem.Repository.Order
             {
                 db.closeConnection();
             }
-
-            return null;
         }
     }
 }

@@ -17,7 +17,7 @@
             IngredientStockModel Build();
         }
 
-        public static IngredientStockBuilder Builder() => new IngredientStockBuilder();
+        public static new IngredientStockBuilder Builder() => new IngredientStockBuilder();
 
 
         public class IngredientStockBuilder : IIngredientStockModel

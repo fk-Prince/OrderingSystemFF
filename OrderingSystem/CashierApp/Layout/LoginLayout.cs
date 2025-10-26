@@ -98,10 +98,5 @@ namespace OrderingSystem.CashierApp.Layout
             KioskLayout k = new KioskLayout();
             k.Show();
         }
-
-        private void LoginLayout_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using OrderingSystem.CashierApp.Forms.Category;
@@ -25,7 +26,7 @@ namespace OrderingSystem.CashierApp.Forms
         public CashierLayout()
         {
             InitializeComponent();
-
+            dts.Start();
             iForms = new FormFactory();
             ingredientPanel = new IngredientPanel(iForms);
 
@@ -177,6 +178,12 @@ namespace OrderingSystem.CashierApp.Forms
         {
             CategoryFrm c = new CategoryFrm(new CategoryServices(new CategoryRepository()));
             loadForm(c);
+        }
+
+        private void dts_Tick(object sender, System.EventArgs e)
+        {
+            time.Text = DateTime.Now.ToString("hh:mm:ss tt");
+            date.Text = DateTime.Now.ToString("yyyy, MMMM dd - dddd");
         }
     }
 }

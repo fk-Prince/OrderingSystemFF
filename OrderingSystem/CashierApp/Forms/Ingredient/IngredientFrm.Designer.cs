@@ -105,7 +105,7 @@
             this.txt.MaxLength = 255;
             this.txt.Name = "txt";
             this.txt.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(156)))), ((int)(((byte)(162)))));
-            this.txt.PlaceholderText = "Search Ingredients, Staff";
+            this.txt.PlaceholderText = "Search Ingredients";
             this.txt.SelectedText = "";
             this.txt.Size = new System.Drawing.Size(469, 41);
             this.txt.TabIndex = 12;

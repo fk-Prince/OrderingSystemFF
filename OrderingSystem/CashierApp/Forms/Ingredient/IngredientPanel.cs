@@ -22,7 +22,7 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
         }
         public void popupAddIngredient(Form parentForm)
         {
-            int id = 0;
+            //int id = 0;
             PopupForm p = new PopupForm();
             DialogResult rs = iForms.selectForm(p, "add-ingredients").ShowDialog(parentForm);
             if (rs == DialogResult.OK)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using OrderingSystem.CashierApp.Components;
 using OrderingSystem.CashierApp.Forms.FactoryForm;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.Model;
 using OrderingSystem.Services;
 
@@ -20,6 +21,9 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
             staffServices = new StaffServices();
 
             refreshList(null, EventArgs.Empty);
+
+            if (SessionStaffData.Role.ToLower() == "cashier")
+                b1.Visible = false;
         }
 
         private void refreshList(object sender, EventArgs e)
@@ -32,7 +36,7 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
                 {
                     StaffCard s = new StaffCard(st, iForms, staffServices);
                     s.staffUpdated += refreshList;
-
+                    s.Tag = st;
                     flowPanel.Controls.Add(s);
                 }
             }
@@ -51,6 +55,27 @@ namespace OrderingSystem.CashierApp.Forms.Staffs
             {
                 s.Hide();
             }
+        }
+
+        private void debouncing_Tick(object sender, EventArgs e)
+        {
+            debouncing.Stop();
+            string txt = search.Text.Trim().ToLower();
+
+            foreach (var i in flowPanel.Controls)
+            {
+                if (i is StaffCard sc)
+                {
+                    StaffModel cz = (StaffModel)sc?.Tag;
+                    sc.Visible = string.IsNullOrEmpty(txt) || cz.FirstName.ToLower().StartsWith(txt) || cz.LastName.ToLower().StartsWith(txt) || cz.StaffId.ToString().StartsWith(txt);
+                }
+            }
+        }
+
+        private void search_TextChanged(object sender, EventArgs e)
+        {
+            debouncing.Stop();
+            debouncing.Start();
         }
     }
 }

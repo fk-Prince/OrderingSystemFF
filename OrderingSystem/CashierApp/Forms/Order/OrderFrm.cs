@@ -36,14 +36,6 @@ namespace OrderingSystem.CashierApp.Forms
             table.Columns.Add("Quantity");
             table.Columns.Add("Total Amount", typeof(string));
             dataGrid.DataSource = table;
-
-            table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
-            table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
-            table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
-            table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
-            table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
-            table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
-            table.Rows.Add("ORD-000001", "Cheese", 900.00, 2, 1800);
         }
 
         private void displayOrders()

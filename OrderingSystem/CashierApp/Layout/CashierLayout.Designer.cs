@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CashierLayout));
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.guna2Button2 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Button21 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Button20 = new Guna.UI2.WinForms.Guna2Button();
@@ -48,15 +50,15 @@
             this.su = new Guna.UI2.WinForms.Guna2Button();
             this.guna2PictureBox3 = new Guna.UI2.WinForms.Guna2PictureBox();
             this.signout = new Guna.UI2.WinForms.Guna2Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.date = new System.Windows.Forms.Label();
             this.guna2PictureBox2 = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.time = new System.Windows.Forms.Label();
             this.guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
             this.role = new System.Windows.Forms.Label();
             this.name = new System.Windows.Forms.Label();
             this.image = new Guna.UI2.WinForms.Guna2PictureBox();
             this.mm = new Guna.UI2.WinForms.Guna2Panel();
-            this.guna2Button2 = new Guna.UI2.WinForms.Guna2Button();
+            this.dts = new System.Windows.Forms.Timer(this.components);
             this.guna2Panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.s2.SuspendLayout();
@@ -99,6 +101,31 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(228, 838);
             this.panel2.TabIndex = 14;
+            // 
+            // guna2Button2
+            // 
+            this.guna2Button2.AutoRoundedCorners = true;
+            this.guna2Button2.BackColor = System.Drawing.Color.Transparent;
+            this.guna2Button2.CustomizableEdges.BottomRight = false;
+            this.guna2Button2.CustomizableEdges.TopRight = false;
+            this.guna2Button2.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.guna2Button2.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.guna2Button2.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.guna2Button2.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.guna2Button2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.guna2Button2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
+            this.guna2Button2.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.guna2Button2.ForeColor = System.Drawing.Color.White;
+            this.guna2Button2.Location = new System.Drawing.Point(0, 719);
+            this.guna2Button2.MaximumSize = new System.Drawing.Size(228, 45);
+            this.guna2Button2.Name = "guna2Button2";
+            this.guna2Button2.Size = new System.Drawing.Size(228, 45);
+            this.guna2Button2.TabIndex = 14;
+            this.guna2Button2.Text = "Category";
+            this.guna2Button2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.guna2Button2.TextOffset = new System.Drawing.Point(20, 0);
+            this.guna2Button2.Click += new System.EventHandler(this.guna2Button2_Click);
+            this.guna2Button2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.primaryButtonClickedSide);
             // 
             // guna2Button1
             // 
@@ -380,9 +407,9 @@
             this.panel3.Controls.Add(this.su);
             this.panel3.Controls.Add(this.guna2PictureBox3);
             this.panel3.Controls.Add(this.signout);
-            this.panel3.Controls.Add(this.label2);
+            this.panel3.Controls.Add(this.date);
             this.panel3.Controls.Add(this.guna2PictureBox2);
-            this.panel3.Controls.Add(this.label1);
+            this.panel3.Controls.Add(this.time);
             this.panel3.Controls.Add(this.guna2Panel2);
             this.panel3.Controls.Add(this.name);
             this.panel3.Controls.Add(this.image);
@@ -439,16 +466,16 @@
             this.signout.Text = "Signout";
             this.signout.Click += new System.EventHandler(this.signoutUser);
             // 
-            // label2
+            // date
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(36, 44);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(189, 17);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "2025, October 15 - Wednesday";
+            this.date.AutoSize = true;
+            this.date.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.date.ForeColor = System.Drawing.Color.White;
+            this.date.Location = new System.Drawing.Point(36, 44);
+            this.date.Name = "date";
+            this.date.Size = new System.Drawing.Size(189, 17);
+            this.date.TabIndex = 6;
+            this.date.Text = "2025, October 15 - Wednesday";
             // 
             // guna2PictureBox2
             // 
@@ -462,16 +489,16 @@
             this.guna2PictureBox2.TabIndex = 5;
             this.guna2PictureBox2.TabStop = false;
             // 
-            // label1
+            // time
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(36, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 17);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "00:00:00 PM";
+            this.time.AutoSize = true;
+            this.time.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.time.ForeColor = System.Drawing.Color.White;
+            this.time.Location = new System.Drawing.Point(36, 13);
+            this.time.Name = "time";
+            this.time.Size = new System.Drawing.Size(79, 17);
+            this.time.TabIndex = 4;
+            this.time.Text = "00:00:00 PM";
             // 
             // guna2Panel2
             // 
@@ -531,30 +558,10 @@
             this.mm.Size = new System.Drawing.Size(1130, 750);
             this.mm.TabIndex = 0;
             // 
-            // guna2Button2
+            // dts
             // 
-            this.guna2Button2.AutoRoundedCorners = true;
-            this.guna2Button2.BackColor = System.Drawing.Color.Transparent;
-            this.guna2Button2.CustomizableEdges.BottomRight = false;
-            this.guna2Button2.CustomizableEdges.TopRight = false;
-            this.guna2Button2.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.guna2Button2.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.guna2Button2.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.guna2Button2.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.guna2Button2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.guna2Button2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
-            this.guna2Button2.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.guna2Button2.ForeColor = System.Drawing.Color.White;
-            this.guna2Button2.Location = new System.Drawing.Point(0, 719);
-            this.guna2Button2.MaximumSize = new System.Drawing.Size(228, 45);
-            this.guna2Button2.Name = "guna2Button2";
-            this.guna2Button2.Size = new System.Drawing.Size(228, 45);
-            this.guna2Button2.TabIndex = 14;
-            this.guna2Button2.Text = "Category";
-            this.guna2Button2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.guna2Button2.TextOffset = new System.Drawing.Point(20, 0);
-            this.guna2Button2.Click += new System.EventHandler(this.guna2Button2_Click);
-            this.guna2Button2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.primaryButtonClickedSide);
+            this.dts.Interval = 1000;
+            this.dts.Tick += new System.EventHandler(this.dts_Tick);
             // 
             // CashierLayout
             // 
@@ -604,12 +611,13 @@
         private Guna.UI2.WinForms.Guna2Panel guna2Panel2;
         private System.Windows.Forms.Label role;
         private Guna.UI2.WinForms.Guna2PictureBox guna2PictureBox2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label time;
         private Guna.UI2.WinForms.Guna2PictureBox guna2PictureBox3;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label date;
         private Guna.UI2.WinForms.Guna2Button signout;
         private Guna.UI2.WinForms.Guna2Button su;
         private Guna.UI2.WinForms.Guna2Button guna2Button1;
         private Guna.UI2.WinForms.Guna2Button guna2Button2;
+        private System.Windows.Forms.Timer dts;
     }
 }
