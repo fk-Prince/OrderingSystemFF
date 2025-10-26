@@ -370,12 +370,6 @@
     <Compile Include="Receipt\OrderReceipt.Designer.cs">
       <DependentUpon>OrderReceipt.cs</DependentUpon>
     </Compile>
-    <Compile Include="Receipt\WaitingNumber.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Receipt\WaitingNumber.Designer.cs">
-      <DependentUpon>WaitingNumber.cs</DependentUpon>
-    </Compile>
     <Compile Include="Repository\Cashier\MenuRepository.cs" />
     <Compile Include="Repository\Cashier\IMenuRepository.cs" />
     <Compile Include="Repository\Category\CategoryRepository.cs" />
@@ -530,9 +524,6 @@
     </Compile>
     <EmbeddedResource Include="Receipt\OrderReceipt.resx">
       <DependentUpon>OrderReceipt.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Receipt\WaitingNumber.resx">
-      <DependentUpon>WaitingNumber.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
