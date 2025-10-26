@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
@@ -47,16 +48,28 @@ namespace OrderingSystem.Services
 
         public bool validateDeductionIngredientStock(int stockId, int quantity, string reason, IngredientModel orig)
         {
-
             if (quantity <= 0)
-            {
                 throw new InvalidInput("Invalid Quantity must be greater than zero.");
-            }
+
             if (quantity > orig.IngredientQuantity)
-            {
                 throw new InvalidInput("Insufficient stock to deduct the requested quantity.");
-            }
+
             return ingredientRepository.deductIngredient(stockId, quantity, reason);
+        }
+
+        public bool validateRestockIngredient(int id, string quantity, DateTime value, string reason)
+        {
+            if (id == 0)
+                throw new InvalidInput("No Selected Ingredient");
+
+            if (!int.TryParse(quantity, out int qty))
+                throw new InvalidInput("Quantity must be a valid integer.");
+
+            if (qty <= 0)
+                throw new InvalidInput("Invalid Quantity must be greater than zero.");
+
+
+            return ingredientRepository.restockIngredient(id, qty, value, reason);
         }
     }
 }

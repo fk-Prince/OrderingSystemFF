@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Windows.Forms;
 using MySqlConnector;
 using Newtonsoft.Json;
 using OrderingSystem.CashierApp.SessionData;
@@ -140,6 +139,35 @@ namespace OrderingSystem.Repository.Ingredients
 
 
         }
+        public List<string> getInventoryReasons(string type)
+        {
+            List<string> im = new List<string>();
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+                using (var cmd = new MySqlCommand("SELECT DISTINCT reason FROM monitor_inventory WHERE type = @type", conn))
+                {
+                    cmd.Parameters.AddWithValue("@type", type);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            im.Add(reader.GetString("reason"));
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+            return im;
+        }
         public DataView getIngredientsView()
         {
 
@@ -223,23 +251,22 @@ namespace OrderingSystem.Repository.Ingredients
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
-                //throw;
+
+                throw;
             }
             finally
             {
                 db.closeConnection();
             }
 
-            return false;
         }
         public void monitorInventory(int id, int quantity, string reason, MySqlTransaction trans, MySqlConnection conn)
         {
             string query2 = @"INSERT INTO monitor_inventory 
-                     (staff_id, ingredient_stock_id, quantity, type,reason, created_at)
-                     VALUES (@staff_id, @ingredient_stock_id, @quantity, 'Deduct',@reason,  NOW())";
+                     (staff_id, ingredient_stock_id, quantity, type,reason)
+                     VALUES (@staff_id, @ingredient_stock_id, @quantity, 'Deduct',@reason)";
 
             using (var cmd = new MySqlCommand(query2, conn, trans))
             {
@@ -251,24 +278,29 @@ namespace OrderingSystem.Repository.Ingredients
             }
         }
 
-        public List<string> getInventoryReasons(string type)
+        public bool restockIngredient(int id, int quantity, DateTime value, string reason)
         {
-            List<string> im = new List<string>();
+            string query = @"INSERT INTO ingredient_stock (ingredient_id,current_stock,expiry_date) VALUES (@ingredient_id,@current_stock,@expiry_date)";
+            int lastId;
             var db = DatabaseHandler.getInstance();
             try
             {
                 var conn = db.getConnection();
-                using (var cmd = new MySqlCommand("SELECT DISTINCT reason FROM monitor_inventory WHERE type = @type", conn))
+                using (var transaction = conn.BeginTransaction())
                 {
-                    cmd.Parameters.AddWithValue("@type", type);
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, conn, transaction))
                     {
-                        while (reader.Read())
-                        {
-                            im.Add(reader.GetString("reason"));
-                        }
+                        cmd.Parameters.AddWithValue("@ingredient_id", id);
+                        cmd.Parameters.AddWithValue("@current_stock", quantity);
+                        cmd.Parameters.AddWithValue("@expiry_date", value);
+                        cmd.ExecuteNonQuery();
+
+                        lastId = (int)cmd.LastInsertedId;
                     }
+                    monitorInventory(lastId, quantity, reason, transaction, conn);
+                    transaction.Commit();
                 }
+                return true;
             }
             catch (Exception)
             {
@@ -278,7 +310,7 @@ namespace OrderingSystem.Repository.Ingredients
             {
                 db.closeConnection();
             }
-            return im;
+
         }
     }
 }

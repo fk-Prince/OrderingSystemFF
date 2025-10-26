@@ -107,16 +107,8 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void viewRestockIngredient(object sender, System.EventArgs e)
         {
-            //PopupForm p = new PopupForm();
-            //p.buttonClicked += (ss, ee) =>
-            //{
-            //    //FactoryFormServices.saveFormData((PopupForm)ss, "restock-ingredients");
-            //};
-            //DialogResult rs = iForms.selectForm(p, "restock-ingredients").ShowDialog(this);
-            //if (rs == DialogResult.OK)
-            //{
-            //    p.Hide();
-            //}
+            ingredientPanel.ingredientUpdated += (ss, ee) => instance.updateTable();
+            ingredientPanel.popupRestockIngredient(this);
         }
         private void viewAddIngredients(object sender, System.EventArgs e)
         {

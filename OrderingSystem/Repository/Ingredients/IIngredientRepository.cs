@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using OrderingSystem.Model;
 
@@ -15,5 +16,6 @@ namespace OrderingSystem.Repository.Ingredients
         bool saveIngredientByMenu(int menudetail_id, List<IngredientModel> menu, string type);
         bool deductIngredient(int id, int quantity, string reason);
         List<string> getInventoryReasons(string type);
+        bool restockIngredient(int id, int quantity, DateTime value, string reason);
     }
 }

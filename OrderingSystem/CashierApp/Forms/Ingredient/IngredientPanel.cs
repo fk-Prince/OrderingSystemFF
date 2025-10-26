@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using OrderingSystem.CashierApp.Forms.FactoryForm;
 using OrderingSystem.Exceptions;
+using OrderingSystem.Model;
 using OrderingSystem.Repository.Ingredients;
 using OrderingSystem.Services;
 
@@ -20,20 +22,8 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
         }
         public void popupAddIngredient(Form parentForm)
         {
+            int id = 0;
             PopupForm p = new PopupForm();
-            p.buttonClicked += (ss, ee) =>
-            {
-                try
-                {
-                    MessageBox.Show("Successful", "Add", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ingredientUpdated.Invoke(this, EventArgs.Empty);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            };
-
             DialogResult rs = iForms.selectForm(p, "add-ingredients").ShowDialog(parentForm);
             if (rs == DialogResult.OK)
             {
@@ -81,6 +71,41 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
                 }
             };
             DialogResult rs = iForms.selectForm(p, "deduct-ingredients").ShowDialog(parentForm);
+            if (rs == DialogResult.OK)
+            {
+                p.Hide();
+            }
+        }
+        public void popupRestockIngredient(Form parentForm)
+        {
+            int id = 0;
+            PopupForm p = new PopupForm();
+            p.buttonClicked += (ss, ee) =>
+            {
+                try
+                {
+                    bool suc = ingredientServices.validateRestockIngredient(id, p.t2.Text.Trim(), p.dt2.Value, p.c4.Text);
+                    MessageBox.Show("Successful", "Restock", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ingredientUpdated.Invoke(this, EventArgs.Empty);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }; List<IngredientModel> ingredients = ingredientServices.getIngredients();
+            p.c1.Items.AddRange(ingredients.Select(i => i.IngredientName).ToArray());
+            List<string> reas = ingredientServices.getReasons("Add");
+            p.c4.Items.AddRange(reas.ToArray());
+            p.comboChanged1 += (ss, ee) =>
+            {
+                if (ss is ComboBox cb && cb.SelectedIndex >= 0)
+                {
+                    p.l2.Text = $"Quantity  ( {ingredients.FirstOrDefault(i => i.IngredientName.Equals(cb.SelectedItem.ToString())).IngredientUnit} )";
+                    id = ingredients.FirstOrDefault(i => i.IngredientName.Equals(cb.SelectedItem.ToString())).Ingredient_id;
+                }
+            };
+
+            DialogResult rs = iForms.selectForm(p, "restock-ingredients").ShowDialog(parentForm);
             if (rs == DialogResult.OK)
             {
                 p.Hide();
