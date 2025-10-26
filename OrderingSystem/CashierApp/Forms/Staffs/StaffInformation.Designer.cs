@@ -197,12 +197,16 @@
             this.b1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
             this.b1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.b1.ForeColor = System.Drawing.Color.White;
+            this.b1.Image = global::OrderingSystem.Properties.Resources.edit;
+            this.b1.ImageOffset = new System.Drawing.Point(-3, 0);
+            this.b1.ImageSize = new System.Drawing.Size(18, 18);
             this.b1.Location = new System.Drawing.Point(0, 0);
             this.b1.Margin = new System.Windows.Forms.Padding(0);
             this.b1.Name = "b1";
             this.b1.Size = new System.Drawing.Size(100, 30);
             this.b1.TabIndex = 14;
             this.b1.Text = "Update";
+            this.b1.TextOffset = new System.Drawing.Point(-3, 0);
             this.b1.Click += new System.EventHandler(this.b1_Click);
             // 
             // fb

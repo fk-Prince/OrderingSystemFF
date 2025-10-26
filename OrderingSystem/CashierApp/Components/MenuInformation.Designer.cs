@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.b2 = new Guna.UI2.WinForms.Guna2Button();
             this.menuName = new Guna.UI2.WinForms.Guna2TextBox();
             this.description = new Guna.UI2.WinForms.Guna2TextBox();
             this.guna2BorderlessForm1 = new Guna.UI2.WinForms.Guna2BorderlessForm(this.components);
@@ -41,37 +40,21 @@
             this.label4 = new System.Windows.Forms.Label();
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.mm = new Guna.UI2.WinForms.Guna2Panel();
-            this.b1 = new Guna.UI2.WinForms.Guna2Button();
-            this.image = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.closeButton = new Guna.UI2.WinForms.Guna2PictureBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.b3 = new Guna.UI2.WinForms.Guna2Button();
-            this.b4 = new Guna.UI2.WinForms.Guna2Button();
             this.lPrice = new System.Windows.Forms.Label();
             this.price = new Guna.UI2.WinForms.Guna2TextBox();
             this.toggle = new Guna.UI2.WinForms.Guna2ToggleSwitch();
-            this.label5 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.closeButton)).BeginInit();
+            this.lav = new System.Windows.Forms.Label();
+            this.b1 = new Guna.UI2.WinForms.Guna2Button();
+            this.b2 = new Guna.UI2.WinForms.Guna2Button();
+            this.b3 = new Guna.UI2.WinForms.Guna2Button();
+            this.b4 = new Guna.UI2.WinForms.Guna2Button();
+            this.closeButton = new Guna.UI2.WinForms.Guna2PictureBox();
+            this.image = new Guna.UI2.WinForms.Guna2PictureBox();
             this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.closeButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             this.SuspendLayout();
-            // 
-            // b2
-            // 
-            this.b2.AutoRoundedCorners = true;
-            this.b2.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.b2.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.b2.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.b2.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.b2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
-            this.b2.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.b2.ForeColor = System.Drawing.Color.White;
-            this.b2.Location = new System.Drawing.Point(3, 42);
-            this.b2.Name = "b2";
-            this.b2.Size = new System.Drawing.Size(214, 33);
-            this.b2.TabIndex = 2;
-            this.b2.Text = "Add Another Variant";
-            this.b2.Click += new System.EventHandler(this.newVariantButton);
             // 
             // menuName
             // 
@@ -224,52 +207,6 @@
             this.mm.Size = new System.Drawing.Size(661, 245);
             this.mm.TabIndex = 15;
             // 
-            // b1
-            // 
-            this.b1.AutoRoundedCorners = true;
-            this.b1.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.b1.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.b1.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.b1.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.b1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
-            this.b1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.b1.ForeColor = System.Drawing.Color.White;
-            this.b1.ImageOffset = new System.Drawing.Point(-5, 0);
-            this.b1.ImageSize = new System.Drawing.Size(15, 15);
-            this.b1.Location = new System.Drawing.Point(3, 3);
-            this.b1.Name = "b1";
-            this.b1.Size = new System.Drawing.Size(214, 33);
-            this.b1.TabIndex = 1;
-            this.b1.Text = "Edit";
-            this.b1.TextOffset = new System.Drawing.Point(-5, 0);
-            this.b1.Click += new System.EventHandler(this.changeMode);
-            // 
-            // image
-            // 
-            this.image.BorderRadius = 10;
-            this.image.ImageRotate = 0F;
-            this.image.Location = new System.Drawing.Point(750, 21);
-            this.image.Name = "image";
-            this.image.Size = new System.Drawing.Size(229, 200);
-            this.image.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.image.TabIndex = 0;
-            this.image.TabStop = false;
-            this.image.Click += new System.EventHandler(this.ImageButton);
-            // 
-            // closeButton
-            // 
-            this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.closeButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.closeButton.Image = global::OrderingSystem.Properties.Resources.exit;
-            this.closeButton.ImageRotate = 0F;
-            this.closeButton.Location = new System.Drawing.Point(985, 1);
-            this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(26, 25);
-            this.closeButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.closeButton.TabIndex = 9;
-            this.closeButton.TabStop = false;
-            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
-            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.b1);
@@ -281,41 +218,6 @@
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(223, 355);
             this.flowLayoutPanel1.TabIndex = 16;
-            // 
-            // b3
-            // 
-            this.b3.AutoRoundedCorners = true;
-            this.b3.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.b3.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.b3.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.b3.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.b3.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
-            this.b3.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.b3.ForeColor = System.Drawing.Color.White;
-            this.b3.Location = new System.Drawing.Point(3, 81);
-            this.b3.Name = "b3";
-            this.b3.Size = new System.Drawing.Size(214, 33);
-            this.b3.TabIndex = 3;
-            this.b3.Text = "Update Bundle";
-            this.b3.Click += new System.EventHandler(this.guna2Button1_Click);
-            // 
-            // b4
-            // 
-            this.b4.AutoRoundedCorners = true;
-            this.b4.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.b4.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.b4.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.b4.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.b4.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
-            this.b4.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.b4.ForeColor = System.Drawing.Color.White;
-            this.b4.Location = new System.Drawing.Point(3, 120);
-            this.b4.Name = "b4";
-            this.b4.Size = new System.Drawing.Size(214, 33);
-            this.b4.TabIndex = 4;
-            this.b4.Text = "Additional Ingredients";
-            this.b4.Visible = false;
-            this.b4.Click += new System.EventHandler(this.b4_Click);
             // 
             // lPrice
             // 
@@ -363,7 +265,7 @@
             this.toggle.CheckedState.InnerColor = System.Drawing.Color.White;
             this.toggle.Enabled = false;
             this.toggle.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.toggle.Location = new System.Drawing.Point(82, 6);
+            this.toggle.Location = new System.Drawing.Point(96, 6);
             this.toggle.Name = "toggle";
             this.toggle.Size = new System.Drawing.Size(35, 20);
             this.toggle.TabIndex = 20;
@@ -373,23 +275,131 @@
             this.toggle.UncheckedState.InnerColor = System.Drawing.Color.White;
             this.toggle.CheckedChanged += new System.EventHandler(this.guna2ToggleSwitch1_CheckedChanged);
             // 
-            // label5
+            // lav
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.Gray;
-            this.label5.Location = new System.Drawing.Point(16, 6);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(60, 17);
-            this.label5.TabIndex = 21;
-            this.label5.Text = "Available";
+            this.lav.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lav.ForeColor = System.Drawing.Color.Gray;
+            this.lav.Location = new System.Drawing.Point(12, 7);
+            this.lav.Name = "lav";
+            this.lav.Size = new System.Drawing.Size(78, 17);
+            this.lav.TabIndex = 21;
+            this.lav.Text = "Available";
+            this.lav.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // b1
+            // 
+            this.b1.AutoRoundedCorners = true;
+            this.b1.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.b1.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.b1.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.b1.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.b1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
+            this.b1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.b1.ForeColor = System.Drawing.Color.White;
+            this.b1.Image = global::OrderingSystem.Properties.Resources.edit1;
+            this.b1.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.b1.ImageOffset = new System.Drawing.Point(2, 0);
+            this.b1.Location = new System.Drawing.Point(3, 3);
+            this.b1.Name = "b1";
+            this.b1.Size = new System.Drawing.Size(214, 33);
+            this.b1.TabIndex = 1;
+            this.b1.Text = "Edit";
+            this.b1.TextOffset = new System.Drawing.Point(-5, 0);
+            this.b1.Click += new System.EventHandler(this.changeMode);
+            // 
+            // b2
+            // 
+            this.b2.AutoRoundedCorners = true;
+            this.b2.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.b2.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.b2.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.b2.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.b2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
+            this.b2.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.b2.ForeColor = System.Drawing.Color.White;
+            this.b2.Image = global::OrderingSystem.Properties.Resources.add1;
+            this.b2.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.b2.ImageOffset = new System.Drawing.Point(2, 0);
+            this.b2.Location = new System.Drawing.Point(3, 42);
+            this.b2.Name = "b2";
+            this.b2.Size = new System.Drawing.Size(214, 33);
+            this.b2.TabIndex = 2;
+            this.b2.Text = "Add Another Variant";
+            this.b2.Click += new System.EventHandler(this.newVariantButton);
+            // 
+            // b3
+            // 
+            this.b3.AutoRoundedCorners = true;
+            this.b3.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.b3.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.b3.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.b3.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.b3.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
+            this.b3.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.b3.ForeColor = System.Drawing.Color.White;
+            this.b3.Image = global::OrderingSystem.Properties.Resources.update;
+            this.b3.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.b3.ImageOffset = new System.Drawing.Point(2, 0);
+            this.b3.Location = new System.Drawing.Point(3, 81);
+            this.b3.Name = "b3";
+            this.b3.Size = new System.Drawing.Size(214, 33);
+            this.b3.TabIndex = 3;
+            this.b3.Text = "Update Bundle";
+            this.b3.Click += new System.EventHandler(this.guna2Button1_Click);
+            // 
+            // b4
+            // 
+            this.b4.AutoRoundedCorners = true;
+            this.b4.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.b4.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.b4.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.b4.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.b4.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(119)))), ((int)(((byte)(206)))));
+            this.b4.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.b4.ForeColor = System.Drawing.Color.White;
+            this.b4.Image = global::OrderingSystem.Properties.Resources.add1;
+            this.b4.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.b4.ImageOffset = new System.Drawing.Point(2, 0);
+            this.b4.Location = new System.Drawing.Point(3, 120);
+            this.b4.Name = "b4";
+            this.b4.Size = new System.Drawing.Size(214, 33);
+            this.b4.TabIndex = 4;
+            this.b4.Text = "Additional Ingredients";
+            this.b4.Visible = false;
+            this.b4.Click += new System.EventHandler(this.b4_Click);
+            // 
+            // closeButton
+            // 
+            this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.closeButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.closeButton.Image = global::OrderingSystem.Properties.Resources.exit;
+            this.closeButton.ImageRotate = 0F;
+            this.closeButton.Location = new System.Drawing.Point(985, 1);
+            this.closeButton.Name = "closeButton";
+            this.closeButton.Size = new System.Drawing.Size(26, 25);
+            this.closeButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.closeButton.TabIndex = 9;
+            this.closeButton.TabStop = false;
+            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
+            // 
+            // image
+            // 
+            this.image.BorderRadius = 10;
+            this.image.ImageRotate = 0F;
+            this.image.Location = new System.Drawing.Point(750, 21);
+            this.image.Name = "image";
+            this.image.Size = new System.Drawing.Size(229, 200);
+            this.image.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.image.TabIndex = 0;
+            this.image.TabStop = false;
+            this.image.Click += new System.EventHandler(this.ImageButton);
             // 
             // MenuInformation
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1012, 600);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.lav);
             this.Controls.Add(this.toggle);
             this.Controls.Add(this.lPrice);
             this.Controls.Add(this.price);
@@ -409,9 +419,9 @@
             this.Name = "MenuInformation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MenuInformation";
-            ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.closeButton)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.closeButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -440,6 +450,6 @@
         private Guna.UI2.WinForms.Guna2TextBox price;
         private Guna.UI2.WinForms.Guna2Button b4;
         private Guna.UI2.WinForms.Guna2ToggleSwitch toggle;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lav;
     }
 }

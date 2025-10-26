@@ -26,9 +26,17 @@ namespace OrderingSystem.CashierApp.Components
             role.Text = staff.Role.Substring(0, 1).ToUpper() + staff.Role.Substring(1);
 
             effects(this);
+            hover(this);
             this.iForms = iForms;
         }
-
+        private void hover(Control c)
+        {
+            c.Cursor = Cursors.Hand;
+            foreach (Control cc in c.Controls)
+            {
+                hover(cc);
+            }
+        }
 
 
         private void effects(Control c)

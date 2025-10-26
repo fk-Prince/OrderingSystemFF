@@ -36,10 +36,23 @@ namespace OrderingSystem.CashierApp.Components
         private void click(Control c)
         {
             c.Click += update;
+            c.Cursor = Cursors.Hand;
 
             foreach (Control cc in c.Controls)
             {
                 click(cc);
+
+            }
+        }
+        private void hover(Control c)
+        {
+            c.MouseEnter += (s, e) => { BorderColor = Color.FromArgb(94, 148, 255); BorderThickness = 2; };
+            c.MouseLeave += (s, e) => { BorderColor = Color.FromArgb(34, 34, 34); BorderThickness = 1; };
+            c.Cursor = Cursors.Hand;
+
+            foreach (Control cc in c.Controls)
+            {
+                hover(cc);
             }
         }
 
@@ -87,6 +100,9 @@ namespace OrderingSystem.CashierApp.Components
         public void isAuthorized()
         {
             click(this);
+            hover(this);
         }
+
+
     }
 }

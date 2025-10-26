@@ -325,12 +325,14 @@ namespace OrderingSystem.CashierApp.Components
                 BackColor = Color.White;
                 if (package != null) package.BackColor = Color.White;
                 if (regular != null) regular.BackColor = Color.White;
+                lav.Text = "Available";
             }
             else
             {
                 if (package != null) package.BackColor = Color.LightGray;
                 if (regular != null) regular.BackColor = Color.LightGray;
                 BackColor = Color.LightGray;
+                lav.Text = "Unavailable";
             }
         }
     }
