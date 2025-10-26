@@ -311,11 +311,11 @@
     <Compile Include="KioskApplication\Forms\CouponFrm.Designer.cs">
       <DependentUpon>CouponFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interface\ICalculateOrder.cs" />
+    <Compile Include="KioskApplication\Interface\ICalculateOrder.cs" />
     <Compile Include="KioskApplication\Options\FrequentlyOrderedOption.cs" />
-    <Compile Include="Interface\IMenuOptions.cs" />
-    <Compile Include="Interface\IOutOfOrder.cs" />
-    <Compile Include="Interface\ISelectedFrequentlyOrdered.cs" />
+    <Compile Include="KioskApplication\Interface\IMenuOptions.cs" />
+    <Compile Include="KioskApplication\Interface\IOutOfOrder.cs" />
+    <Compile Include="KioskApplication\Interface\ISelectedFrequentlyOrdered.cs" />
     <Compile Include="KioskApplication\Forms\KioskLayout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -369,6 +369,12 @@
     </Compile>
     <Compile Include="Receipt\OrderReceipt.Designer.cs">
       <DependentUpon>OrderReceipt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Receipt\WaitingNumber.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Receipt\WaitingNumber.Designer.cs">
+      <DependentUpon>WaitingNumber.cs</DependentUpon>
     </Compile>
     <Compile Include="Repository\Cashier\MenuRepository.cs" />
     <Compile Include="Repository\Cashier\IMenuRepository.cs" />
@@ -524,6 +530,9 @@
     </Compile>
     <EmbeddedResource Include="Receipt\OrderReceipt.resx">
       <DependentUpon>OrderReceipt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Receipt\WaitingNumber.resx">
+      <DependentUpon>WaitingNumber.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

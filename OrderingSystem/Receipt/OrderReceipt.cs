@@ -12,12 +12,15 @@ namespace OrderingSystem.Receipt
     {
         private Image image = Properties.Resources.bloopandas;
         private string orderId;
-        private int y = 200;
+        private int y = 180;
         private int x = 10;
         private static int lastRead = 0;
         private List<MenuModel> menus;
         private OrderModel om;
         private string message;
+        private string invoice_id;
+        private string estimated_date;
+
         public OrderReceipt(OrderModel om)
         {
             InitializeComponent();
@@ -26,7 +29,7 @@ namespace OrderingSystem.Receipt
             this.om = om;
         }
 
-        public void d()
+        public void print()
         {
             int baseHeight = 700;
             int rowHeight = 40;
@@ -51,9 +54,11 @@ namespace OrderingSystem.Receipt
             printPreviewDialog.ShowDialog();
         }
 
-        public void Message(string message)
+        public void Message(string message, string estimated_date, string invoice_id)
         {
             this.message = message;
+            this.estimated_date = estimated_date;
+            this.invoice_id = invoice_id;
         }
 
         private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
@@ -62,6 +67,12 @@ namespace OrderingSystem.Receipt
             e.Graphics.DrawString("BlooPanda", new Font("Segui UI", 23, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline), Brushes.Black, 15, 25);
             e.Graphics.DrawString("506 J.P. Laurel Ave,", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, 15, 65);
             e.Graphics.DrawString("Poblacion District, Davao City", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, 15, 80);
+            if (!string.IsNullOrWhiteSpace(invoice_id))
+            {
+                e.Graphics.DrawString("Invoice ID.: ", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, 15, y);
+                e.Graphics.DrawString(invoice_id.ToString(), new Font("Segui UI", 9, FontStyle.Regular | FontStyle.Underline), Brushes.Black, 90, y);
+            }
+            y += 20;
             e.Graphics.DrawString("Order No.: ", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, 15, y);
             e.Graphics.DrawString(orderId.ToString(), new Font("Segui UI", 9, FontStyle.Regular | FontStyle.Underline), Brushes.Black, 90, y);
             y += 50;
@@ -92,7 +103,7 @@ namespace OrderingSystem.Receipt
                 x += 30;
                 if (a is MenuModel)
                 {
-                    string va = a.SizeName?.ToLower().Trim() == a.FlavorName?.ToLower().Trim() ? a.SizeName : a.SizeName + "  " + a.FlavorName;
+                    string va = a.SizeName?.ToLower().Trim() == a.FlavorName?.ToLower().Trim() ? a.SizeName : a.SizeName + " - " + a.FlavorName;
                     e.Graphics.DrawString(va, mainFont, Brushes.Black, x, y);
                 }
                 x += 260;
@@ -141,7 +152,21 @@ namespace OrderingSystem.Receipt
                 bx += 7;
             }
 
-            e.Graphics.DrawString(message, new Font("Segui UI", 15, FontStyle.Bold), Brushes.Black, 90, y + 80);
+            y += 100;
+
+
+            e.Graphics.DrawString(message, new Font("Segui UI", 15, FontStyle.Bold), Brushes.Black, 95, y);
+
+            if (!string.IsNullOrWhiteSpace(estimated_date))
+            {
+                y += 30;
+                size1 = e.Graphics.MeasureString(estimated_date, new Font("Segoe UI", 15, FontStyle.Regular));
+                float x = (400 - size1.Width) / 2;
+                e.Graphics.DrawString(estimated_date, new Font("Segui UI", 15, FontStyle.Regular), Brushes.Black, x, y);
+            }
+
         }
+
+
     }
 }

@@ -8,6 +8,7 @@ using OrderingSystem.CashierApp.Forms.Order;
 using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication.Services;
 using OrderingSystem.Model;
+using OrderingSystem.Receipt;
 using OrderingSystem.Repository;
 using OrderingSystem.Repository.Order;
 
@@ -44,7 +45,6 @@ namespace OrderingSystem.CashierApp.Forms
             {
                 string orderId = txt.Text.Trim();
                 om = orderServices.getAllOrders(orderId);
-
                 DialogResult = DialogResult.OK;
                 if (om.OrderList.Count > 0)
                 {
@@ -103,6 +103,10 @@ namespace OrderingSystem.CashierApp.Forms
 
             if (rs == DialogResult.OK)
             {
+                Tuple<TimeSpan, string> xd = orderServices.getTimeInvoiceWaiting(om.Order_id);
+                OrderReceipt or = new OrderReceipt(om);
+                or.Message("Wait for your Order", xd.Item1.ToString(@"hh\:mm\:ss"), xd.Item2);
+                or.print();
                 p.Hide();
                 clear();
             }

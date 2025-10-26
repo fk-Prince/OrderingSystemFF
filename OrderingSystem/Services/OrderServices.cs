@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using OrderingSystem.Exceptions;
 using OrderingSystem.Model;
 using OrderingSystem.Repository;
@@ -48,6 +49,11 @@ namespace OrderingSystem.KioskApplication.Services
         public List<string> getAvailablePayments()
         {
             return orderRepository.getAvailablePayments();
+        }
+
+        public Tuple<TimeSpan, string> getTimeInvoiceWaiting(string order_id)
+        {
+            return orderRepository.getTimeInvoiceWaiting(order_id);
         }
     }
 }

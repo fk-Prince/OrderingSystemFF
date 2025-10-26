@@ -204,7 +204,6 @@ namespace OrderingSystem.Repository.Order
             }
             return false;
         }
-
         public string getOrderId()
         {
             var db = DatabaseHandler.getInstance();
@@ -230,7 +229,6 @@ namespace OrderingSystem.Repository.Order
                 db.closeConnection();
             }
         }
-
         public List<string> getAvailablePayments()
         {
             List<string> p = new List<string>();
@@ -258,6 +256,47 @@ namespace OrderingSystem.Repository.Order
             {
                 db.closeConnection();
             }
+        }
+
+        public Tuple<TimeSpan, string> getTimeInvoiceWaiting(string order_id)
+        {
+            string query = @"
+                        SELECT
+                        o.estimated_max_time, 
+                        i.invoice_id
+                        FROM orders o
+                        INNER JOIN invoice i ON i.order_id = o.order_id
+                        WHERE @order_id = o.order_id
+                        ";
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+                using (var cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@order_id", order_id);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            TimeSpan estimatedTime = reader.GetTimeSpan("estimated_max_time");
+                            string invoiceId = reader.GetString("invoice_id");
+
+                            return new Tuple<TimeSpan, string>(estimatedTime, invoiceId);
+                        }
+
+                    }
+                }
+            }
+            catch (MySqlException)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+            return null;
         }
     }
 }

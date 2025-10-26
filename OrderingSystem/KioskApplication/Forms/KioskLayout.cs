@@ -309,8 +309,8 @@ namespace OrderingSystem
                 if (suc)
                 {
                     OrderReceipt or = new OrderReceipt(om);
-                    or.Message("Proceed to the cashier \n    Within 30minutes");
-                    or.d();
+                    or.Message("Proceed to the cashier \n    Within 30minutes", DateTime.Now.AddMinutes(30).ToString("hh:mm:ss tt"), "");
+                    or.print();
                     orderList.Clear();
                     flowCart.Controls.Clear();
                     displayTotal(this, EventArgs.Empty);
