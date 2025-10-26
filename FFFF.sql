@@ -18,6 +18,10 @@
 --
 -- Table structure for table `category`
 --
+DROP DATABASE IF EXISTS final_ordering_system;
+CREATE DATABASE final_ordering_system;
+USE final_ordering_system;
+
 
 DROP TABLE IF EXISTS `category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -2422,3 +2426,4 @@ DELIMITER ;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-10-26 20:13:27
+
