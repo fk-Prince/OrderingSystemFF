@@ -45,7 +45,7 @@ namespace OrderingSystem.Repository.CategoryRepository
             try
             {
                 var conn = db.getConnection();
-                using (var cmd = new MySqlCommand("SELECT DISTINCT c.category_id, c.category_name, c.category_image FROM category c INNER JOIN menu m ON c.category_id = m.category_id", conn))
+                using (var cmd = new MySqlCommand("SELECT DISTINCT c.category_id, c.category_name, c.image FROM category c INNER JOIN menu m ON c.category_id = m.category_id", conn))
                 {
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -71,7 +71,6 @@ namespace OrderingSystem.Repository.CategoryRepository
                    .ToList();
             return list;
         }
-
         public List<CategoryModel> getCategories()
         {
             List<CategoryModel> list = new List<CategoryModel>();
@@ -79,7 +78,7 @@ namespace OrderingSystem.Repository.CategoryRepository
             try
             {
                 var conn = db.getConnection();
-                using (var cmd = new MySqlCommand("SELECT DISTINCT c.category_id, c.category_name, c.category_image FROM category c", conn))
+                using (var cmd = new MySqlCommand("SELECT DISTINCT c.category_id, c.category_name, c.image FROM category c", conn))
                 {
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -141,15 +140,15 @@ namespace OrderingSystem.Repository.CategoryRepository
             var db = DatabaseHandler.getInstance();
             try
             {
-                string query = "UPDATE category SET category_name = @category_name, category_image = @category_image WHERE category_id = @category_id";
+                string query = "UPDATE category SET category_name = @category_name, image = @image WHERE category_id = @category_id";
                 var conn = db.getConnection();
                 using (var cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@category_name", c.CategoryName);
                     if (c.CategoryImage != null)
-                        cmd.Parameters.AddWithValue("@category_image", ImageHelper.GetImageFromFile(c.CategoryImage));
+                        cmd.Parameters.AddWithValue("@image", ImageHelper.GetImageFromFile(c.CategoryImage));
                     else
-                        cmd.Parameters.AddWithValue("@category_image", DBNull.Value);
+                        cmd.Parameters.AddWithValue("@image", DBNull.Value);
                     cmd.Parameters.AddWithValue("@category_id", c.CategoryId);
                     cmd.ExecuteNonQuery();
                 }
