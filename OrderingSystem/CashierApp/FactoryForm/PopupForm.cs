@@ -13,7 +13,6 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
         {
             InitializeComponent();
         }
-
         private void guna2Button1_Click(object sender, System.EventArgs e)
         {
             foreach (var c in Controls)
@@ -34,7 +33,6 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
 
             buttonClicked?.Invoke(this, EventArgs.Empty);
         }
-
         private void guna2PictureBox1_Click(object sender, System.EventArgs e)
         {
             DialogResult = DialogResult.OK;
@@ -43,5 +41,7 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
         {
             comboChanged1?.Invoke(c1, EventArgs.Empty);
         }
+
+
     }
 }

@@ -89,5 +89,13 @@ namespace OrderingSystem.Services
 
             return ingredientRepository.addIngredient(name, qty, unit, expire);
         }
+
+        public bool validateUpdateIngredient(int id, string name, string unit)
+        {
+            if (ingredientRepository.isIngredientNameExists(name, id))
+                throw new InvalidInput("Ingredient name already exists.");
+
+            return ingredientRepository.updateIngredient(id, name, unit);
+        }
     }
 }

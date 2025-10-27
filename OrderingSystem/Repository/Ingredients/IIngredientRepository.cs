@@ -11,13 +11,13 @@ namespace OrderingSystem.Repository.Ingredients
         List<IngredientModel> getIngredients();
         List<IngredientStockModel> getIngredientsStock();
         DataView getIngredientsView();
-
-        bool isIngredientNameExists(string name);
+        bool isIngredientNameExists(string name, int id = 0);
         bool removeExpiredIngredient();
         bool saveIngredientByMenu(int menudetail_id, List<IngredientModel> menu, string type);
         bool deductIngredient(int id, int quantity, string reason);
         bool addIngredient(string name, int quantity, string unit, DateTime expiry);
         bool restockIngredient(int id, int quantity, DateTime value, string reason);
+        bool updateIngredient(int id, string name, string unit);
         List<string> getInventoryReasons(string type);
     }
 }

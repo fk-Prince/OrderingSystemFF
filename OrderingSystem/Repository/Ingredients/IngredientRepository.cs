@@ -312,16 +312,28 @@ namespace OrderingSystem.Repository.Ingredients
             }
 
         }
-        public bool isIngredientNameExists(string name)
+        public bool isIngredientNameExists(string name, int id = 0)
         {
             var db = DatabaseHandler.getInstance();
             try
             {
                 var conn = db.getConnection();
-
-                using (var cmd = new MySqlCommand("SELECT ingredient_name FROM ingredients WHERE @ingredient_name = ingredient_name", conn))
+                string query = "";
+                if (id != 0)
+                    query += @"
+				        SELECT ingredient_name FROM ingredients 
+                        WHERE ingredient_id IN (
+                        SELECT oss.ingredient_id FROM ingredient_stock oss
+                        INNER JOIN ingredients i ON i.ingredient_id = oss.ingredient_id
+                        WHERE oss.ingredient_stock_id <> @ingredient_stock_id AND i.ingredient_name <>  @ingredient_name) AND ingredient_name = @ingredient_name";
+                else
+                    query += "SELECT 1 FROM ingredients i WHERE @ingredient_name = i.ingredient_name LIMIT 1";
+                using (var cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@ingredient_name", name);
+                    if (id != 0)
+                        cmd.Parameters.AddWithValue("@ingredient_stock_id", id);
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         return reader.Read();
@@ -402,6 +414,43 @@ namespace OrderingSystem.Repository.Ingredients
 
                 using (var cmd = new MySqlCommand(query, conn))
                 {
+                    cmd.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+        }
+
+        public bool updateIngredient(int stock_id, string name, string unit)
+        {
+            string query1 = @"SELECT ingredient_id FROM ingredient_stock WHERE ingredient_stock_id = @ingredient_stock_id LIMIT 1";
+            string query2 = @"UPDATE ingredients SET ingredient_name = @ingredient_name, unit = @unit WHERE ingredient_id = @ingredient_id";
+
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+                int id = 0;
+                using (var cmd = new MySqlCommand(query1, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ingredient_stock_id", stock_id);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read()) id = reader.GetInt32("ingredient_id");
+                    }
+                }
+                using (var cmd = new MySqlCommand(query2, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ingredient_id", id);
+                    cmd.Parameters.AddWithValue("@ingredient_name", name);
+                    cmd.Parameters.AddWithValue("@unit", unit);
                     cmd.ExecuteNonQuery();
                 }
                 return true;

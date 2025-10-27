@@ -65,39 +65,50 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
                 f4.b1.Text = "Submit";
                 f4.title.Text = "Deduct Ingredients";
             }
-            else if (fx is StaffInformation f5 && type.ToLower() == "add-staff")
+            else if (fx is PopupForm f5 && type.ToLower() == "update-ingredients")
             {
-                f5.fb.Visible = false;
-                f5.b1.Text = "Add Staff";
-                f5.cRolePanel.Visible = false;
-                f5.cRole.Visible = true;
-                f5.ll.Visible = true;
-                f5.fn.Visible = true;
-                f5.firstName.Visible = true;
-                f5.lastName.Visible = true;
-                f5.fName.Visible = false;
-                f5.ffn.Visible = false;
-                f5.dt.Visible = true;
-                f5.rr.Visible = true;
-                f5.hired.Visible = false;
+                f5.title.Text = "Update Ingredient";
+                f5.l1.Text = "Ingredient Name";
+                f5.l2.Text = "Unit";
+                f5.l3.Visible = false;
+                f5.l4.Visible = false;
+                f5.c2.Visible = true;
+                f5.t2.Visible = false;
+                f5.t3.Visible = false;
+                f5.t4.Visible = false;
             }
-            else if (fx is StaffInformation f6 && type.ToLower() == "view-staff")
+            else if (fx is StaffInformation f6 && type.ToLower() == "add-staff")
             {
-                f6.b1.Text = "Update";
+                f6.fb.Visible = false;
+                f6.b1.Text = "Add Staff";
+                f6.cRolePanel.Visible = false;
+                f6.cRole.Visible = true;
+                f6.ll.Visible = true;
+                f6.fn.Visible = true;
+                f6.firstName.Visible = true;
+                f6.lastName.Visible = true;
+                f6.fName.Visible = false;
+                f6.ffn.Visible = false;
+                f6.dt.Visible = true;
+                f6.rr.Visible = true;
+                f6.hired.Visible = false;
             }
-            else if (fx is TableLayout f7 && type.ToLower() == "category")
+            else if (fx is StaffInformation f7 && type.ToLower() == "view-staff")
             {
-                f7.cb.Visible = false;
-                f7.title.Text = "Category";
+                f7.b1.Text = "Update";
             }
-            else if (fx is TableLayout f8 && type.ToLower() == "view-coupon")
+            else if (fx is TableLayout f8 && type.ToLower() == "category")
             {
-                f8.b1.Text = "Add Coupon";
-                f8.cb.Text = "View Used Coupon";
-                f8.title.Text = "Coupon";
-                f8.search.Visible = false;
+                f8.cb.Visible = false;
+                f8.title.Text = "Category";
             }
-
+            else if (fx is TableLayout f9 && type.ToLower() == "view-coupon")
+            {
+                f9.b1.Text = "Add Coupon";
+                f9.cb.Text = "View Used Coupon";
+                f9.title.Text = "Coupon";
+                f9.search.Visible = false;
+            }
             return fx;
         }
     }
