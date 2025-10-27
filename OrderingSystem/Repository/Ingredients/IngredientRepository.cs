@@ -382,7 +382,6 @@ namespace OrderingSystem.Repository.Ingredients
                 db.closeConnection();
             }
         }
-
         public bool removeExpiredIngredient()
         {
             var db = DatabaseHandler.getInstance();
