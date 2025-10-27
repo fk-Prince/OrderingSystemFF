@@ -384,12 +384,23 @@ namespace OrderingSystem.Repository.Ingredients
         }
         public bool removeExpiredIngredient()
         {
+            string query = @"
+                                UPDATE ingredient_stock
+                                SET current_stock = 0
+                                WHERE ingredient_stock_id IN (
+                                    SELECT ingredient_stock_id
+                                    FROM (
+                                        SELECT ingredient_stock_id
+                                        FROM ingredient_stock
+                                        WHERE expiry_date <= CURDATE()
+                                    ) AS t
+                                )";
             var db = DatabaseHandler.getInstance();
             try
             {
                 var conn = db.getConnection();
 
-                using (var cmd = new MySqlCommand("UPDATE ingredient_stock SET current_stock = 0 WHERE expiry_date < NOW()", conn))
+                using (var cmd = new MySqlCommand(query, conn))
                 {
                     cmd.ExecuteNonQuery();
                 }

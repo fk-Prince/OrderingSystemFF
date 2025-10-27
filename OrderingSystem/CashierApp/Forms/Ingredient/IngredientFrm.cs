@@ -51,9 +51,23 @@ namespace OrderingSystem.CashierApp.Forms
         private void bb_Click(object sender, EventArgs e)
         {
             DialogResult rs = MessageBox.Show("Do you want to remove expired ingredient?", "Deduct", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (rs == DialogResult.OK)
-            {
 
+            if (rs == DialogResult.Yes)
+            {
+                try
+                {
+                    bool suc = ingredientServices.removeExpiredIngredient();
+                    if (suc)
+                    {
+                        MessageBox.Show("Successful Removed", "Remove", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        updateTable();
+                    }
+                    else MessageBox.Show("Failed to remove expired ingredient", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
