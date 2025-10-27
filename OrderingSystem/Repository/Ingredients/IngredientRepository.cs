@@ -382,5 +382,28 @@ namespace OrderingSystem.Repository.Ingredients
                 db.closeConnection();
             }
         }
+
+        public bool removeExpiredIngredient()
+        {
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+
+                using (var cmd = new MySqlCommand("UPDATE ingredient_stock SET current_stock = 0 WHERE expiry_date < NOW()", conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+        }
     }
 }

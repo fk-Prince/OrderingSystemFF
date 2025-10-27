@@ -44,6 +44,10 @@ namespace OrderingSystem.Services
         {
             return ingredientRepository.getInventoryReasons(type);
         }
+        public bool removeExpiredIngredient()
+        {
+            return ingredientRepository.removeExpiredIngredient();
+        }
 
 
         public bool validateDeductionIngredientStock(int stockId, int quantity, string reason, IngredientModel orig)

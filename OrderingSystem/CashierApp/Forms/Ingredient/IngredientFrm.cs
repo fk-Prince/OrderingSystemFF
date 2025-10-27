@@ -10,9 +10,11 @@ namespace OrderingSystem.CashierApp.Forms
     public partial class IngredientFrm : Form
     {
         private DataView view;
+        private IngredientServices ingredientServices;
         public IngredientFrm()
         {
             InitializeComponent();
+            ingredientServices = new IngredientServices(new IngredientRepository());
             updateTable();
         }
 
@@ -20,7 +22,7 @@ namespace OrderingSystem.CashierApp.Forms
         {
             check.Checked = false;
             txt.Text = "";
-            view = new IngredientServices(new IngredientRepository()).getIngredientsView();
+            view = ingredientServices.getIngredientsView();
             dataGrid.DataSource = view;
         }
         private void textChanged(object sender, System.EventArgs e)
@@ -46,5 +48,13 @@ namespace OrderingSystem.CashierApp.Forms
             loadIngredientData();
         }
 
+        private void bb_Click(object sender, EventArgs e)
+        {
+            DialogResult rs = MessageBox.Show("Do you want to remove expired ingredient?", "Deduct", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (rs == DialogResult.OK)
+            {
+
+            }
+        }
     }
 }

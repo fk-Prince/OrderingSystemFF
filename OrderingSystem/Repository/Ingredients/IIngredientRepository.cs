@@ -13,6 +13,7 @@ namespace OrderingSystem.Repository.Ingredients
         DataView getIngredientsView();
 
         bool isIngredientNameExists(string name);
+        bool removeExpiredIngredient();
         bool saveIngredientByMenu(int menudetail_id, List<IngredientModel> menu, string type);
         bool deductIngredient(int id, int quantity, string reason);
         bool addIngredient(string name, int quantity, string unit, DateTime expiry);
