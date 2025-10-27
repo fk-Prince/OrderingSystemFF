@@ -89,7 +89,6 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
                     MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
-
             p.comboChanged1 += (ss, ee) =>
             {
                 if (ss is ComboBox cb && cb.SelectedIndex >= 0)
