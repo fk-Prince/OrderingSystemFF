@@ -22,8 +22,33 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
         }
         public void popupAddIngredient(Form parentForm)
         {
-            //int id = 0;
             PopupForm p = new PopupForm();
+            p.c3.Items.Add("Piece");
+            p.c3.Items.Add("Kg");
+            p.c3.SelectedIndex = 0;
+            p.buttonClicked += (s, e) =>
+            {
+                try
+                {
+                    bool suc = ingredientServices.validateAddIngredients(p.t1.Text.Trim(), p.t2.Text.Trim(), p.c3.Text, p.dt4.Value);
+                    if (suc)
+                    {
+                        MessageBox.Show("Successful Added", "Add", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ingredientUpdated.Invoke(this, EventArgs.Empty);
+                        p.Hide();
+                    }
+                    else
+                        MessageBox.Show("Failed to add ingredient", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (InvalidInput ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
             DialogResult rs = iForms.selectForm(p, "add-ingredients").ShowDialog(parentForm);
             if (rs == DialogResult.OK)
             {
@@ -48,6 +73,8 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
                     {
                         MessageBox.Show("Successful", "Deduct", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ingredientUpdated.Invoke(this, EventArgs.Empty);
+
+                        p.Hide();
                     }
                     else
                         MessageBox.Show("Failed to deduct ingredient stock", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -84,9 +111,20 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
             {
                 try
                 {
-                    bool suc = ingredientServices.validateRestockIngredient(id, p.t2.Text.Trim(), p.dt2.Value, p.c4.Text);
-                    MessageBox.Show("Successful", "Restock", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ingredientUpdated.Invoke(this, EventArgs.Empty);
+                    bool suc = ingredientServices.validateRestockIngredient(id, p.t2.Text.Trim(), p.dt3.Value, p.c4.Text);
+                    if (suc)
+                    {
+                        MessageBox.Show("Successful", "Restock", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ingredientUpdated.Invoke(this, EventArgs.Empty);
+                        p.Hide();
+                    }
+                    else
+                        MessageBox.Show("Failed to Restock ingredient", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                catch (InvalidInput ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception)
                 {

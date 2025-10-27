@@ -246,7 +246,7 @@ namespace OrderingSystem.Repository.Ingredients
                         cmd.Parameters.AddWithValue("@qty", quantity);
                         cmd.ExecuteNonQuery();
                     }
-                    monitorInventory(id, quantity, reason, transaction, conn);
+                    monitorInventory(id, quantity, reason, transaction, conn, "Deduct");
                     transaction.Commit();
                 }
                 return true;
@@ -262,11 +262,11 @@ namespace OrderingSystem.Repository.Ingredients
             }
 
         }
-        public void monitorInventory(int id, int quantity, string reason, MySqlTransaction trans, MySqlConnection conn)
+        public void monitorInventory(int id, int quantity, string reason, MySqlTransaction trans, MySqlConnection conn, string type)
         {
             string query2 = @"INSERT INTO monitor_inventory 
                      (staff_id, ingredient_stock_id, quantity, type,reason)
-                     VALUES (@staff_id, @ingredient_stock_id, @quantity, 'Deduct',@reason)";
+                     VALUES (@staff_id, @ingredient_stock_id, @quantity, @type,@reason)";
 
             using (var cmd = new MySqlCommand(query2, conn, trans))
             {
@@ -274,10 +274,10 @@ namespace OrderingSystem.Repository.Ingredients
                 cmd.Parameters.AddWithValue("@ingredient_stock_id", id);
                 cmd.Parameters.AddWithValue("@quantity", quantity);
                 cmd.Parameters.AddWithValue("@reason", reason);
+                cmd.Parameters.AddWithValue("@type", type);
                 cmd.ExecuteNonQuery();
             }
         }
-
         public bool restockIngredient(int id, int quantity, DateTime value, string reason)
         {
             string query = @"INSERT INTO ingredient_stock (ingredient_id,current_stock,expiry_date) VALUES (@ingredient_id,@current_stock,@expiry_date)";
@@ -297,7 +297,7 @@ namespace OrderingSystem.Repository.Ingredients
 
                         lastId = (int)cmd.LastInsertedId;
                     }
-                    monitorInventory(lastId, quantity, reason, transaction, conn);
+                    monitorInventory(lastId, quantity, reason, transaction, conn, "Add");
                     transaction.Commit();
                 }
                 return true;
@@ -311,6 +311,76 @@ namespace OrderingSystem.Repository.Ingredients
                 db.closeConnection();
             }
 
+        }
+        public bool isIngredientNameExists(string name)
+        {
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+
+                using (var cmd = new MySqlCommand("SELECT ingredient_name FROM ingredients WHERE @ingredient_name = ingredient_name", conn))
+                {
+                    cmd.Parameters.AddWithValue("@ingredient_name", name);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        return reader.Read();
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+        }
+        public bool addIngredient(string name, int quantity, string unit, DateTime expiry)
+        {
+            string query1 = @"INSERT INTO ingredients (ingredient_name,unit) VALUES (@ingredient_name,@unit)";
+            string query2 = @"INSERT INTO ingredient_stock (ingredient_id,current_stock,expiry_date) VALUES (@ingredient_id,@current_stock,@expiry_date)";
+            int lastId;
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+                using (var transaction = conn.BeginTransaction())
+                {
+
+                    using (var cmd = new MySqlCommand(query1, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@ingredient_name", name);
+                        cmd.Parameters.AddWithValue("@unit", unit);
+                        cmd.ExecuteNonQuery();
+
+                        lastId = (int)cmd.LastInsertedId;
+                    }
+
+                    using (var cmd = new MySqlCommand(query2, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@ingredient_id", lastId);
+                        cmd.Parameters.AddWithValue("@current_stock", quantity);
+                        cmd.Parameters.AddWithValue("@expiry_date", expiry);
+                        cmd.ExecuteNonQuery();
+
+                        lastId = (int)cmd.LastInsertedId;
+                    }
+                    monitorInventory(lastId, quantity, "Initial-Stock", transaction, conn, "Add");
+                    transaction.Commit();
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
         }
     }
 }

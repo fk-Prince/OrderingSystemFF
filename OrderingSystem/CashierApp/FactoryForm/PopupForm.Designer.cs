@@ -45,8 +45,10 @@
             this.c4 = new System.Windows.Forms.ComboBox();
             this.guna2BorderlessForm1 = new Guna.UI2.WinForms.Guna2BorderlessForm(this.components);
             this.guna2PictureBox1 = new Guna.UI2.WinForms.Guna2PictureBox();
-            this.dt1 = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.dt2 = new Guna.UI2.WinForms.Guna2DateTimePicker();
+            this.dt3 = new Guna.UI2.WinForms.Guna2DateTimePicker();
+            this.dt4 = new Guna.UI2.WinForms.Guna2DateTimePicker();
+            this.dt1 = new Guna.UI2.WinForms.Guna2DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -265,22 +267,6 @@
             this.guna2PictureBox1.UseTransparentBackground = true;
             this.guna2PictureBox1.Click += new System.EventHandler(this.guna2PictureBox1_Click);
             // 
-            // dt1
-            // 
-            this.dt1.BorderRadius = 2;
-            this.dt1.Checked = true;
-            this.dt1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
-            this.dt1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.dt1.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dt1.Location = new System.Drawing.Point(64, 190);
-            this.dt1.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
-            this.dt1.MinDate = new System.DateTime(2025, 10, 26, 0, 0, 0, 0);
-            this.dt1.Name = "dt1";
-            this.dt1.Size = new System.Drawing.Size(304, 36);
-            this.dt1.TabIndex = 67;
-            this.dt1.Value = new System.DateTime(2025, 10, 26, 0, 0, 0, 0);
-            this.dt1.Visible = false;
-            // 
             // dt2
             // 
             this.dt2.BorderRadius = 2;
@@ -288,22 +274,72 @@
             this.dt2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
             this.dt2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dt2.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dt2.Location = new System.Drawing.Point(64, 258);
+            this.dt2.Location = new System.Drawing.Point(64, 190);
             this.dt2.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.dt2.MinDate = new System.DateTime(2025, 10, 26, 0, 0, 0, 0);
             this.dt2.Name = "dt2";
             this.dt2.Size = new System.Drawing.Size(304, 36);
-            this.dt2.TabIndex = 68;
-            this.dt2.Value = new System.DateTime(2025, 10, 26, 15, 33, 15, 0);
+            this.dt2.TabIndex = 67;
+            this.dt2.Value = new System.DateTime(2025, 10, 26, 0, 0, 0, 0);
             this.dt2.Visible = false;
+            // 
+            // dt3
+            // 
+            this.dt3.BorderRadius = 2;
+            this.dt3.Checked = true;
+            this.dt3.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+            this.dt3.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.dt3.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.dt3.Location = new System.Drawing.Point(64, 258);
+            this.dt3.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
+            this.dt3.MinDate = new System.DateTime(2025, 10, 26, 0, 0, 0, 0);
+            this.dt3.Name = "dt3";
+            this.dt3.Size = new System.Drawing.Size(304, 36);
+            this.dt3.TabIndex = 68;
+            this.dt3.Value = new System.DateTime(2025, 10, 26, 15, 33, 15, 0);
+            this.dt3.Visible = false;
+            // 
+            // dt4
+            // 
+            this.dt4.BorderRadius = 2;
+            this.dt4.Checked = true;
+            this.dt4.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+            this.dt4.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.dt4.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.dt4.Location = new System.Drawing.Point(64, 320);
+            this.dt4.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
+            this.dt4.MinDate = new System.DateTime(2025, 10, 26, 0, 0, 0, 0);
+            this.dt4.Name = "dt4";
+            this.dt4.Size = new System.Drawing.Size(304, 36);
+            this.dt4.TabIndex = 69;
+            this.dt4.Value = new System.DateTime(2025, 10, 26, 15, 33, 15, 0);
+            this.dt4.Visible = false;
+            // 
+            // dt1
+            // 
+            this.dt1.BorderRadius = 2;
+            this.dt1.Checked = true;
+            this.dt1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+            this.dt1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.dt1.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.dt1.Location = new System.Drawing.Point(64, 125);
+            this.dt1.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
+            this.dt1.MinDate = new System.DateTime(2025, 10, 26, 0, 0, 0, 0);
+            this.dt1.Name = "dt1";
+            this.dt1.Size = new System.Drawing.Size(304, 36);
+            this.dt1.TabIndex = 70;
+            this.dt1.Value = new System.DateTime(2025, 10, 26, 0, 0, 0, 0);
+            this.dt1.Visible = false;
             // 
             // PopupForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(425, 484);
-            this.Controls.Add(this.dt2);
             this.Controls.Add(this.dt1);
+            this.Controls.Add(this.dt4);
+            this.Controls.Add(this.dt3);
+            this.Controls.Add(this.dt2);
             this.Controls.Add(this.c4);
             this.Controls.Add(this.c3);
             this.Controls.Add(this.c2);
@@ -343,10 +379,12 @@
         public Guna.UI2.WinForms.Guna2TextBox t4;
         private System.Windows.Forms.ComboBox c2;
         private Guna.UI2.WinForms.Guna2BorderlessForm guna2BorderlessForm1;
-        public Guna.UI2.WinForms.Guna2DateTimePicker dt1;
+        public Guna.UI2.WinForms.Guna2DateTimePicker dt2;
         public System.Windows.Forms.ComboBox c1;
         public System.Windows.Forms.ComboBox c3;
         public System.Windows.Forms.ComboBox c4;
-        public Guna.UI2.WinForms.Guna2DateTimePicker dt2;
+        public Guna.UI2.WinForms.Guna2DateTimePicker dt3;
+        public Guna.UI2.WinForms.Guna2DateTimePicker dt4;
+        public Guna.UI2.WinForms.Guna2DateTimePicker dt1;
     }
 }

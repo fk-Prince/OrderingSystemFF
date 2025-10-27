@@ -10,8 +10,8 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
         {
             if (fx is PopupForm f1 && type.ToLower() == "coupon")
             {
-                f1.dt1.MinDate = DateTime.Now;
-                f1.dt1.Visible = true;
+                f1.dt2.MinDate = DateTime.Now;
+                f1.dt2.Visible = true;
                 f1.t2.Visible = false;
                 f1.l1.Text = "Rate %";
                 f1.l2.Text = "Expiry Date";
@@ -19,14 +19,19 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
                 f1.l4.Text = "Description";
                 f1.b1.Text = "Submit";
                 f1.title.Text = "Generate Coupon";
-                f1.dt1.MinDate = DateTime.Now;
+                f1.dt2.MinDate = DateTime.Now;
             }
             else if (fx is PopupForm f2 && type.ToLower() == "add-ingredients")
             {
                 f2.l1.Text = "Ingredient Name";
                 f2.l2.Text = "Initial-Stock";
-                f2.l3.Text = "Expiry-Date";
-                f2.l4.Text = "Unit";
+                f2.l3.Text = "Unit";
+                f2.l4.Text = "Expiry-Date";
+                f2.t3.Visible = false;
+                f2.t4.Visible = false;
+                f2.dt4.Visible = true;
+                f2.dt4.MinDate = DateTime.Now;
+                f2.c3.Visible = true;
                 f2.b1.Text = "Submit";
                 f2.title.Text = "Add Ingredients";
             }
@@ -40,8 +45,8 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
                 f3.l4.Text = "Reason";
                 f3.l3.Text = "Expiry-Date";
                 f3.c1.Visible = true;
-                f3.dt2.Visible = true;
-                f3.dt2.MinDate = DateTime.Now.AddDays(1);
+                f3.dt3.Visible = true;
+                f3.dt3.MinDate = DateTime.Now.AddDays(1);
                 f3.c4.Visible = true;
                 f3.b1.Text = "Submit";
                 f3.title.Text = "Restock Ingredients";

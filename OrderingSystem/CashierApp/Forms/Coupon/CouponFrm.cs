@@ -35,7 +35,7 @@ namespace OrderingSystem.CashierApp.Forms.Coupon
             {
                 try
                 {
-                    bool suc = couponServices.saveAction(p.t1.Text, p.dt1.Value, p.t3.Text, p.t4.Text);
+                    bool suc = couponServices.saveAction(p.t1.Text, p.dt2.Value, p.t3.Text, p.t4.Text);
                     if (suc) displayCoupons();
                 }
                 catch (Exception ex)

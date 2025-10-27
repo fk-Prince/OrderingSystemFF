@@ -208,23 +208,11 @@
     <Compile Include="CashierApp\Components\MenuCard.Designer.cs">
       <DependentUpon>MenuCard.cs</DependentUpon>
     </Compile>
-    <Compile Include="CashierApp\Forms\Ingredient\AddIngredient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CashierApp\Forms\Ingredient\AddIngredient.Designer.cs">
-      <DependentUpon>AddIngredient.cs</DependentUpon>
-    </Compile>
     <Compile Include="CashierApp\Forms\Ingredient\IngredientFrm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CashierApp\Forms\Ingredient\IngredientFrm.Designer.cs">
       <DependentUpon>IngredientFrm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CashierApp\Forms\Ingredient\RestockIngredient.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CashierApp\Forms\Ingredient\RestockIngredient.Designer.cs">
-      <DependentUpon>RestockIngredient.cs</DependentUpon>
     </Compile>
     <Compile Include="CashierApp\Forms\Inventory\InventoryFrm.cs">
       <SubType>Form</SubType>
@@ -449,14 +437,8 @@
     <EmbeddedResource Include="CashierApp\Components\MenuCard.resx">
       <DependentUpon>MenuCard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Forms\Ingredient\AddIngredient.resx">
-      <DependentUpon>AddIngredient.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\Ingredient\IngredientFrm.resx">
       <DependentUpon>IngredientFrm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Forms\Ingredient\RestockIngredient.resx">
-      <DependentUpon>RestockIngredient.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\Inventory\InventoryFrm.resx">
       <DependentUpon>InventoryFrm.cs</DependentUpon>

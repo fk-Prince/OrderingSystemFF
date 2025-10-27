@@ -71,5 +71,19 @@ namespace OrderingSystem.Services
 
             return ingredientRepository.restockIngredient(id, qty, value, reason);
         }
+
+        public bool validateAddIngredients(string name, string quantity, string unit, DateTime expire)
+        {
+            if (ingredientRepository.isIngredientNameExists(name))
+                throw new InvalidInput("Ingredient name already exists.");
+
+            if (!int.TryParse(quantity, out int qty))
+                throw new InvalidInput("Quantity must be a valid integer.");
+
+            if (qty <= 0)
+                throw new InvalidInput("Invalid Quantity must be greater than zero.");
+
+            return ingredientRepository.addIngredient(name, qty, unit, expire);
+        }
     }
 }
