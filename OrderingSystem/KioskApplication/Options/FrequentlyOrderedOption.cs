@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using OrderingSystem.Model;
-using OrderingSystem.Repository;
+using OrderingSystem.Services;
 
 
 namespace OrderingSystem.KioskApplication.Options
@@ -12,18 +12,19 @@ namespace OrderingSystem.KioskApplication.Options
     {
         private FrequentlyOrderedLayout fot;
         private FlowLayoutPanel flowPanel;
-        private IKioskMenuRepository _menuRepository;
-        public FrequentlyOrderedOption(IKioskMenuRepository _menuRepository, FlowLayoutPanel flowPanel)
+        private KioskMenuServices kioskMenuServices;
+        public FrequentlyOrderedOption(KioskMenuServices kioskMenuServices, FlowLayoutPanel flowPanel)
         {
             this.flowPanel = flowPanel;
-            this._menuRepository = _menuRepository;
+            this.kioskMenuServices = kioskMenuServices;
         }
 
         public void displayFrequentlyOrdered(MenuModel menus)
         {
             try
             {
-                List<MenuModel> md = _menuRepository.getFrequentlyOrderedTogether(menus);
+                List<MenuModel> md = kioskMenuServices.getFrequentlyOrderedTogether(menus);
+
                 if (flowPanel.Contains(fot))
                 {
                     flowPanel.Controls.SetChildIndex(fot, flowPanel.Controls.Count - 1);
@@ -41,19 +42,15 @@ namespace OrderingSystem.KioskApplication.Options
                     flowPanel.Controls.SetChildIndex(fot, flowPanel.Controls.Count - 1);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Internal Server Error." + ex.Message);
+                throw;
             }
         }
 
         public List<MenuModel> getFrequentlyOrdered()
         {
-            if (fot != null)
-            {
-                return fot.getFrequentlyOrderList();
-            }
-            return null;
+            return fot?.getFrequentlyOrderList();
         }
     }
 }

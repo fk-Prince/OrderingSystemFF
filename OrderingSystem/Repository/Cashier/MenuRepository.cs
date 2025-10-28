@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 using MySqlConnector;
 using Newtonsoft.Json;
 using OrderingSystem.DatabaseConnection;
@@ -64,7 +65,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             }
             catch (MySqlException ex)
             {
-                Console.WriteLine(ex.Message + "MenuRepository createregular");
+                MessageBox.Show(ex.Message);
                 throw ex;
             }
             finally
@@ -127,6 +128,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                                      .WithCategoryName(reader.GetString("category_Name"))
                                      .isAvailable(reader.GetString("isAvailable").ToLower() == "yes")
                                      .WithMenuId(reader.GetInt32("menu_id"))
+                                     .WithMenuDetailId(reader.GetInt32("menu_detail_id"))
                                      .WithMenuDescription(reader.GetString("menu_description"))
                                      .WithMenuName(reader.GetString("menu_name"))
                                      .WithCategoryId(reader.GetInt32("category_id"))
@@ -264,7 +266,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             }
             catch (MySqlException ex)
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -456,6 +458,34 @@ namespace OrderingSystem.Repo.CashierMenuRepository
             {
                 Console.WriteLine(ex.Message + "MenuRepository updatePackageMenu");
 
+                throw ex;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+        }
+
+        public bool updateBundle2(int id, List<MenuModel> included)
+        {
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var con = db.getConnection();
+                using (var cmd = new MySqlCommand("p_updateBundle2", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    string json = JsonConvert.SerializeObject(included);
+                    Console.WriteLine(json);
+                    cmd.Parameters.AddWithValue("@p_package_included", json);
+                    cmd.Parameters.AddWithValue("@p_menu_detail_id", id);
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+
+            }
+            catch (MySqlException ex)
+            {
                 throw ex;
             }
             finally

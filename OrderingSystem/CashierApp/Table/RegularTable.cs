@@ -193,21 +193,21 @@ namespace OrderingSystem.CashierApp.Components
                     return null;
                 }
 
-                if (!string.IsNullOrEmpty(prepTimeText) && !TimeSpan.TryParse(prepTimeText, out _))
+                if (string.IsNullOrEmpty(prepTimeText) && !TimeSpan.TryParse(prepTimeText, out _))
                 {
                     MessageBox.Show("Invalid Preparation Time", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
 
 
-                if (!string.IsNullOrEmpty(sizeText) && !Regex.IsMatch(sizeText, patternText))
+                if (string.IsNullOrEmpty(sizeText) && !Regex.IsMatch(sizeText, patternText))
                 {
                     MessageBox.Show("Invalid Size", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
 
 
-                if (!string.IsNullOrEmpty(flavorText) && !Regex.IsMatch(flavorText, patternText))
+                if (string.IsNullOrEmpty(flavorText) && !Regex.IsMatch(flavorText, patternText))
                 {
                     MessageBox.Show("Invalid Flavor", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;

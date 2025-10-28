@@ -54,6 +54,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "OrderReceipt";
             this.Text = "OrderReceipt";
+            this.Load += new System.EventHandler(this.OrderReceipt_Load);
             this.ResumeLayout(false);
 
         }

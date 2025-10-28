@@ -6,40 +6,36 @@ using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication.Components;
 using OrderingSystem.KioskApplication.Services;
 using OrderingSystem.Model;
-using OrderingSystem.Repository;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.KioskApplication.Options
 {
     public class RegularOption : IMenuOptions, ISelectedFrequentlyOrdered
     {
-        private IKioskMenuRepository _menuRepository;
-        private FlowLayoutPanel flowPanel;
+        private readonly KioskMenuServices kioskMenuServices;
+        private readonly FlowLayoutPanel flowPanel;
+        private readonly FrequentlyOrderedOption frequentlyOrderedOption;
+
         private SizeLayout sc;
         private MenuModel menu;
-        private FrequentlyOrderedOption frequentlyOrderedOption;
 
         private MenuModel selectedFlavor;
         private MenuModel selectedSize;
         private string titleOption;
         private string subTitle;
-
-
         private List<MenuModel> menuDetails;
-
-        public RegularOption(IKioskMenuRepository _menuRepository, FlowLayoutPanel flowPanel)
+        public RegularOption(KioskMenuServices kioskMenuServices, FlowLayoutPanel flowPanel)
         {
-            this._menuRepository = _menuRepository;
+            this.kioskMenuServices = kioskMenuServices;
             this.flowPanel = flowPanel;
-
-            frequentlyOrderedOption = new FrequentlyOrderedOption(_menuRepository, flowPanel);
+            frequentlyOrderedOption = new FrequentlyOrderedOption(kioskMenuServices, flowPanel);
         }
-
         public void displayMenuOptions(MenuModel menu)
         {
             try
             {
                 this.menu = menu;
-                menuDetails = _menuRepository.getDetails(menu);
+                menuDetails = kioskMenuServices.getDetails(menu);
                 displayFlavor(menuDetails);
                 frequentlyOrderedOption.displayFrequentlyOrdered(menu);
             }
@@ -115,31 +111,23 @@ namespace OrderingSystem.KioskApplication.Options
         }
         public List<MenuModel> getFrequentlyOrdered()
         {
-            if (frequentlyOrderedOption != null)
-                return frequentlyOrderedOption.getFrequentlyOrdered();
-
-            return null;
+            return frequentlyOrderedOption?.getFrequentlyOrdered();
         }
         public List<MenuModel> confirmOrder()
         {
-
             if (selectedFlavor == null && selectedSize == null)
-            {
                 throw new NoSelectedMenu("No Selected Menu.");
-            }
+
             var selectedMenu = menuDetails.FirstOrDefault(m => m.FlavorName == selectedFlavor.FlavorName && m.SizeName == selectedFlavor.SizeName);
+
             if (selectedMenu.MaxOrder <= 0)
-            {
                 throw new OutOfOrder("This menu is out of order.");
-            }
 
             var purchaseMenu = getMenuPurchase(selectedMenu);
-
 
             return new List<MenuModel> { purchaseMenu };
 
         }
-
         public MenuModel getMenuPurchase(MenuModel selectedMenu)
         {
             var m = MenuModel.Builder()

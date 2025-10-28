@@ -19,6 +19,7 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         private DataTable table;
         private MenuService menuService;
         private readonly IngredientServices ingredientServices;
+        public event EventHandler menuUpdate;
         public NewMenu(MenuService menuService, IngredientServices ingredientServices)
         {
             InitializeComponent();
@@ -54,7 +55,7 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         }
         private void NewMenu_Load(object sender, System.EventArgs e)
         {
-            List<CategoryModel> cat = new CategoryRepository().getCategoriesByMenu();
+            List<CategoryModel> cat = new CategoryServices(new CategoryRepository()).getCategories();
             cat.ForEach(c => cmbCat.Items.Add(c.CategoryName));
         }
         private void ImageButton1(object sender, System.EventArgs e)
@@ -125,9 +126,12 @@ namespace OrderingSystem.CashierApp.Forms.Menu
                     .WithCategoryName(cat)
                     .Build();
 
-                bool success = menuService.saveMenu(md, "Normal");
+                bool success = menuService.saveMenu(md, "regular");
                 if (success)
+                {
+                    menuUpdate.Invoke(this, EventArgs.Empty);
                     MessageBox.Show("New menu created successfully.", "Menu", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
                 else
                     MessageBox.Show("Failed to create new menu.", "Menu", MessageBoxButtons.OK, MessageBoxIcon.Error);
 

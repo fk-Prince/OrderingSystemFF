@@ -159,7 +159,7 @@ namespace OrderingSystem.Receipt
 
             if (!string.IsNullOrWhiteSpace(estimated_date))
             {
-                y += 30;
+                y += 80;
                 size1 = e.Graphics.MeasureString(estimated_date, new Font("Segoe UI", 15, FontStyle.Regular));
                 float x = (400 - size1.Width) / 2;
                 e.Graphics.DrawString(estimated_date, new Font("Segui UI", 15, FontStyle.Regular), Brushes.Black, x, y);
@@ -167,6 +167,9 @@ namespace OrderingSystem.Receipt
 
         }
 
+        private void OrderReceipt_Load(object sender, EventArgs e)
+        {
 
+        }
     }
 }

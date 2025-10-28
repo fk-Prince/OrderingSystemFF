@@ -71,6 +71,7 @@ namespace OrderingSystem.CashierApp.Forms
         public void showBundle()
         {
             MenuBundleFrm f = new MenuBundleFrm(menuService, ingredientServices);
+            f.menuUpdate += (s, e) => displayMenu();
             DialogResult rs = f.ShowDialog(this);
             if (rs == DialogResult.OK)
             {
@@ -80,6 +81,7 @@ namespace OrderingSystem.CashierApp.Forms
         public void showNewMenu()
         {
             NewMenu f = new NewMenu(menuService, ingredientServices);
+            f.menuUpdate += (s, e) => displayMenu();
             DialogResult rs = f.ShowDialog(this);
             if (rs == DialogResult.OK)
             {

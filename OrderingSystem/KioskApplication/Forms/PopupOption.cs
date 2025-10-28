@@ -5,22 +5,22 @@ using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication.Options;
 using OrderingSystem.KioskApplication.Services;
 using OrderingSystem.Model;
-using OrderingSystem.Repository;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.KioskApplication
 {
     public partial class PopupOption : Form
     {
         public MenuModel menu { get; }
-        public IKioskMenuRepository _menuRepository;
+        private KioskMenuServices kioskMenuServices;
         public event EventHandler<List<MenuModel>> orderListEvent;
         private List<MenuModel> orderList;
         private IMenuOptions menuOptions;
 
-        public PopupOption(IKioskMenuRepository _menuRepository, MenuModel menu, List<MenuModel> orderList)
+        public PopupOption(KioskMenuServices kioskMenuServices, MenuModel menu, List<MenuModel> orderList)
         {
             InitializeComponent();
-            this._menuRepository = _menuRepository;
+            this.kioskMenuServices = kioskMenuServices;
             this.menu = menu;
             this.orderList = orderList;
 
@@ -33,13 +33,13 @@ namespace OrderingSystem.KioskApplication
         {
             try
             {
-                if (_menuRepository.isMenuPackage(menu))
+                if (kioskMenuServices.isMenuPackage(menu))
                 {
-                    menuOptions = new PackageOption(_menuRepository, flowPanel);
+                    menuOptions = new PackageOption(kioskMenuServices, flowPanel);
                 }
                 else
                 {
-                    menuOptions = new RegularOption(_menuRepository, flowPanel);
+                    menuOptions = new RegularOption(kioskMenuServices, flowPanel);
                 }
                 if (menuOptions is IOutOfOrder e)
                 {
@@ -53,9 +53,9 @@ namespace OrderingSystem.KioskApplication
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Internal Server Error. 3" + ex.Message);
+                MessageBox.Show("Internal Server Error ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -94,11 +94,11 @@ namespace OrderingSystem.KioskApplication
             }
             catch (Exception ex) when (ex is OutOfOrder || ex is NoSelectedMenu)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Internal Server Error " + ex.Message);
+                MessageBox.Show("Internal Server Error ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void close(object sender, EventArgs e)

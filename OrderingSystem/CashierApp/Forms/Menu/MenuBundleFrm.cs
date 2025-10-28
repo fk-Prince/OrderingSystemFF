@@ -16,6 +16,7 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         private List<IngredientModel> ingredientSelected = new List<IngredientModel>();
         private readonly IngredientServices ingredientServices;
         private readonly MenuService menuService;
+        public event EventHandler menuUpdate;
         public MenuBundleFrm(MenuService menuService, IngredientServices ingredientServices)
         {
             InitializeComponent();
@@ -85,7 +86,8 @@ namespace OrderingSystem.CashierApp.Forms.Menu
                 if (menuService.saveMenu(md, "Bundle"))
                 {
                     MessageBox.Show("New menu created successfully.", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Hide();
+                    menuUpdate?.Invoke(this, EventArgs.Empty);
+                    DialogResult = DialogResult.OK;
                 }
                 else
                 {
@@ -127,7 +129,7 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         }
         private void menuListButton(object sender, System.EventArgs e)
         {
-            BundleMenuPopup p = new BundleMenuPopup(inclded);
+            BundleMenuPopup p = new BundleMenuPopup(menuService, inclded);
 
             DialogResult rs = p.ShowDialog(this);
             if (rs == DialogResult.OK)
@@ -147,6 +149,32 @@ namespace OrderingSystem.CashierApp.Forms.Menu
             ICategoryRepository categoryRepository = new CategoryRepository();
             List<CategoryModel> cat = categoryRepository.getCategoriesByMenu();
             cat.ForEach(ex => cmbCat.Items.Add(ex.CategoryName));
+        }
+
+        private void guna2Button2_Click(object sender, EventArgs e)
+        {
+            chooseImage();
+        }
+        private void chooseImage()
+        {
+            ofd.Filter = "Image Files (*.jpg, *.png)|*.jpg;*.png";
+            DialogResult result = ofd.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                string imagePath = ofd.FileName;
+                pictureBox.ImageLocation = imagePath;
+            }
+            else
+            {
+                pictureBox.ImageLocation = null;
+                pictureBox.Image = null;
+            }
+        }
+
+        private void pictureBox_Click(object sender, EventArgs e)
+        {
+            chooseImage();
         }
     }
 }

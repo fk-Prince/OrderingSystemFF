@@ -57,6 +57,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
+            this.ofd = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -138,6 +139,7 @@
             this.guna2Button2.TabIndex = 60;
             this.guna2Button2.Text = "Insert Image Here";
             this.guna2Button2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.guna2Button2.Click += new System.EventHandler(this.guna2Button2_Click);
             // 
             // cmbCat
             // 
@@ -266,6 +268,7 @@
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 61;
             this.pictureBox.TabStop = false;
+            this.pictureBox.Click += new System.EventHandler(this.pictureBox_Click);
             // 
             // label15
             // 
@@ -466,6 +469,10 @@
             this.guna2Panel1.Size = new System.Drawing.Size(2, 475);
             this.guna2Panel1.TabIndex = 80;
             // 
+            // ofd
+            // 
+            this.ofd.FileName = "openFileDialog1";
+            // 
             // MenuBundleFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -540,5 +547,6 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label13;
         private Guna.UI2.WinForms.Guna2Panel guna2Panel1;
+        private System.Windows.Forms.OpenFileDialog ofd;
     }
 }

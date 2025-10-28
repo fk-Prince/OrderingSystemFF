@@ -31,9 +31,6 @@ namespace OrderingSystem.Services
             else
                 throw new NotSupportedException("Not Supported.");
         }
-
-
-
         public bool isMenuNameExist(string name)
         {
             return menuRepository.isMenuNameExist(name);
@@ -63,6 +60,9 @@ namespace OrderingSystem.Services
             return menuRepository.newMenuVariant(id, m);
         }
 
-
+        public bool updateBundle2(int id, List<MenuModel> included)
+        {
+            return menuRepository.updateBundle2(id, included);
+        }
     }
 }

@@ -84,7 +84,6 @@
             this.price.TabIndex = 1;
             this.price.Text = "Price";
             this.price.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.price.Click += new System.EventHandler(this.price_Click);
             // 
             // ooo
             // 

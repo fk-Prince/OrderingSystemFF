@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using MySqlConnector;
+using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication;
 using OrderingSystem.KioskApplication.Cards;
 using OrderingSystem.KioskApplication.Component;
@@ -15,34 +16,34 @@ using OrderingSystem.Repository;
 using OrderingSystem.Repository.CategoryRepository;
 using OrderingSystem.Repository.Coupon;
 using OrderingSystem.Repository.Order;
+using OrderingSystem.Services;
 
 namespace OrderingSystem
 {
     public partial class KioskLayout : Form
     {
-        private IKioskMenuRepository _menuRepository;
-        private Dictionary<int, FlowLayoutPanel> categoryPanels;
-        private Dictionary<int, Guna2Panel> categoryContainer;
-        private List<MenuModel> orderList;
-        private List<Guna2Button> buttonListTop;
-        private List<Guna2Button> buttonListSide;
-        private List<MenuModel> _allMenus;
+        private readonly KioskMenuServices menuServicesKiosk;
+        private readonly Dictionary<int, FlowLayoutPanel> categoryPanels;
+        private readonly Dictionary<int, Guna2Panel> categoryContainer;
+        private readonly List<MenuModel> orderList;
+        private readonly List<Guna2Button> buttonListTop;
+        private readonly List<Guna2Button> buttonListSide;
+        private List<MenuModel> allMenus;
         private Guna2Button lastActiveButtonSide;
-        private bool isFilter = false;
         private CartServices cartServices;
         private CouponModel couponSelected;
         private Guna2Button lastClickedTop;
 
-
+        private bool isFilter = false;
         private bool isShowing = true;
         private int x = 0;
         private int x1 = 20;
         private int basedx = 0;
-
         public KioskLayout()
         {
             InitializeComponent();
             orderList = new List<MenuModel>();
+            menuServicesKiosk = new KioskMenuServices(new KioskMenuRepository(orderList));
             buttonListTop = new List<Guna2Button>();
             buttonListSide = new List<Guna2Button>();
             categoryPanels = new Dictionary<int, FlowLayoutPanel>();
@@ -51,8 +52,6 @@ namespace OrderingSystem
             dt.Start();
             flowMenu.MouseWheel += FlowMenu_MouseWheel;
         }
-
-
         private void lastButton(Guna2Button b)
         {
 
@@ -128,9 +127,7 @@ namespace OrderingSystem
             MenuCard card = null;
             if (isFilter)
             {
-
                 flowMenu.Controls.Clear();
-
                 FlowLayoutPanel flatPanel = new FlowLayoutPanel();
                 flatPanel.MaximumSize = new Size(flowMenu.Width - 40, 10000);
                 flatPanel.AutoSize = true;
@@ -139,7 +136,7 @@ namespace OrderingSystem
 
                 foreach (MenuModel menu in mm)
                 {
-                    card = new MenuCard(_menuRepository, menu);
+                    card = new MenuCard(menuServicesKiosk, menu);
                     card.Margin = new Padding(20, 20, 20, 0);
                     card.orderListEvent += (s, e) =>
                     {
@@ -159,7 +156,6 @@ namespace OrderingSystem
             }
             else
             {
-
                 if (flowMenu.Controls.Count == 0)
                 {
                     foreach (var panel in categoryContainer.Values)
@@ -167,12 +163,11 @@ namespace OrderingSystem
                         flowMenu.Controls.Add(panel);
                     }
                 }
-
                 foreach (MenuModel menu in mm)
                 {
                     if (categoryPanels.ContainsKey(menu.CategoryId))
                     {
-                        card = new MenuCard(_menuRepository, menu);
+                        card = new MenuCard(menuServicesKiosk, menu);
                         card.Margin = new Padding(20, 40, 20, 0);
                         card.orderListEvent += (s, e) =>
                         {
@@ -183,7 +178,7 @@ namespace OrderingSystem
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message);
+                                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         };
                         categoryPanels[menu.CategoryId].Controls.Add(card);
@@ -201,7 +196,6 @@ namespace OrderingSystem
             {
                 Guna2Panel p = new Guna2Panel();
                 p.Width = flowMenu.Width - 40;
-                //p.Padding = new Padding(20, 0, 20, 0);
                 p.Margin = new Padding(20, 20, 20, 20);
                 p.MaximumSize = new Size(flowMenu.Width - 40, 10000);
                 p.AutoSize = true;
@@ -224,6 +218,10 @@ namespace OrderingSystem
 
                 Guna2Button b = new Guna2Button();
                 b.Text = c.CategoryName;
+                b.Image = c.CategoryImage;
+                b.BackColor = Color.Transparent;
+                b.ImageSize = new Size(25, 25);
+                b.ImageAlign = HorizontalAlignment.Left;
                 b.Size = new Size(230, 45);
                 b.Tag = c.CategoryId;
                 b.Click += catClickedSide;
@@ -318,7 +316,7 @@ namespace OrderingSystem
             }
             catch (Exception)
             {
-                MessageBox.Show("Internal Server Error.");
+                MessageBox.Show("Internal Server Error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -357,23 +355,30 @@ namespace OrderingSystem
         {
             try
             {
-                _menuRepository = new KioskMenuRepository(orderList);
-                ICategoryRepository categoryRepository = new CategoryRepository();
+                CategoryServices categoryServices = new CategoryServices(new CategoryRepository());
 
-                List<CategoryModel> cats = categoryRepository.getCategoriesByMenu();
+
+                List<CategoryModel> cats = categoryServices.getCategoriesByMenu();
                 displayCategory(cats);
-                _allMenus = _menuRepository.getMenu();
-                displayMenu(_allMenus);
-                cartServices = new CartServices(_menuRepository, flowCart, orderList);
+
+                allMenus = menuServicesKiosk.getMenu();
+                displayMenu(allMenus);
+
+
+                cartServices = new CartServices(menuServicesKiosk, flowCart, orderList);
                 cartServices.quantityChanged += (s, b) => displayTotal(this, EventArgs.Empty);
+            }
+            catch (MaxOrder ex)
+            {
+                MessageBox.Show(ex.Message, "Order Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception)
             {
-                MessageBox.Show("Internal Server Error");
+                MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void triggerCart(object sender, EventArgs e)
@@ -397,13 +402,13 @@ namespace OrderingSystem
                     flowMenu.Controls.Add(panel);
                 }
 
-                displayMenu(_allMenus);
+                displayMenu(allMenus);
                 return;
             }
 
             isFilter = true;
 
-            var filter = _allMenus.FindAll(m =>
+            var filter = allMenus.FindAll(m =>
                 m.MenuName != null && m.MenuName.ToLower().Contains(t)
             );
 
@@ -440,7 +445,6 @@ namespace OrderingSystem
                     var panel = kvp.Value;
 
                     Rectangle screenRect = panel.RectangleToScreen(panel.ClientRectangle);
-                    //Rectangle scren = panel.RectangleToScreen(screenRect.ClientRectangle);
                     Rectangle panelRect = flowMenu.RectangleToClient(screenRect);
 
                     bool isVisible = panelRect.Bottom > 0 && panelRect.Top < flowMenu.ClientSize.Height;

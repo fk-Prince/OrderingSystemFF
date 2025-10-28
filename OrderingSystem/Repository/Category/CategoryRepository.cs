@@ -16,15 +16,13 @@ namespace OrderingSystem.Repository.CategoryRepository
             try
             {
                 var conn = db.getConnection();
-                using (var cmd = new MySqlCommand("INSERT INTO category (category_name, category_image) VALUES (@category_name,@category_image)", conn))
+                using (var cmd = new MySqlCommand("INSERT INTO category (category_name, image) VALUES (@category_name,@image)", conn))
                 {
                     cmd.Parameters.AddWithValue("@category_name", c.CategoryName);
                     if (c.CategoryImage != null)
-
-                        cmd.Parameters.AddWithValue("@category_image", ImageHelper.GetImageFromFile(c.CategoryImage));
+                        cmd.Parameters.AddWithValue("@image", ImageHelper.GetImageFromFile(c.CategoryImage));
                     else
-                        cmd.Parameters.AddWithValue("@category_image", DBNull.Value);
-
+                        cmd.Parameters.AddWithValue("@image", DBNull.Value);
                     cmd.ExecuteNonQuery();
                     return true;
                 }

@@ -6,21 +6,22 @@ using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication.Components;
 using OrderingSystem.KioskApplication.Interface;
 using OrderingSystem.Model;
-using OrderingSystem.Repository;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.KioskApplication.Services
 {
     public class CartServices : ICalculateOrder
     {
-        private IKioskMenuRepository _menuRepository;
+        //private IKioskMenuRepository _menuRepository;
+        private KioskMenuServices menuServices;
         private FlowLayoutPanel flowCart;
         private List<MenuModel> orderList;
         public event EventHandler quantityChanged;
 
         private CouponModel coupon;
-        public CartServices(IKioskMenuRepository _menuRepository, FlowLayoutPanel flowCart, List<MenuModel> orderList)
+        public CartServices(KioskMenuServices menuServices, FlowLayoutPanel flowCart, List<MenuModel> orderList)
         {
-            this._menuRepository = _menuRepository;
+            this.menuServices = menuServices;
             this.flowCart = flowCart;
             this.orderList = orderList;
         }
@@ -56,22 +57,19 @@ namespace OrderingSystem.KioskApplication.Services
             try
             {
                 CartCard cc = sender as CartCard;
-                //var order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId);
                 MenuModel order = getOrder(e);
-                //order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId && o.getPrice() == e.getPrice());
-                int b = _menuRepository.getMaxOrderRealTime(e.MenuDetailId, orderList);
+                int b = menuServices.getMaxOrderRealTime(e.MenuDetailId, orderList);
+
                 if (b <= 0)
-                {
                     throw new MaxOrder("Unable to add more quantity.");
-                }
+
                 order.PurchaseQty++;
                 cc.displayPurchasedMenu();
-
                 quantityChanged?.Invoke(this, EventArgs.Empty);
             }
-            catch (MaxOrder ex)
+            catch (MaxOrder)
             {
-                MessageBox.Show(ex.Message);
+                throw;
             }
         }
         public MenuModel getOrder(MenuModel e)
@@ -85,7 +83,6 @@ namespace OrderingSystem.KioskApplication.Services
         private void deductQuantity(object sender, MenuModel e)
         {
             CartCard cc = sender as CartCard;
-            //var order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId);
             MenuModel order = getOrder(e);
             order.PurchaseQty--;
             if (order.PurchaseQty <= 0)

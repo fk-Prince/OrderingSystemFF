@@ -18,5 +18,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
         List<MenuModel> getMenuDetail();
         List<string> getSize();
         double getBundlePrice(MenuModel menu);
+
+        bool updateBundle2(int id, List<MenuModel> included);
     }
 }

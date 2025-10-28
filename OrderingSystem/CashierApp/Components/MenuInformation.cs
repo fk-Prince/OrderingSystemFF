@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
-using Newtonsoft.Json;
 using OrderingSystem.CashierApp.Forms.Menu;
 using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.CashierApp.Table;
@@ -102,9 +101,9 @@ namespace OrderingSystem.CashierApp.Components
                     loadForm(regular = new RegularTable(variantList, ingredientServices));
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Internal Server Error" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void changeMode(object sender, EventArgs e)
@@ -190,9 +189,6 @@ namespace OrderingSystem.CashierApp.Components
                                  .WithCategoryName(cat)
                                  .WithVariant(regular.getMenus());
                     if (imagex != null) builder = builder.WithMenuImageByte(imagex);
-
-                    string json = JsonConvert.SerializeObject(regular.getMenus());
-                    Console.WriteLine(json);
                     menus = builder.Build();
                     type = "regular";
                 }
@@ -263,11 +259,16 @@ namespace OrderingSystem.CashierApp.Components
         }
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            BundleMenuPopup bb = new BundleMenuPopup(included);
+            BundleMenuPopup bb = new BundleMenuPopup(menuService, included);
             DialogResult rs = bb.ShowDialog(this);
             if (rs == DialogResult.OK)
             {
                 included = bb.getMenuSelected();
+                bool suc = menuService.updateBundle2(menu.MenuDetailId, included);
+                if (suc)
+                    MessageBox.Show("Updated Bundled", "Update Scucessfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    MessageBox.Show("Failed to update", "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 displayTable();
                 bb.Hide();
             }

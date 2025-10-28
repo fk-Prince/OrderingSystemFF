@@ -6,69 +6,64 @@ using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication.Layouts;
 using OrderingSystem.KioskApplication.Services;
 using OrderingSystem.Model;
-using OrderingSystem.Repository;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.KioskApplication.Options
 {
     public class PackageOption : IMenuOptions, ISelectedFrequentlyOrdered
     {
 
-        private IKioskMenuRepository _menuRepository;
-        private FlowLayoutPanel flowPanel;
-        private FrequentlyOrderedOption frequentlyOrderedOption;
-        private List<PackageLayout> _orderListPackage;
+        private readonly KioskMenuServices kioskMenuServices;
+        private readonly FlowLayoutPanel flowPanel;
+        private readonly FrequentlyOrderedOption frequentlyOrderedOption;
+        private readonly List<PackageLayout> orderList;
 
         private MenuModel menu;
-        public PackageOption(IKioskMenuRepository _menuRepository, FlowLayoutPanel flowPanel)
+        public PackageOption(KioskMenuServices kioskMenuServices, FlowLayoutPanel flowPanel)
         {
-            this._menuRepository = _menuRepository;
+            this.kioskMenuServices = kioskMenuServices;
             this.flowPanel = flowPanel;
-            _orderListPackage = new List<PackageLayout>();
-            frequentlyOrderedOption = new FrequentlyOrderedOption(_menuRepository, flowPanel);
+            orderList = new List<PackageLayout>();
+            frequentlyOrderedOption = new FrequentlyOrderedOption(kioskMenuServices, flowPanel);
         }
         public void displayMenuOptions(MenuModel menu)
         {
             try
             {
                 this.menu = menu;
-                List<MenuModel> menuList = _menuRepository.getIncludedMenu(menu);
+                List<MenuModel> menuList = kioskMenuServices.getIncludedMenu(menu);
 
                 foreach (var item in menuList)
                 {
-                    var pakage = new PackageLayout(_menuRepository, item);
+                    var pakage = new PackageLayout(kioskMenuServices, item);
                     pakage.Margin = new Padding(20, 20, 0, 20);
                     flowPanel.Controls.Add(pakage);
-                    _orderListPackage.Add(pakage);
+                    orderList.Add(pakage);
                 }
 
                 frequentlyOrderedOption.displayFrequentlyOrdered(menu);
             }
             catch (Exception)
             {
-
-                Console.WriteLine("Error on package option displayMenuOptions");
                 throw;
             }
         }
 
         public List<MenuModel> getFrequentlyOrdered()
         {
-            if (frequentlyOrderedOption != null)
-                return frequentlyOrderedOption.getFrequentlyOrdered();
-            return null;
+            return frequentlyOrderedOption?.getFrequentlyOrdered();
         }
 
         public List<MenuModel> confirmOrder()
         {
             try
             {
-                if (_orderListPackage.Any(pg => pg.SelectedMenuDetail == null || pg.SelectedMenuDetail.MaxOrder <= 0))
-                {
+                if (orderList.Any(pg => pg.SelectedMenuDetail == null || pg.SelectedMenuDetail.MaxOrder <= 0))
                     throw new OutOfOrder("Currently this menu is unavailable.");
-                }
 
-                var includedMenu = _orderListPackage.Select(pg => pg.SelectedMenuDetail).ToList();
-                double newPrice = _menuRepository.getNewPackagePrice(menu.MenuDetailId, includedMenu);
+                var includedMenu = orderList.Select(pg => pg.SelectedMenuDetail).ToList();
+                double newPrice = kioskMenuServices.getNewPackagePrice(menu.MenuDetailId, includedMenu);
+
 
                 var packageBundle = MenuPackageModel.Builder()
                     .WithMenuDetailId(menu.MenuDetailId)
@@ -85,7 +80,6 @@ namespace OrderingSystem.KioskApplication.Options
             }
             catch (Exception)
             {
-                Console.WriteLine("Error on package option confirm order");
                 throw;
             }
         }

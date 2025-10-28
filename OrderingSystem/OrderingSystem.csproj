@@ -380,6 +380,7 @@
     <Compile Include="Services\IngredientServices.cs" />
     <Compile Include="Services\InventoryServices.cs" />
     <Compile Include="Services\MenuService.cs" />
+    <Compile Include="Services\KioskMenuServices.cs" />
     <Compile Include="Services\OrderServices.cs" />
     <Compile Include="Services\StaffServices.cs" />
     <Compile Include="util\ImageHelper.cs" />

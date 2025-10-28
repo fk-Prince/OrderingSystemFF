@@ -15,6 +15,7 @@ namespace OrderingSystem.CashierApp.Forms.Coupon
         private readonly TableLayout tableLayout;
         private DataView view;
         private readonly IForms f;
+
         public CouponFrm(IForms f, CouponServices couponServices)
         {
             InitializeComponent();
@@ -36,17 +37,23 @@ namespace OrderingSystem.CashierApp.Forms.Coupon
                 try
                 {
                     bool suc = couponServices.saveAction(p.t1.Text, p.dt2.Value, p.t3.Text, p.t4.Text);
-                    if (suc) displayCoupons();
+                    if (suc)
+                    {
+                        displayCoupons();
+                        MessageBox.Show("Successfully generate coupons.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        p.Hide();
+                    }
+                    else
+                        MessageBox.Show("Failed to generate coupons.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
             DialogResult rs = f.selectForm(p, "coupon").ShowDialog(this);
             if (rs == DialogResult.OK)
             {
-
                 p.Hide();
             }
         }

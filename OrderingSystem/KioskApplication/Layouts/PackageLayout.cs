@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using OrderingSystem.KioskApplication.Components;
 using OrderingSystem.Model;
-using OrderingSystem.Repository;
+using OrderingSystem.Services;
 
 namespace OrderingSystem.KioskApplication.Layouts
 {
@@ -21,22 +21,20 @@ namespace OrderingSystem.KioskApplication.Layouts
         private MenuModel selectedMenu;
         public MenuModel SelectedMenuDetail => selectedMenu;
 
-        private MenuModel menuDetail;
-        private List<MenuModel> menuDetails;
-        public PackageLayout(IKioskMenuRepository _menuRepository, MenuModel menuDetail)
+        private readonly MenuModel menuDetail;
+        private readonly List<MenuModel> menuDetails;
+        public PackageLayout(KioskMenuServices kioskMenuServices, MenuModel menuDetail)
         {
             InitializeComponent();
             this.menuDetail = menuDetail;
             try
             {
-                menuDetails = _menuRepository.getDetailsByPackage(menuDetail);
-
+                menuDetails = kioskMenuServices.getDetailsByPackage(menuDetail);
                 cardLayout();
                 displayFlavor(menuDetail);
             }
             catch (Exception)
             {
-                Console.WriteLine("error on PackageLayout constructor");
                 throw;
             }
         }

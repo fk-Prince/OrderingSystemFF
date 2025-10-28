@@ -4,7 +4,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OrderingSystem.Model;
-using OrderingSystem.Repo.CashierMenuRepository;
+using OrderingSystem.Services;
 
 
 namespace OrderingSystem.CashierApp.Components
@@ -16,14 +16,13 @@ namespace OrderingSystem.CashierApp.Components
         private DataView view;
         private List<MenuModel> menuSelected;
         private List<MenuModel> menuList;
-        private IMenuRepository menuRepotisory;
+        private MenuService menuService;
 
-        public BundleMenuPopup(List<MenuModel> menuSelected)
+        public BundleMenuPopup(MenuService menuService, List<MenuModel> menuSelected)
         {
             InitializeComponent();
-            menuRepotisory = new MenuRepository();
             this.menuSelected = menuSelected;
-            menuList = menuRepotisory.getMenuDetail();
+            menuList = menuService.getMenuDetail();
             initTable();
         }
 
@@ -123,6 +122,7 @@ namespace OrderingSystem.CashierApp.Components
 
         private void confirmButton(object sender, EventArgs e)
         {
+            menuSelected.Clear();
             foreach (DataGridViewRow row in dataGrid.Rows)
             {
                 bool isChecked = false;
@@ -144,19 +144,27 @@ namespace OrderingSystem.CashierApp.Components
                     bool fx = bool.Parse(row.Cells["Fixed ✓"].Value.ToString());
                     int q = int.Parse(row.Cells["Quantity"].Value?.ToString());
 
-                    MenuPackageModel selectedMenu = menuList.Find(x => x.MenuName == menuName && x.FlavorName == flavor && x.SizeName == size) as MenuPackageModel;
+                    MenuModel originalMenu = menuList.Find(x =>
+                           x.MenuName == menuName &&
+                           x.FlavorName == flavor &&
+                           x.SizeName == size);
 
+                    // Find if this was already selected (has a PackageId)
+                    MenuPackageModel existingPackage = menuSelected.Find(x =>
+                        x.MenuName == menuName &&
+                        x.FlavorName == flavor &&
+                        x.SizeName == size) as MenuPackageModel;
                     MenuPackageModel p = MenuPackageModel.Builder()
-                        .WithMenuDetailId(selectedMenu.MenuDetailId)
-                        .WithPackageId(selectedMenu.PackageId)
+                        .WithMenuDetailId(originalMenu.MenuDetailId)
+                        .WithPackageId(existingPackage?.PackageId ?? 0)
                         .WithMenuName(menuName)
                         .WithSizeName(size)
                         .WithFlavorName(flavor)
                         .WithQuantity(q)
                         .isFixed(fx)
                         .Build();
-
                     menuSelected.Add(p);
+
                 }
             }
             DialogResult = DialogResult.OK;

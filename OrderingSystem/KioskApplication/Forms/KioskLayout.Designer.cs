@@ -91,7 +91,7 @@
             this.guna2Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.guna2Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(221)))), ((int)(((byte)(221)))));
+            this.guna2Panel1.BackColor = System.Drawing.Color.White;
             this.guna2Panel1.Controls.Add(this.cartPanel);
             this.guna2Panel1.Controls.Add(this.guna2Panel3);
             this.guna2Panel1.Controls.Add(this.xxx);
@@ -409,7 +409,7 @@
             // week
             // 
             this.week.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.week.ForeColor = System.Drawing.Color.White;
+            this.week.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.week.Location = new System.Drawing.Point(46, 103);
             this.week.Name = "week";
             this.week.Size = new System.Drawing.Size(134, 17);
@@ -420,7 +420,7 @@
             // date
             // 
             this.date.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.date.ForeColor = System.Drawing.Color.White;
+            this.date.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.date.Location = new System.Drawing.Point(41, 85);
             this.date.Name = "date";
             this.date.Size = new System.Drawing.Size(147, 20);
@@ -444,7 +444,7 @@
             // 
             this.time.AutoSize = true;
             this.time.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.time.ForeColor = System.Drawing.Color.White;
+            this.time.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.time.Location = new System.Drawing.Point(44, 53);
             this.time.Name = "time";
             this.time.Size = new System.Drawing.Size(144, 32);
@@ -573,13 +573,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.flowMenu.AutoScroll = true;
             this.flowMenu.BackColor = System.Drawing.Color.White;
-            this.flowMenu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.flowMenu.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowMenu.Location = new System.Drawing.Point(228, 149);
+            this.flowMenu.Location = new System.Drawing.Point(285, 149);
             this.flowMenu.MaximumSize = new System.Drawing.Size(1920, 2000);
+            this.flowMenu.MinimumSize = new System.Drawing.Size(732, 551);
             this.flowMenu.Name = "flowMenu";
             this.flowMenu.Padding = new System.Windows.Forms.Padding(0, 20, 0, 40);
-            this.flowMenu.Size = new System.Drawing.Size(1070, 551);
+            this.flowMenu.Size = new System.Drawing.Size(732, 551);
             this.flowMenu.TabIndex = 0;
             this.flowMenu.WrapContents = false;
             this.flowMenu.Scroll += new System.Windows.Forms.ScrollEventHandler(this.flowMenu_Scroll);

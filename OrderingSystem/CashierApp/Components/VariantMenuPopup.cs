@@ -101,8 +101,8 @@ namespace OrderingSystem.CashierApp.Forms.Menu
                 List<string> size = menuRepository.getSize();
                 flavor.ForEach(f => cmbFlavor.Items.Add(f));
                 size.ForEach(f => cmbSize.Items.Add(f));
-                if (flavor.Count > 0) cmbFlavor.SelectedIndex = 0;
-                if (size.Count > 0) cmbSize.SelectedIndex = 0;
+                if (flavor.Count > 0) cmbFlavor.SelectedItem = "Regular";
+                if (size.Count > 0) cmbSize.SelectedItem = "Regular";
             }
             catch (Exception)
             {
