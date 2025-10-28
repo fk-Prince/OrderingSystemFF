@@ -16,8 +16,7 @@ namespace OrderingSystem.CashierApp.Components
         private DataView view;
         private List<MenuModel> menuSelected;
         private List<MenuModel> menuList;
-        private MenuService menuService;
-
+        public event EventHandler xx;
         public BundleMenuPopup(MenuService menuService, List<MenuModel> menuSelected)
         {
             InitializeComponent();
@@ -168,6 +167,7 @@ namespace OrderingSystem.CashierApp.Components
                 }
             }
             DialogResult = DialogResult.OK;
+            //xx?.Invoke(this, EventArgs.Empty);
         }
 
         public List<MenuModel> getMenuSelected()
@@ -177,7 +177,6 @@ namespace OrderingSystem.CashierApp.Components
 
         private void FormClosing1(object sender, FormClosingEventArgs e)
         {
-            DialogResult = DialogResult.OK;
         }
 
         private void dataGrid_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)

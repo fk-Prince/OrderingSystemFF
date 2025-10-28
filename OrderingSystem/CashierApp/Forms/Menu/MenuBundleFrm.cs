@@ -130,7 +130,6 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         private void menuListButton(object sender, System.EventArgs e)
         {
             BundleMenuPopup p = new BundleMenuPopup(menuService, inclded);
-
             DialogResult rs = p.ShowDialog(this);
             if (rs == DialogResult.OK)
             {
