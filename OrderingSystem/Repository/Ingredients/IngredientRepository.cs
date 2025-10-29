@@ -396,6 +396,11 @@ namespace OrderingSystem.Repository.Ingredients
         }
         public bool removeExpiredIngredient()
         {
+            string query2 = @"INSERT INTO monitor_inventory 
+                     (staff_id, ingredient_stock_id, quantity, type,reason)
+                     SELECT @staff_id, ingredient_stock_id, current_stock, 'Deduct', 'Expired'
+                     FROM ingredient_stock
+                     WHERE expiry_date <= CURDATE() AND current_stock > 0";
             string query = @"
                                 UPDATE ingredient_stock
                                 SET current_stock = 0
@@ -412,10 +417,22 @@ namespace OrderingSystem.Repository.Ingredients
             {
                 var conn = db.getConnection();
 
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var transaction = conn.BeginTransaction())
                 {
-                    cmd.ExecuteNonQuery();
+
+                    using (var cmd = new MySqlCommand(query2, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("@staff_id", SessionStaffData.StaffId);
+                        cmd.ExecuteNonQuery();
+                    }
+                    using (var cmd = new MySqlCommand(query, conn, transaction))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    transaction.Commit();
                 }
+
+                //monitorInventory()
                 return true;
             }
             catch (Exception)
@@ -427,7 +444,6 @@ namespace OrderingSystem.Repository.Ingredients
                 db.closeConnection();
             }
         }
-
         public bool updateIngredient(int stock_id, string name, string unit)
         {
             string query1 = @"SELECT ingredient_id FROM ingredient_stock WHERE ingredient_stock_id = @ingredient_stock_id LIMIT 1";
