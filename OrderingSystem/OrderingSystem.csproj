@@ -281,6 +281,12 @@
     <Compile Include="KioskApplication\Component\MyRadioButton.Designer.cs">
       <DependentUpon>MyRadioButton.cs</DependentUpon>
     </Compile>
+    <Compile Include="KioskApplication\Component\Note.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="KioskApplication\Component\Note.Designer.cs">
+      <DependentUpon>Note.cs</DependentUpon>
+    </Compile>
     <Compile Include="KioskApplication\Component\Title.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -300,6 +306,7 @@
       <DependentUpon>CouponFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="KioskApplication\Interface\ICalculateOrder.cs" />
+    <Compile Include="KioskApplication\Interface\IOrderNote.cs" />
     <Compile Include="KioskApplication\Options\FrequentlyOrderedOption.cs" />
     <Compile Include="KioskApplication\Interface\IMenuOptions.cs" />
     <Compile Include="KioskApplication\Interface\IOutOfOrder.cs" />
@@ -348,6 +355,7 @@
     <Compile Include="Model\IngredientStockModel.cs" />
     <Compile Include="Model\MenuModel.cs" />
     <Compile Include="Model\MenuPackageModel.cs" />
+    <Compile Include="Model\OrderItemModel.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\StaffModel.cs" />
     <Compile Include="Program.cs" />
@@ -467,6 +475,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="KioskApplication\Component\MyRadioButton.resx">
       <DependentUpon>MyRadioButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KioskApplication\Component\Note.resx">
+      <DependentUpon>Note.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="KioskApplication\Component\Title.resx">
       <DependentUpon>Title.cs</DependentUpon>

@@ -95,6 +95,7 @@ namespace OrderingSystem.CashierApp.Layout
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
+            Hide();
             KioskLayout k = new KioskLayout();
             k.Show();
         }

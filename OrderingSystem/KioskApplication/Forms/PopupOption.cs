@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using OrderingSystem.Exceptions;
+using OrderingSystem.KioskApplication.Interface;
 using OrderingSystem.KioskApplication.Options;
 using OrderingSystem.KioskApplication.Services;
 using OrderingSystem.Model;
@@ -14,16 +15,12 @@ namespace OrderingSystem.KioskApplication
         public MenuModel menu { get; }
         private KioskMenuServices kioskMenuServices;
         public event EventHandler<List<MenuModel>> orderListEvent;
-        private List<MenuModel> orderList;
         private IMenuOptions menuOptions;
-
-        public PopupOption(KioskMenuServices kioskMenuServices, MenuModel menu, List<MenuModel> orderList)
+        public PopupOption(KioskMenuServices kioskMenuServices, MenuModel menu)
         {
             InitializeComponent();
             this.kioskMenuServices = kioskMenuServices;
             this.menu = menu;
-            this.orderList = orderList;
-
             displayDetails(menu);
             diisplayOptions();
         }
@@ -48,9 +45,11 @@ namespace OrderingSystem.KioskApplication
                         bb.Enabled = false;
                     };
                 }
-
                 menuOptions.displayMenuOptions(menu);
 
+
+                if (menuOptions is IOrderNote i)
+                    i.displayOrderNotice();
 
             }
             catch (Exception)
@@ -58,6 +57,7 @@ namespace OrderingSystem.KioskApplication
                 MessageBox.Show("Internal Server Error ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void displayDetails(MenuModel menu)
         {
@@ -78,7 +78,12 @@ namespace OrderingSystem.KioskApplication
                         var frequentlyOrdered = freqOrdered.getFrequentlyOrdered();
                         if (frequentlyOrdered != null)
                             order.AddRange(frequentlyOrdered);
+                    }
 
+                    if (menuOptions is IOrderNote iNo)
+                    {
+                        string ino = iNo.getNote;
+                        MessageBox.Show(ino);
                     }
 
                     var orders = menuOptions.confirmOrder();
@@ -105,5 +110,6 @@ namespace OrderingSystem.KioskApplication
         {
             DialogResult = DialogResult.Abort;
         }
+
     }
 }

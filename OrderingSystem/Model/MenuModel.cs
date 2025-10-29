@@ -21,6 +21,7 @@ namespace OrderingSystem.Model
         public byte[] MenuImageByte { get; protected set; }
         public int MenuDetailId { get; protected set; }
         public int PurchaseQty { get; set; }
+        public string PurchaseNote { get; protected set; }
         public int CategoryId { get; protected set; }
         public double MenuPrice { get; protected set; }
         public int MaxOrder { get; protected set; }
@@ -36,6 +37,8 @@ namespace OrderingSystem.Model
             }
             return false;
         }
+
+
         public interface IMenuBuilder
         {
             MenuBuilder WithIngredients(List<IngredientModel> ing);
@@ -52,6 +55,7 @@ namespace OrderingSystem.Model
             MenuBuilder WithMenuName(string menuName);
             MenuBuilder WithCategoryName(string n); //
             MenuBuilder WithFlavorName(string menuName);
+            MenuBuilder WithPurchaseNote(string note);
             MenuBuilder WithSizeName(string menuName);
             MenuBuilder WithMenuDescription(string menuDescription);
             MenuBuilder WithMenuDetailId(int lowestMenuDetailId);
@@ -80,6 +84,7 @@ namespace OrderingSystem.Model
                 .WithCategoryId(CategoryId)
                 .WithFlavorName(FlavorName)
                 .WithSizeName(SizeName)
+                .WithPurchaseNote(PurchaseNote)
                 .WithEstimatedTime(EstimatedTime)
                 .WithMenuImage(MenuImage)
                 .WithMenuImageByte(MenuImageByte)
@@ -199,6 +204,12 @@ namespace OrderingSystem.Model
             public MenuBuilder isAvailable(bool ts)
             {
                 _menuModel.isAvailable = ts;
+                return this;
+            }
+
+            public MenuBuilder WithPurchaseNote(string note)
+            {
+                _menuModel.PurchaseNote = note;
                 return this;
             }
         }

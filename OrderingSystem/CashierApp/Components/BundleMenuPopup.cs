@@ -16,7 +16,6 @@ namespace OrderingSystem.CashierApp.Components
         private DataView view;
         private List<MenuModel> menuSelected;
         private List<MenuModel> menuList;
-        public event EventHandler xx;
         public BundleMenuPopup(MenuService menuService, List<MenuModel> menuSelected)
         {
             InitializeComponent();

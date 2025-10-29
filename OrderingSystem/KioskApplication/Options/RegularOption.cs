@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using OrderingSystem.Exceptions;
+using OrderingSystem.KioskApplication.Component;
 using OrderingSystem.KioskApplication.Components;
+using OrderingSystem.KioskApplication.Interface;
 using OrderingSystem.KioskApplication.Services;
 using OrderingSystem.Model;
 using OrderingSystem.Services;
 
 namespace OrderingSystem.KioskApplication.Options
 {
-    public class RegularOption : IMenuOptions, ISelectedFrequentlyOrdered
+    public class RegularOption : IMenuOptions, ISelectedFrequentlyOrdered, IOrderNote
     {
         private readonly KioskMenuServices kioskMenuServices;
         private readonly FlowLayoutPanel flowPanel;
         private readonly FrequentlyOrderedOption frequentlyOrderedOption;
 
+        private Note n;
         private SizeLayout sc;
         private MenuModel menu;
 
@@ -24,6 +27,9 @@ namespace OrderingSystem.KioskApplication.Options
         private string titleOption;
         private string subTitle;
         private List<MenuModel> menuDetails;
+
+        public string getNote { get; set; } = "";
+
         public RegularOption(KioskMenuServices kioskMenuServices, FlowLayoutPanel flowPanel)
         {
             this.kioskMenuServices = kioskMenuServices;
@@ -46,6 +52,7 @@ namespace OrderingSystem.KioskApplication.Options
         }
         private void displayFlavor(List<MenuModel> menuDetails)
         {
+            string t = "Select Your Menu.";
             titleOption = "Option A";
             subTitle = "Select Flavor of your choice.";
 
@@ -54,22 +61,21 @@ namespace OrderingSystem.KioskApplication.Options
                 .Select(group => group.First())
                 .ToList();
 
+
+            FlavorLayout fl = new FlavorLayout(x);
+            fl.Margin = new Padding(20, 30, 0, 0);
+            fl.FlavorSelected += (s, e) => flavorSelected(s, e);
+            fl.setTitle(titleOption, menu.MenuName);
+            fl.setSubTitle(subTitle);
+            fl.defaultSelection();
+            flowPanel.Controls.Add(fl);
+            titleOption = "Option B";
+            selectedFlavor = x[0];
+
             if (x.Count > 1)
-            {
-                FlavorLayout fl = new FlavorLayout(x);
-                fl.Margin = new Padding(20, 30, 0, 0);
-                fl.FlavorSelected += (s, e) => flavorSelected(s, e);
-                fl.setTitle(titleOption, menu.MenuName);
-                fl.setSubTitle(subTitle);
-                fl.defaultSelection();
-                flowPanel.Controls.Add(fl);
-                titleOption = "Option B";
-            }
-            else
-            {
-                selectedFlavor = x[0];
                 filterSizeByFlavor(menuDetails, menu.MenuId, "");
-            }
+            else
+                fl.setSubTitle(t);
         }
         private void filterSizeByFlavor(List<MenuModel> menuDetails, int menuid, string flavor)
         {
@@ -136,12 +142,19 @@ namespace OrderingSystem.KioskApplication.Options
                          .WithMenuDetailId(selectedMenu.MenuDetailId)
                          .WithEstimatedTime(selectedMenu.EstimatedTime)
                          .WithSizeName(selectedMenu.SizeName)
+                         .WithPurchaseNote(n?.txt.Text.Trim())
                          .WithFlavorName(selectedMenu.FlavorName)
                          .WithMenuImage(selectedMenu.MenuImage)
                          .WithPrice(selectedMenu.getPrice())
                          .Build();
             m.PurchaseQty += 1;
             return m;
+        }
+        public void displayOrderNotice()
+        {
+            n = new Note();
+            n.Margin = new Padding(20, 0, 0, 30);
+            flowPanel.Controls.Add(n);
         }
     }
 }

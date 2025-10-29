@@ -137,6 +137,7 @@ namespace OrderingSystem
                 foreach (MenuModel menu in mm)
                 {
                     card = new MenuCard(menuServicesKiosk, menu);
+                    card.outOfOrder(menu.MaxOrder <= 0);
                     card.Margin = new Padding(20, 20, 20, 0);
                     card.orderListEvent += (s, e) =>
                     {
@@ -169,6 +170,7 @@ namespace OrderingSystem
                     {
                         card = new MenuCard(menuServicesKiosk, menu);
                         card.Margin = new Padding(20, 40, 20, 0);
+                        card.outOfOrder(menu.MaxOrder <= 0);
                         card.orderListEvent += (s, e) =>
                         {
                             try
@@ -200,8 +202,10 @@ namespace OrderingSystem
                 p.MaximumSize = new Size(flowMenu.Width - 40, 10000);
                 p.AutoSize = true;
                 p.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                if (c.CategoryName == cats.Last().CategoryName)
+                    p.Margin = new Padding(20, 20, 20, 40);
 
-                Title title = new Title(c.CategoryName);
+                Title title = new Title(c.CategoryName, c.CategoryImage);
                 title.BackColor = Color.Transparent;
 
                 p.Controls.Add(title);

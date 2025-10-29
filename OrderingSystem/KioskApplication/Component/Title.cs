@@ -6,7 +6,7 @@ namespace OrderingSystem.KioskApplication.Component
 {
     public partial class Title : Guna2Panel
     {
-        public Title(string title)
+        public Title(string title, Image img)
         {
             InitializeComponent();
             tt.Text = title;
@@ -15,7 +15,7 @@ namespace OrderingSystem.KioskApplication.Component
             BorderColor = Color.FromArgb(9, 119, 206);
             BackColor = Color.Transparent;
             FillColor = ColorTranslator.FromHtml("#689FF9");
-
+            im.Image = img;
             BorderThickness = 1;
         }
 

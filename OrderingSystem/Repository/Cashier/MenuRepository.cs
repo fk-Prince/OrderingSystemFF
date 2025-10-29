@@ -264,7 +264,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                     return true;
                 }
             }
-            catch (MySqlException ex)
+            catch (MySqlException)
             {
                 throw;
             }

@@ -40,12 +40,12 @@
             // 
             // menuName
             // 
-            this.menuName.AutoSize = true;
+            this.menuName.AutoEllipsis = true;
             this.menuName.BackColor = System.Drawing.Color.Transparent;
             this.menuName.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menuName.Location = new System.Drawing.Point(12, 9);
+            this.menuName.Location = new System.Drawing.Point(12, 68);
             this.menuName.Name = "menuName";
-            this.menuName.Size = new System.Drawing.Size(121, 25);
+            this.menuName.Size = new System.Drawing.Size(226, 25);
             this.menuName.TabIndex = 0;
             this.menuName.Text = "Menu Name";
             // 
@@ -53,9 +53,9 @@
             // 
             this.description.BackColor = System.Drawing.Color.Transparent;
             this.description.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.description.Location = new System.Drawing.Point(24, 114);
+            this.description.Location = new System.Drawing.Point(24, 124);
             this.description.Name = "description";
-            this.description.Size = new System.Drawing.Size(202, 59);
+            this.description.Size = new System.Drawing.Size(202, 57);
             this.description.TabIndex = 2;
             this.description.Text = "Descirption";
             this.description.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -66,9 +66,9 @@
             this.image.FillColor = System.Drawing.Color.Transparent;
             this.image.Image = ((System.Drawing.Image)(resources.GetObject("image.Image")));
             this.image.ImageRotate = 0F;
-            this.image.Location = new System.Drawing.Point(156, 12);
+            this.image.Location = new System.Drawing.Point(1, 4);
             this.image.Name = "image";
-            this.image.Size = new System.Drawing.Size(94, 89);
+            this.image.Size = new System.Drawing.Size(249, 61);
             this.image.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.image.TabIndex = 3;
             this.image.TabStop = false;
@@ -78,7 +78,7 @@
             // 
             this.price.BackColor = System.Drawing.Color.Transparent;
             this.price.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.price.Location = new System.Drawing.Point(13, 56);
+            this.price.Location = new System.Drawing.Point(13, 95);
             this.price.Name = "price";
             this.price.Size = new System.Drawing.Size(78, 21);
             this.price.TabIndex = 1;
@@ -113,7 +113,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ooo)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

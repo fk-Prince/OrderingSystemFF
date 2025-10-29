@@ -482,7 +482,6 @@ namespace OrderingSystem.Repository
             }
             return 0;
         }
-
         public int getMaxOrderRealTime2(int menuDetailId, int menu_id, List<MenuModel> orderList)
         {
             var db = DatabaseHandler.getInstance();
@@ -519,7 +518,6 @@ namespace OrderingSystem.Repository
             }
             return 0;
         }
-
         public bool getDetailCount(MenuModel menu)
         {
             var db = DatabaseHandler.getInstance();

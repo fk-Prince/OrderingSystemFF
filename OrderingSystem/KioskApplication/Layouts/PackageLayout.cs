@@ -48,7 +48,7 @@ namespace OrderingSystem.KioskApplication.Layouts
         }
         private void displayFlavor(MenuModel menuDetail)
         {
-
+            string t = "Select your menu.";
             titleOption = "Option A";
             subTitle = $"Select Flavor of your choice.";
             try
@@ -62,9 +62,7 @@ namespace OrderingSystem.KioskApplication.Layouts
                 if (menuDetail is MenuPackageModel mp)
                 {
                     if (mp.isFixed)
-                    {
                         x = menuDetails.Take(1).ToList();
-                    }
                 }
 
                 FlavorLayout fl = new FlavorLayout(x);
@@ -76,10 +74,16 @@ namespace OrderingSystem.KioskApplication.Layouts
                 fl.setSubTitle(subTitle);
                 fl.defaultSelection();
                 flowPanel.Controls.Add(fl);
-                adjustHeight();
                 titleOption = "Option B";
                 selectedFlavor = x[0];
-                filterSizeByFlavor(menuDetails, menuDetail.MenuId, menuDetail.FlavorName);
+
+                if (x.Count > 1)
+                {
+                    adjustHeight();
+                    filterSizeByFlavor(menuDetails, menuDetail.MenuId, menuDetail.FlavorName);
+                }
+                else
+                    fl.setSubTitle(t);
             }
             catch (Exception)
             {
@@ -135,26 +139,32 @@ namespace OrderingSystem.KioskApplication.Layouts
             }
 
 
-            subTitle = $"Select Size of your choice.";
-            sc = new SizeLayout(selectedFlavor, x);
-            sc.Margin = new Padding(0);
-            sc.BorderThickness = 0;
-            sc.BorderRadius = 0;
-            sc.setTitleOption(titleOption, menuList[0].MenuName);
-            sc.setSubTitle(subTitle);
-            sc.SizeSelected += (s, e) =>
+            if (x.Count > 1)
             {
-                selectedSize = e;
-                string flavorName = selectedFlavor?.FlavorName ?? "";
-                string sizeName = selectedSize?.SizeName ?? "";
-                if (flavorName == "" && sizeName == "") return;
+                subTitle = $"Select Size of your choice.";
+                sc = new SizeLayout(selectedFlavor, x);
+                sc.Margin = new Padding(0);
+                sc.BorderThickness = 0;
+                sc.BorderRadius = 0;
+                sc.setTitleOption(titleOption, menuList[0].MenuName);
+                sc.setSubTitle(subTitle);
+                sc.SizeSelected += (s, e) =>
+                {
+                    selectedSize = e;
+                    string flavorName = selectedFlavor?.FlavorName ?? "";
+                    string sizeName = selectedSize?.SizeName ?? "";
+                    if (flavorName == "" && sizeName == "") return;
+                    getSelectedMenu();
+                };
+                flowPanel.Controls.Add(sc);
+                sc.defaultSelection();
+                adjustHeight();
+            }
+            else
+            {
+                selectedSize = x[0];
                 getSelectedMenu();
-            };
-            flowPanel.Controls.Add(sc);
-            sc.defaultSelection();
-            adjustHeight();
-            selectedSize = x[0];
-            getSelectedMenu();
+            }
         }
         private void getSelectedMenu()
         {
@@ -171,7 +181,7 @@ namespace OrderingSystem.KioskApplication.Layouts
             }
 
             flowPanel.Height = totalHeight;
-            Height = totalHeight + 10;
+            Height = totalHeight + 20;
 
             PerformLayout();
             Parent?.PerformLayout();
@@ -188,7 +198,7 @@ namespace OrderingSystem.KioskApplication.Layouts
             }
 
             flowPanel.Height = heigt;
-            Height = heigt + 10;
+            Height = heigt + 20;
 
             PerformLayout();
             Parent?.PerformLayout();

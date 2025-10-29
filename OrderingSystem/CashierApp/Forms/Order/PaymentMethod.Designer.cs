@@ -169,6 +169,7 @@
             this.total.Size = new System.Drawing.Size(195, 27);
             this.total.TabIndex = 12;
             this.total.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.total.TextChanged += new System.EventHandler(this.total_TextChanged);
             // 
             // l2
             // 
@@ -203,7 +204,7 @@
             this.t2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.t2.Visible = false;
             // 
-            // zxc
+            // PaymentMethod
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
@@ -219,7 +220,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "zxc";
+            this.Name = "PaymentMethod";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PaymentMethod";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

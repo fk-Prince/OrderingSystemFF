@@ -12,10 +12,9 @@ namespace OrderingSystem.KioskApplication.Cards
     public partial class MenuCard : Guna2Panel
 
     {
-        private MenuModel menu;
-        private KioskMenuServices kioskMenuServices;
+        private readonly MenuModel menu;
+        private readonly KioskMenuServices kioskMenuServices;
         public event EventHandler<List<MenuModel>> orderListEvent;
-        private List<MenuModel> orderList;
 
         public MenuModel Menu => menu;
 
@@ -24,11 +23,14 @@ namespace OrderingSystem.KioskApplication.Cards
             InitializeComponent();
             this.kioskMenuServices = kioskMenuServices;
             this.menu = menu;
-            orderList = new List<MenuModel>();
             displayMenu();
             cardLayout();
         }
 
+        public void outOfOrder(bool b)
+        {
+            ooo.Visible = b;
+        }
         private void cardLayout()
         {
             ooo.Visible = !(menu.MaxOrder <= 0);
@@ -42,14 +44,8 @@ namespace OrderingSystem.KioskApplication.Cards
 
         private void menuClicked(object sender, EventArgs b)
         {
-            List<MenuModel> single = kioskMenuServices.getDetails(menu);
-            if (single.Count == 1)
-            {
-                single[0].PurchaseQty++;
-                orderListEvent?.Invoke(this, single);
-                return;
-            }
-            PopupOption popup = new PopupOption(kioskMenuServices, menu, orderList);
+
+            PopupOption popup = new PopupOption(kioskMenuServices, menu);
             popup.orderListEvent += (s, e) => orderListEvent?.Invoke(this, e);
             DialogResult res = popup.ShowDialog(this);
             if (res == DialogResult.OK)

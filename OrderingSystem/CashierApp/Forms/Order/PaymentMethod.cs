@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using OrderingSystem.CashierApp.Payment;
 using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication.Services;
+using OrderingSystem.Model;
 
 namespace OrderingSystem.CashierApp.Forms.Order
 {
     public partial class PaymentMethod : Form
     {
-        private string orderId;
+        private OrderModel om;
         private OrderServices orderServices;
 
         public PaymentMethod(OrderServices orderServices)
@@ -64,10 +66,8 @@ namespace OrderingSystem.CashierApp.Forms.Order
                 if (!isCashValid(t1.Text.ToString().Trim()) && t1.Visible)
                     throw new InvalidPayment("Cash amount is invalid.");
 
-
-
-                payment.calculateFee(double.Parse(total.Text));
-                bool suc = payment.processPayment(orderId, double.Parse(t1.Text));
+                payment.calculateFee(om.OrderItemList.Sum(ex => ex.getTotal()));
+                bool suc = payment.processPayment(om, double.Parse(t1.Text));
                 if (suc)
                 {
                     MessageBox.Show("Successfull Payment", "Payment Method", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -109,13 +109,11 @@ namespace OrderingSystem.CashierApp.Forms.Order
 
 
 
-        public void displayTotal(string text, string orderId)
+        public void setOrder(OrderModel om)
         {
-            total.Text = text;
-            this.orderId = orderId;
+            this.om = om;
+            total.Text = om.OrderItemList.Sum(e => e.getTotal()).ToString("N2");
         }
-
-
 
         private void t1_TextChanged(object sender, EventArgs e)
         {
@@ -123,6 +121,11 @@ namespace OrderingSystem.CashierApp.Forms.Order
             {
                 calculateChange(p);
             }
+        }
+
+        private void total_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

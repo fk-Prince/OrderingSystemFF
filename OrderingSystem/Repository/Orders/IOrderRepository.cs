@@ -11,7 +11,7 @@ namespace OrderingSystem.Repository
         OrderModel getOrders(string order_id);
         bool isOrderPayed(string order_id);
         bool saveNewOrder(OrderModel order);
-        bool payOrder(string order_id, int staff_id, string payment_method);
+        bool payOrder(OrderModel order, int staff_id, string payment_method);
         string getOrderId();
         List<string> getAvailablePayments();
 

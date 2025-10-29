@@ -18,6 +18,7 @@ namespace OrderingSystem.CashierApp.Forms
     {
         private DataTable table;
         private OrderModel om;
+        string orderId;
         private readonly OrderServices orderServices;
         private readonly IOrderRepository orderRepository;
 
@@ -33,45 +34,57 @@ namespace OrderingSystem.CashierApp.Forms
             table = new DataTable();
             table.Columns.Add("Order-ID");
             table.Columns.Add("Name");
+            table.Columns.Add("Note");
+            table.Columns.Add("Note Approval", typeof(bool));
             table.Columns.Add("Price");
             table.Columns.Add("Quantity");
             table.Columns.Add("Total Amount", typeof(string));
             dataGrid.DataSource = table;
+            dataGrid.Columns["Note Approval"].Width = 70;
+            DataGridViewCheckBoxColumn fx = new DataGridViewCheckBoxColumn();
+            fx.DataPropertyName = "Note Approval";
+            fx.HeaderText = "Note Approval";
+            dataGrid.CellValueChanged += (s, e) =>
+            {
+                if (e.ColumnIndex == dataGrid.Columns["Note Approval"].Index && e.RowIndex >= 0)
+                {
+                    bool approved = (bool)dataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    om.OrderItemList[e.RowIndex].NoteApproved = approved;
+                }
+            };
         }
 
         private void displayOrders()
         {
             try
             {
-                string orderId = txt.Text.Trim();
+                orderId = txt.Text.Trim();
                 om = orderServices.getAllOrders(orderId);
-                DialogResult = DialogResult.OK;
-                if (om.OrderList.Count > 0)
+
+
+
+
+                if (om.OrderItemList.Count > 0)
                 {
-
-                    foreach (var order in om.OrderList)
+                    foreach (var order in om.OrderItemList)
                     {
-                        DataRow row = table.NewRow();
-                        row["Order-ID"] = om.Order_id;
-                        row["Name"] = order.MenuName;
-                        row["Price"] = order.MenuPrice;
-                        row["Quantity"] = order.PurchaseQty;
-                        row["Total Amount"] = order.GetTotal();
-                        table.Rows.Add(row);
+                        table.Rows.Add(om.OrderId, order.MenuName, order.Note, order.NoteApproved, order.Price, order.PurchaseQty, order.getTotal());
                     }
-                    double subtotald = om.OrderList.Sum(o => o.MenuPrice * o.PurchaseQty);
-                    double couponRated = subtotald * om.CouponRate;
-                    double vatd = (subtotald - couponRated) * 0.12;
-                    double totald = (subtotald - couponRated) + vatd;
-
-                    double rated = om.CouponRate * 100;
-                    subtotal.Text = subtotald.ToString("N2");
-                    coupon.Text = couponRated.ToString("N2");
-                    rate.Text = rated != 0 ? rated.ToString() + "%" : "";
-                    vat.Text = vatd.ToString("N2");
-                    total.Text = totald.ToString("N2");
                 }
+
+                double subtotald = om.OrderItemList.Sum(o => o.getTotal());
+                double couponRated = subtotald * om.CouponRate;
+                double vatd = (subtotald - couponRated) * 0.12;
+                double totald = (subtotald - couponRated) + vatd;
+
+                double rated = om.CouponRate * 100;
+                subtotal.Text = subtotald.ToString("N2");
+                coupon.Text = couponRated.ToString("N2");
+                rate.Text = rated != 0 ? rated.ToString() + "%" : "";
+                vat.Text = vatd.ToString("N2");
+                total.Text = totald.ToString("N2");
             }
+
             catch (Exception ex) when (ex is OrderInvalid || ex is OrderNotFound)
             {
                 MessageBox.Show(ex.Message, "Order", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -93,17 +106,16 @@ namespace OrderingSystem.CashierApp.Forms
             coupon.Text = "0.00";
             vat.Text = "0.00";
             total.Text = "0.00";
-
         }
         private void cashPayment(object sender, System.EventArgs e)
         {
             PaymentMethod p = new PaymentMethod(orderServices);
-            p.displayTotal(total.Text, txt.Text.Trim());
+            p.setOrder(om);
             DialogResult rs = p.ShowDialog(this);
 
             if (rs == DialogResult.OK)
             {
-                Tuple<TimeSpan, string> xd = orderServices.getTimeInvoiceWaiting(om.Order_id);
+                Tuple<TimeSpan, string> xd = orderServices.getTimeInvoiceWaiting(om.OrderId);
                 OrderReceipt or = new OrderReceipt(om);
                 or.Message("Wait for your Order", xd.Item1.ToString(@"hh\:mm\:ss"), xd.Item2);
                 or.print();

@@ -15,7 +15,7 @@ namespace OrderingSystem.Receipt
         private int y = 180;
         private int x = 10;
         private static int lastRead = 0;
-        private List<MenuModel> menus;
+        private List<OrderItemModel> menus;
         private OrderModel om;
         private string message;
         private string invoice_id;
@@ -24,8 +24,8 @@ namespace OrderingSystem.Receipt
         public OrderReceipt(OrderModel om)
         {
             InitializeComponent();
-            this.orderId = om.Order_id;
-            this.menus = om.OrderList;
+            this.orderId = om.OrderId;
+            this.menus = om.OrderItemList;
             this.om = om;
         }
 
@@ -93,7 +93,7 @@ namespace OrderingSystem.Receipt
             Font mainFont = new Font("Segui UI", 9);
             for (int i = lastRead; i < menus.Count; i++)
             {
-                MenuModel a = menus[i];
+                OrderItemModel a = menus[i];
                 e.Graphics.DrawString(a.PurchaseQty.ToString(), mainFont, Brushes.Black, x, y);
                 e.Graphics.DrawLine(Pens.Black, x + 25, y - 30, x + 25, y + 30);
                 e.Graphics.DrawLine(Pens.Black, x + 310, y - 30, x + 310, y + 30);
@@ -101,23 +101,19 @@ namespace OrderingSystem.Receipt
                 e.Graphics.DrawString(a.MenuName, mainFont, Brushes.Black, x, y);
                 y += 15;
                 x += 30;
-                if (a is MenuModel)
-                {
-                    string va = a.SizeName?.ToLower().Trim() == a.FlavorName?.ToLower().Trim() ? a.SizeName : a.SizeName + " - " + a.FlavorName;
-                    e.Graphics.DrawString(va, mainFont, Brushes.Black, x, y);
-                }
+                string va = a.SizeName?.ToLower().Trim() == a.FlavorName?.ToLower().Trim() ? a.SizeName : a.SizeName + " - " + a.FlavorName;
+                e.Graphics.DrawString(va, mainFont, Brushes.Black, x, y);
                 x += 260;
-                e.Graphics.DrawString(a.GetTotal().ToString("N2"), mainFont, Brushes.Black, x, y);
-
+                e.Graphics.DrawString(a.getTotal().ToString("N2"), mainFont, Brushes.Black, x, y);
                 x = 10;
                 y += 35;
             }
 
             y += 20;
             SizeF size1;
-            double subtotald = menus.Sum(o => o.GetTotal());
-            double couponRated = menus.Sum(o => o.GetTotal() * om.CouponRate);
-            double vatd = menus.Sum(o => (o.GetTotal() - om.CouponRate) * 0.12);
+            double subtotald = menus.Sum(o => o.getTotal());
+            double couponRated = menus.Sum(o => o.getTotal() * om.CouponRate);
+            double vatd = menus.Sum(o => (o.getTotal() - om.CouponRate) * 0.12);
             double rated = om.CouponRate * 100;
             double totald = (subtotald - couponRated) + vatd;
 

@@ -41,9 +41,9 @@ namespace OrderingSystem.KioskApplication.Services
             }
             return orderRepository.getOrders(order_id); ;
         }
-        public bool payOrder(string order_id, int staff_id, string payment_method)
+        public bool payOrder(OrderModel order, int staff_id, string payment_method)
         {
-            return orderRepository.payOrder(order_id, staff_id, payment_method);
+            return orderRepository.payOrder(order, staff_id, payment_method);
         }
 
         public List<string> getAvailablePayments()
@@ -55,5 +55,7 @@ namespace OrderingSystem.KioskApplication.Services
         {
             return orderRepository.getTimeInvoiceWaiting(order_id);
         }
+
+
     }
 }

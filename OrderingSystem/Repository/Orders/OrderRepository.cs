@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using MySqlConnector;
+using Newtonsoft.Json;
 using OrderingSystem.DatabaseConnection;
 using OrderingSystem.Model;
 
@@ -67,7 +68,7 @@ namespace OrderingSystem.Repository.Order
         }
         public OrderModel getOrders(string order_id)
         {
-            List<MenuModel> orderList = new List<MenuModel>();
+            List<OrderItemModel> oim = new List<OrderItemModel>();
             var db = DatabaseHandler.getInstance();
             double couponRate = 0;
             string orderId = "";
@@ -83,14 +84,18 @@ namespace OrderingSystem.Repository.Order
                     {
                         while (reader.Read())
                         {
-                            MenuModel m = MenuModel.Builder()
+                            OrderItemModel m = OrderItemModel.Builder()
                                 .WithMenuName(reader.GetString("menu_name"))
                                 .WithFlavorName(reader.GetString("flavor_name"))
                                 .WithSizeName(reader.GetString("size_name"))
                                 .WithPurchaseQty(reader.GetInt32("quantity"))
                                 .WithPrice(reader.GetDouble("price"))
+                                .WithOrderItemId(reader.GetInt32("order_item_id"))
+                                .WithNote(reader.GetString("order_note"))
+                                .WithNoteApproved(reader.GetBoolean("note_approve"))
                                 .Build();
-                            orderList.Add(m);
+                            oim.Add(m);
+
                             if (string.IsNullOrEmpty(orderId))
                             {
                                 orderId = reader.GetString("order_id");
@@ -111,8 +116,8 @@ namespace OrderingSystem.Repository.Order
             }
             OrderModel om = OrderModel.Builder()
                                 .SetOrderId(orderId)
-                                .SetOrderList(orderList)
                                 .SetCouponRate(couponRate)
+                                .SetOrderItemModel(oim)
                                 .Build();
 
             return om;
@@ -129,13 +134,9 @@ namespace OrderingSystem.Repository.Order
                     Console.Write(order.JsonOrderList());
                     cmd.Parameters.AddWithValue("@p_json_orderList", order.JsonOrderList());
                     if (order.Coupon != null)
-                    {
                         cmd.Parameters.AddWithValue("@p_coupon_code", order.Coupon.CouponCode);
-                    }
                     else
-                    {
                         cmd.Parameters.AddWithValue("@p_coupon_code", DBNull.Value);
-                    }
                     cmd.ExecuteNonQuery();
                     return true;
                 }
@@ -149,7 +150,7 @@ namespace OrderingSystem.Repository.Order
                 db.closeConnection();
             }
         }
-        public bool payOrder(string order_id, int staff_id, string payment_method)
+        public bool payOrder(OrderModel order, int staff_id, string payment_method)
         {
             var db = DatabaseHandler.getInstance();
             try
@@ -158,7 +159,8 @@ namespace OrderingSystem.Repository.Order
                 using (var cmd = new MySqlCommand("p_Confirm_Payment", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@p_order_id ", order_id);
+                    string json = JsonConvert.SerializeObject(order);
+                    cmd.Parameters.AddWithValue("@p_order_json", json);
                     cmd.Parameters.AddWithValue("@p_staff_id", staff_id);
                     cmd.Parameters.AddWithValue("@p_payment_method ", payment_method);
                     cmd.ExecuteNonQuery();
@@ -257,7 +259,6 @@ namespace OrderingSystem.Repository.Order
                 db.closeConnection();
             }
         }
-
         public Tuple<TimeSpan, string> getTimeInvoiceWaiting(string order_id)
         {
             string query = @"

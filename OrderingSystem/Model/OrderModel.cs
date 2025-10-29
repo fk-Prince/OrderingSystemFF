@@ -6,22 +6,13 @@ namespace OrderingSystem.Model
     public class OrderModel
     {
         private string order_id;
-        private string menu_name;
-        private double totalPrice;
-        private double price;
-        private int quantity;
         private double couponRate;
-
-
+        public List<OrderItemModel> OrderItemList { get; set; }
         public List<MenuModel> OrderList { get; set; }
         public CouponModel Coupon { get; set; }
 
-        public string Order_id { get => order_id; }
-        public string Menu_name { get => menu_name; }
-        public double TotalPrice { get => totalPrice; }
-        public double PricePerQuantity { get => price; }
+        public string OrderId { get => order_id; }
         public double CouponRate { get => couponRate; }
-        public int Quantity { get => quantity; }
 
 
         public string JsonOrderList()
@@ -40,34 +31,28 @@ namespace OrderingSystem.Model
                 _order = new OrderModel();
             }
 
-            public OrderBuilder SetOrderList(List<MenuModel> list)
-            {
-                _order.OrderList = list;
-                return this;
-            }
-            public OrderBuilder SetCoupon(CouponModel c)
-            {
-                _order.Coupon = c;
-                return this;
-            }
+
             public OrderBuilder SetOrderId(string c)
             {
                 _order.order_id = c;
                 return this;
             }
-            public OrderBuilder SetMenuName(string c)
+            public OrderBuilder SetOrderItemModel(List<OrderItemModel> c)
             {
-                _order.menu_name = c;
+                _order.OrderItemList = c;
                 return this;
             }
-            public OrderBuilder SetTotalPrice(double c)
+            public OrderBuilder SetOrderList(List<MenuModel> c)
             {
-                _order.totalPrice = c;
+                _order.OrderList = c;
                 return this;
             }
-            public OrderBuilder SetPricePerQuantity(double c)
+
+
+
+            public OrderBuilder SetCoupon(CouponModel c)
             {
-                _order.price = c;
+                _order.Coupon = c;
                 return this;
             }
             public OrderBuilder SetCouponRate(double c)
@@ -75,11 +60,7 @@ namespace OrderingSystem.Model
                 _order.couponRate = c;
                 return this;
             }
-            public OrderBuilder SetQuantity(int c)
-            {
-                _order.quantity = c;
-                return this;
-            }
+
 
             public OrderModel Build()
             {
