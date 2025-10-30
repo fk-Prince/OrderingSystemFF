@@ -44,7 +44,6 @@ namespace OrderingSystem.KioskApplication.Cards
 
         private void menuClicked(object sender, EventArgs b)
         {
-
             PopupOption popup = new PopupOption(kioskMenuServices, menu);
             popup.orderListEvent += (s, e) => orderListEvent?.Invoke(this, e);
             DialogResult res = popup.ShowDialog(this);

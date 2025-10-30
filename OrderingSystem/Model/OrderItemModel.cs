@@ -4,13 +4,15 @@
     {
 
         public int OrderItemId { get; protected set; }
-        public string Note { get; protected set; }
+        //public string Note { get; protected set; }
         public string MenuName { get; protected set; }
         public int PurchaseQty { get; protected set; }
         public string SizeName { get; protected set; }
         public double Price { get; protected set; }
         public string FlavorName { get; protected set; }
-        public bool NoteApproved { get; set; }
+        //public bool NoteApproved { get; set; }
+
+        public MenuModel Menu { get; protected set; }
 
         public double getTotal()
         {
@@ -20,13 +22,13 @@
         public interface IOrderItemBuilder
         {
             OrderItemBuilder WithOrderItemId(int id);
-            OrderItemBuilder WithNote(string note);
+            //OrderItemBuilder WithNote(string note);
             OrderItemBuilder WithMenuName(string name);
             OrderItemBuilder WithPurchaseQty(int qty);
             OrderItemBuilder WithSizeName(string size);
             OrderItemBuilder WithPrice(double price);
             OrderItemBuilder WithFlavorName(string flavor);
-            OrderItemBuilder WithNoteApproved(bool approved);
+            //OrderItemBuilder WithNoteApproved(bool approved);
 
             OrderItemModel Build();
         }
@@ -56,17 +58,17 @@
                 return this;
             }
 
-            public OrderItemBuilder WithNote(string note)
-            {
-                oim.Note = note;
-                return this;
-            }
+            //public OrderItemBuilder WithNote(string note)
+            //{
+            //    oim.Note = note;
+            //    return this;
+            //}
 
-            public OrderItemBuilder WithNoteApproved(bool approved)
-            {
-                oim.NoteApproved = approved;
-                return this;
-            }
+            //public OrderItemBuilder WithNoteApproved(bool approved)
+            //{
+            //    oim.NoteApproved = approved;
+            //    return this;
+            //}
 
             public OrderItemBuilder WithOrderItemId(int id)
             {

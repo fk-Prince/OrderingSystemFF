@@ -83,7 +83,6 @@ namespace OrderingSystem.KioskApplication
                     if (menuOptions is IOrderNote iNo)
                     {
                         string ino = iNo.getNote;
-                        MessageBox.Show(ino);
                     }
 
                     var orders = menuOptions.confirmOrder();

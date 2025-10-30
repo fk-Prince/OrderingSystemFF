@@ -34,24 +34,24 @@ namespace OrderingSystem.CashierApp.Forms
             table = new DataTable();
             table.Columns.Add("Order-ID");
             table.Columns.Add("Name");
-            table.Columns.Add("Note");
-            table.Columns.Add("Note Approval", typeof(bool));
+            //table.Columns.Add("Note");
+            //table.Columns.Add("Note Approval", typeof(bool));
             table.Columns.Add("Price");
             table.Columns.Add("Quantity");
             table.Columns.Add("Total Amount", typeof(string));
             dataGrid.DataSource = table;
-            dataGrid.Columns["Note Approval"].Width = 70;
-            DataGridViewCheckBoxColumn fx = new DataGridViewCheckBoxColumn();
-            fx.DataPropertyName = "Note Approval";
-            fx.HeaderText = "Note Approval";
-            dataGrid.CellValueChanged += (s, e) =>
-            {
-                if (e.ColumnIndex == dataGrid.Columns["Note Approval"].Index && e.RowIndex >= 0)
-                {
-                    bool approved = (bool)dataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                    om.OrderItemList[e.RowIndex].NoteApproved = approved;
-                }
-            };
+            //dataGrid.Columns["Note Approval"].Width = 70;
+            //DataGridViewCheckBoxColumn fx = new DataGridViewCheckBoxColumn();
+            //fx.DataPropertyName = "Note Approval";
+            //fx.HeaderText = "Note Approval";
+            //dataGrid.CellValueChanged += (s, e) =>
+            //{
+            //    if (e.ColumnIndex == dataGrid.Columns["Note Approval"].Index && e.RowIndex >= 0)
+            //    {
+            //        bool approved = (bool)dataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+            //        om.OrderItemList[e.RowIndex].NoteApproved = approved;
+            //    }
+            //};
         }
 
         private void displayOrders()
@@ -60,17 +60,10 @@ namespace OrderingSystem.CashierApp.Forms
             {
                 orderId = txt.Text.Trim();
                 om = orderServices.getAllOrders(orderId);
-
-
-
-
                 if (om.OrderItemList.Count > 0)
-                {
                     foreach (var order in om.OrderItemList)
-                    {
-                        table.Rows.Add(om.OrderId, order.MenuName, order.Note, order.NoteApproved, order.Price, order.PurchaseQty, order.getTotal());
-                    }
-                }
+                        table.Rows.Add(om.OrderId, order.MenuName, order.Price, order.PurchaseQty, order.getTotal());
+                //table.Rows.Add(om.OrderId, order.MenuName, order.Note, order.NoteApproved, order.Price, order.PurchaseQty, order.getTotal());
 
                 double subtotald = om.OrderItemList.Sum(o => o.getTotal());
                 double couponRated = subtotald * om.CouponRate;

@@ -68,19 +68,26 @@ namespace OrderingSystem.KioskApplication.Options
             fl.setTitle(titleOption, menu.MenuName);
             fl.setSubTitle(subTitle);
             fl.defaultSelection();
-            flowPanel.Controls.Add(fl);
+            if (x.Count <= 1 && getSizeCount(menuDetails, menu.MenuId, x[0].FlavorName) > 1)
+                filterSizeByFlavor(menuDetails, menu.MenuId, "");
+            else
+            {
+                flowPanel.Controls.Add(fl);
+                fl.setSubTitle(t);
+            }
             titleOption = "Option B";
             selectedFlavor = x[0];
 
-            if (x.Count > 1)
-                filterSizeByFlavor(menuDetails, menu.MenuId, "");
-            else
-                fl.setSubTitle(t);
+
         }
         private void filterSizeByFlavor(List<MenuModel> menuDetails, int menuid, string flavor)
         {
             List<MenuModel> l = string.IsNullOrWhiteSpace(flavor) ? menuDetails.FindAll(x => menuid == x.MenuId) : menuDetails.FindAll(x => menuid == x.MenuId && x.FlavorName == flavor);
             displaySize(l);
+        }
+        public int getSizeCount(List<MenuModel> menuDetails, int menuid, string flavor)
+        {
+            return string.IsNullOrWhiteSpace(flavor) ? menuDetails.FindAll(x => menuid == x.MenuId).Count : menuDetails.FindAll(x => menuid == x.MenuId && x.FlavorName == flavor).Count;
         }
         private void flavorSelected(object sender, MenuModel e)
         {
@@ -124,7 +131,11 @@ namespace OrderingSystem.KioskApplication.Options
             if (selectedFlavor == null && selectedSize == null)
                 throw new NoSelectedMenu("No Selected Menu.");
 
-            var selectedMenu = menuDetails.FirstOrDefault(m => m.FlavorName == selectedFlavor.FlavorName && m.SizeName == selectedFlavor.SizeName);
+
+            var selectedMenu = menuDetails.FirstOrDefault(m =>
+                     m.FlavorName.Equals(selectedFlavor.FlavorName, StringComparison.OrdinalIgnoreCase) &&
+                     m.SizeName.Equals(selectedSize.SizeName, StringComparison.OrdinalIgnoreCase));
+
 
             if (selectedMenu.MaxOrder <= 0)
                 throw new OutOfOrder("This menu is out of order.");
@@ -152,9 +163,9 @@ namespace OrderingSystem.KioskApplication.Options
         }
         public void displayOrderNotice()
         {
-            n = new Note();
-            n.Margin = new Padding(20, 0, 0, 30);
-            flowPanel.Controls.Add(n);
+            //n = new Note();
+            //n.Margin = new Padding(20, 0, 0, 30);
+            //flowPanel.Controls.Add(n);
         }
     }
 }

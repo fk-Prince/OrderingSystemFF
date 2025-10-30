@@ -37,6 +37,7 @@ namespace OrderingSystem.Repository
                                 .WithPrice(reader.GetDouble("min_price"))
                                 .WithEstimatedTime(reader.GetTimeSpan("estimated_time"))
                                 .WithCategoryId(reader.GetInt32("category_id"))
+                                .WithMaxOrder(getMaxOrderRealTime(reader.GetInt32("menu_id"), orderList))
                                 .WithMenuImage(ImageHelper.GetImageFromBlob(reader, "menu"))
                                 .Build();
                             list.Add(menu);

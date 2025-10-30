@@ -91,8 +91,8 @@ namespace OrderingSystem.Repository.Order
                                 .WithPurchaseQty(reader.GetInt32("quantity"))
                                 .WithPrice(reader.GetDouble("price"))
                                 .WithOrderItemId(reader.GetInt32("order_item_id"))
-                                .WithNote(reader.GetString("order_note"))
-                                .WithNoteApproved(reader.GetBoolean("note_approve"))
+                                //.WithNote(reader.GetString("order_note"))
+                                //.WithNoteApproved(reader.GetBoolean("note_approve"))
                                 .Build();
                             oim.Add(m);
 
@@ -131,7 +131,6 @@ namespace OrderingSystem.Repository.Order
                 using (var cmd = new MySqlCommand("p_NewOrder", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    Console.Write(order.JsonOrderList());
                     cmd.Parameters.AddWithValue("@p_json_orderList", order.JsonOrderList());
                     if (order.Coupon != null)
                         cmd.Parameters.AddWithValue("@p_coupon_code", order.Coupon.CouponCode);
@@ -141,7 +140,7 @@ namespace OrderingSystem.Repository.Order
                     return true;
                 }
             }
-            catch (MySqlException)
+            catch (MySqlException ex)
             {
                 throw;
             }

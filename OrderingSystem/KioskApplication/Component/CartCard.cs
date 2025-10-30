@@ -33,12 +33,13 @@ namespace OrderingSystem.KioskApplication.Components
             price.Text = menu.getPrice().ToString("N2");
 
             string text = "";
-
             if (menu is MenuPackageModel p) text = "Package";
-            else if (menu.SizeName == menu.FlavorName) text = "Regular";
-            else text = "Flavor: " + menu.FlavorName + "   -   Size:" + menu.SizeName;
+            else if (menu.SizeName.ToLower() == menu.FlavorName.ToLower()) text = "Regular";
+            else if (menu.SizeName.ToLower() == "regular" || menu.FlavorName.ToLower() == "regular") text = menu.FlavorName.ToLower() == "regular" ? menu.SizeName : menu.FlavorName;
+            else text = "Flavor: " + menu.FlavorName + " - Size:" + menu.SizeName;
+
             image.Image = menu.MenuImage;
-            detail.Text = text;
+            detail.Text = "";
             qty.Text = menu.PurchaseQty.ToString();
             bb.Text = qty.Text;
             total.Text = (menu.getPrice() * menu.PurchaseQty).ToString("N2");

@@ -33,21 +33,11 @@ namespace OrderingSystem.Receipt
         {
             int baseHeight = 700;
             int rowHeight = 40;
-            int height = 0;
-            if (menus.Count > 1)
-            {
-                height = Math.Max(rowHeight * menus.Count + baseHeight, baseHeight);
-            }
-            else
-            {
-                height = baseHeight;
-            }
-
+            int height = menus.Count > 1 ? Math.Max(rowHeight * menus.Count + baseHeight, baseHeight) : baseHeight;
 
             PaperSize customSize = new PaperSize("Custom", 400, height);
             printDocument.DefaultPageSettings.PaperSize = customSize;
             printDocument.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
-
 
             printPreviewDialog.Document = printDocument;
             printPreviewDialog.WindowState = FormWindowState.Maximized;

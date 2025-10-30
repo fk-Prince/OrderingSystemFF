@@ -307,10 +307,12 @@ namespace OrderingSystem
                                 .SetOrderList(orderList)
                                 .SetCoupon(couponSelected)
                                 .Build();
+
                 bool suc = orderServices.confirmOrder(om);
                 if (suc)
                 {
-                    OrderReceipt or = new OrderReceipt(om);
+                    OrderModel x = orderServices.getAllOrders(orderId);
+                    OrderReceipt or = new OrderReceipt(x);
                     or.Message("Proceed to the cashier \n    Within 30minutes", DateTime.Now.AddMinutes(30).ToString("hh:mm:ss tt"), "");
                     or.print();
                     orderList.Clear();
