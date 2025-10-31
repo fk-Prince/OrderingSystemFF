@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using MySqlConnector;
@@ -174,6 +175,25 @@ namespace OrderingSystem.CashierApp.Forms.Menu
         private void pictureBox_Click(object sender, EventArgs e)
         {
             chooseImage();
+        }
+
+        private void menuPrice_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(menuPrice.Text))
+            {
+                l2.Text = "Price";
+                lp.Location = new Point(l2.Right + 2, lp.Location.Y);
+                return;
+            }
+            if (double.TryParse(menuPrice.Text.Trim(), out double d))
+            {
+                l2.Text = $"Price ( {d + (d * 0.12)} ) After Tax";
+            }
+            else
+            {
+                l2.Text = "Price";
+            }
+            lp.Location = new Point(l2.Right + 2, lp.Location.Y);
         }
     }
 }

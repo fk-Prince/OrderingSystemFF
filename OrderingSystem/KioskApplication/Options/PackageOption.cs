@@ -49,12 +49,12 @@ namespace OrderingSystem.KioskApplication.Options
             }
         }
 
-        public List<MenuModel> getFrequentlyOrdered()
+        public List<OrderItemModel> getFrequentlyOrdered()
         {
             return frequentlyOrderedOption?.getFrequentlyOrdered();
         }
 
-        public List<MenuModel> confirmOrder()
+        public List<OrderItemModel> confirmOrder()
         {
             try
             {
@@ -72,11 +72,13 @@ namespace OrderingSystem.KioskApplication.Options
                     .WithMenuImage(menu.MenuImage)
                     .WithMenuId(menu.MenuId)
                     .WithPackageIncluded(includedMenu)
+                    .WithDiscount(menu.Discount)
                     .WithEstimatedTime(menu.EstimatedTime)
                     .Build();
 
-                packageBundle.PurchaseQty++;
-                return new List<MenuModel> { packageBundle };
+                var om = OrderItemModel.Builder().WithPurchaseQty(1).WithPurchaseMenu(packageBundle).Build();
+
+                return new List<OrderItemModel> { om };
             }
             catch (Exception)
             {

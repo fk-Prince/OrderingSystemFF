@@ -48,7 +48,7 @@ namespace OrderingSystem.KioskApplication.Options
             }
         }
 
-        public List<MenuModel> getFrequentlyOrdered()
+        public List<OrderItemModel> getFrequentlyOrdered()
         {
             return fot?.getFrequentlyOrderList();
         }

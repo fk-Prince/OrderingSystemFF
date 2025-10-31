@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using OrderingSystem.Exceptions;
-using OrderingSystem.KioskApplication.Component;
 using OrderingSystem.KioskApplication.Components;
 using OrderingSystem.KioskApplication.Interface;
 using OrderingSystem.KioskApplication.Services;
@@ -18,7 +17,7 @@ namespace OrderingSystem.KioskApplication.Options
         private readonly FlowLayoutPanel flowPanel;
         private readonly FrequentlyOrderedOption frequentlyOrderedOption;
 
-        private Note n;
+        //private Note n;
         private SizeLayout sc;
         private MenuModel menu;
 
@@ -122,11 +121,11 @@ namespace OrderingSystem.KioskApplication.Options
                 selectedSize = x[0];
             }
         }
-        public List<MenuModel> getFrequentlyOrdered()
+        public List<OrderItemModel> getFrequentlyOrdered()
         {
             return frequentlyOrderedOption?.getFrequentlyOrdered();
         }
-        public List<MenuModel> confirmOrder()
+        public List<OrderItemModel> confirmOrder()
         {
             if (selectedFlavor == null && selectedSize == null)
                 throw new NoSelectedMenu("No Selected Menu.");
@@ -142,10 +141,10 @@ namespace OrderingSystem.KioskApplication.Options
 
             var purchaseMenu = getMenuPurchase(selectedMenu);
 
-            return new List<MenuModel> { purchaseMenu };
+            return new List<OrderItemModel> { purchaseMenu };
 
         }
-        public MenuModel getMenuPurchase(MenuModel selectedMenu)
+        public OrderItemModel getMenuPurchase(MenuModel selectedMenu)
         {
             var m = MenuModel.Builder()
                          .WithMenuName(selectedMenu.MenuName)
@@ -153,13 +152,18 @@ namespace OrderingSystem.KioskApplication.Options
                          .WithMenuDetailId(selectedMenu.MenuDetailId)
                          .WithEstimatedTime(selectedMenu.EstimatedTime)
                          .WithSizeName(selectedMenu.SizeName)
-                         .WithPurchaseNote(n?.txt.Text.Trim())
+                         //.WithPurchaseNote(n?.txt.Text.Trim())
                          .WithFlavorName(selectedMenu.FlavorName)
                          .WithMenuImage(selectedMenu.MenuImage)
-                         .WithPrice(selectedMenu.getPrice())
+                         .WithPrice(selectedMenu.MenuPrice)
+                         .WithDiscount(selectedMenu.Discount)
                          .Build();
-            m.PurchaseQty += 1;
-            return m;
+
+            OrderItemModel om = OrderItemModel.Builder()
+                         .WithPurchaseMenu(m)
+                         .WithPurchaseQty(1)
+                         .Build();
+            return om;
         }
         public void displayOrderNotice()
         {

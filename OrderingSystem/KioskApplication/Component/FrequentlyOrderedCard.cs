@@ -7,8 +7,8 @@ namespace OrderingSystem.KioskApplication.Components
     public partial class FrequentlyOrderedCard : Guna2Panel
     {
         private MenuModel menu;
-        public event EventHandler<MenuModel> checkedMenu;
-        public event EventHandler<MenuModel> unCheckedMenu;
+        public event EventHandler<OrderItemModel> checkedMenu;
+        public event EventHandler<OrderItemModel> unCheckedMenu;
 
         public FrequentlyOrderedCard(MenuModel menu)
         {
@@ -28,14 +28,20 @@ namespace OrderingSystem.KioskApplication.Components
                 {
                     BorderColor = Color.FromArgb(94, 148, 255);
                     BorderThickness = 2;
-                    menu.PurchaseQty++;
-                    checkedMenu.Invoke(this, menu);
+                    var om = OrderItemModel.Builder()
+                        .WithPurchaseMenu(menu)
+                        .WithPurchaseQty(1)
+                        .Build();
+                    checkedMenu.Invoke(this, om);
                 }
                 else
                 {
                     BorderColor = Color.DarkGray;
                     BorderThickness = 1;
-                    unCheckedMenu.Invoke(this, menu);
+                    var om = OrderItemModel.Builder()
+                        .WithPurchaseMenu(menu)
+                        .Build();
+                    unCheckedMenu.Invoke(this, om);
                     menu = null;
                 }
             };

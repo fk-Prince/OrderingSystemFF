@@ -109,6 +109,20 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
                 f9.title.Text = "Coupon";
                 f9.search.Visible = false;
             }
+            else if (fx is PopupForm f10 && type.ToLower() == "add-discount")
+            {
+                f10.title.Text = "Add Discount";
+                f10.l1.Text = "Discount Rate ( % )";
+                f10.l2.Text = "Discount Available until";
+                f10.t2.Visible = false;
+                f10.t3.Visible = false;
+                f10.t4.Visible = false;
+                f10.l3.Visible = false;
+                f10.l4.Visible = false;
+                f10.dt2.Visible = true;
+                f10.dt2.MinDate = DateTime.Now;
+            }
+
             return fx;
         }
     }

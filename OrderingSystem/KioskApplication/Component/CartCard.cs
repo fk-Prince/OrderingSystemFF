@@ -6,10 +6,10 @@ namespace OrderingSystem.KioskApplication.Components
 {
     public partial class CartCard : Guna2Panel
     {
-        private MenuModel menu;
-        public event EventHandler<MenuModel> addQuantityEvent;
-        public event EventHandler<MenuModel> deductQuantityEvent;
-        public CartCard(MenuModel menu)
+        public OrderItemModel menu;
+        public event EventHandler<OrderItemModel> addQuantityEvent;
+        public event EventHandler<OrderItemModel> deductQuantityEvent;
+        public CartCard(OrderItemModel menu)
         {
             InitializeComponent();
             this.menu = menu;
@@ -29,20 +29,20 @@ namespace OrderingSystem.KioskApplication.Components
         public void displayPurchasedMenu()
         {
 
-            menuName.Text = menu.MenuName;
-            price.Text = menu.getPrice().ToString("N2");
+            menuName.Text = menu.PurchaseMenu.MenuName;
+            price.Text = menu.PurchaseMenu.getPriceAfterVatWithDiscount().ToString("N2");
 
             string text = "";
-            if (menu is MenuPackageModel p) text = "Package";
-            else if (menu.SizeName.ToLower() == menu.FlavorName.ToLower()) text = "Regular";
-            else if (menu.SizeName.ToLower() == "regular" || menu.FlavorName.ToLower() == "regular") text = menu.FlavorName.ToLower() == "regular" ? menu.SizeName : menu.FlavorName;
-            else text = "Flavor: " + menu.FlavorName + " - Size:" + menu.SizeName;
+            if (menu.PurchaseMenu is MenuPackageModel p) text = "Package";
+            else if (menu.PurchaseMenu.SizeName.ToLower() == menu.PurchaseMenu.FlavorName.ToLower()) text = "Regular";
+            else if (menu.PurchaseMenu.SizeName.ToLower() == "regular" || menu.PurchaseMenu.FlavorName.ToLower() == "regular") text = menu.PurchaseMenu.FlavorName.ToLower() == "regular" ? menu.PurchaseMenu.SizeName : menu.PurchaseMenu.FlavorName;
+            else text = "Flavor: " + menu.PurchaseMenu.FlavorName + " - Size:" + menu.PurchaseMenu.SizeName;
 
-            image.Image = menu.MenuImage;
-            detail.Text = "";
+            image.Image = menu.PurchaseMenu.MenuImage;
+            detail.Text = text;
             qty.Text = menu.PurchaseQty.ToString();
             bb.Text = qty.Text;
-            total.Text = (menu.getPrice() * menu.PurchaseQty).ToString("N2");
+            total.Text = (menu.PurchaseMenu.getPriceAfterVatWithDiscount() * menu.PurchaseQty).ToString("N2");
         }
 
         private void addQuantity(object sender, System.EventArgs e)
@@ -55,13 +55,6 @@ namespace OrderingSystem.KioskApplication.Components
         {
             deductQuantityEvent.Invoke(this, menu);
             displayPurchasedMenu();
-        }
-
-
-
-        private void CartCard_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

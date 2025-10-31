@@ -45,9 +45,9 @@
             this.pictureBox = new Guna.UI2.WinForms.Guna2PictureBox();
             this.label15 = new System.Windows.Forms.Label();
             this.ingredientButton = new Guna.UI2.WinForms.Guna2Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.l2 = new System.Windows.Forms.Label();
             this.menuPrice = new Guna.UI2.WinForms.Guna2TextBox();
-            this.label11 = new System.Windows.Forms.Label();
+            this.lp = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.menuButton = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Button3 = new Guna.UI2.WinForms.Guna2Button();
@@ -303,17 +303,17 @@
             this.ingredientButton.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.ingredientButton.Click += new System.EventHandler(this.ingredientListButton);
             // 
-            // label2
+            // l2
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
-            this.label2.Location = new System.Drawing.Point(318, 109);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(33, 15);
-            this.label2.TabIndex = 69;
-            this.label2.Text = "Price";
+            this.l2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.l2.AutoSize = true;
+            this.l2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.l2.Location = new System.Drawing.Point(318, 109);
+            this.l2.Name = "l2";
+            this.l2.Size = new System.Drawing.Size(33, 15);
+            this.l2.TabIndex = 69;
+            this.l2.Text = "Price";
             // 
             // menuPrice
             // 
@@ -335,18 +335,19 @@
             this.menuPrice.SelectedText = "";
             this.menuPrice.Size = new System.Drawing.Size(253, 30);
             this.menuPrice.TabIndex = 68;
+            this.menuPrice.TextChanged += new System.EventHandler(this.menuPrice_TextChanged);
             // 
-            // label11
+            // lp
             // 
-            this.label11.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.IndianRed;
-            this.label11.Location = new System.Drawing.Point(347, 107);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(12, 13);
-            this.label11.TabIndex = 70;
-            this.label11.Text = "*";
+            this.lp.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lp.AutoSize = true;
+            this.lp.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lp.ForeColor = System.Drawing.Color.IndianRed;
+            this.lp.Location = new System.Drawing.Point(347, 107);
+            this.lp.Name = "lp";
+            this.lp.Size = new System.Drawing.Size(12, 13);
+            this.lp.TabIndex = 70;
+            this.lp.Text = "*";
             // 
             // label5
             // 
@@ -488,9 +489,9 @@
             this.Controls.Add(this.menuButton);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.ingredientButton);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.l2);
             this.Controls.Add(this.menuPrice);
-            this.Controls.Add(this.label11);
+            this.Controls.Add(this.lp);
             this.Controls.Add(this.estimatedTime);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label9);
@@ -535,9 +536,9 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label15;
         private Guna.UI2.WinForms.Guna2Button ingredientButton;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label l2;
         private Guna.UI2.WinForms.Guna2TextBox menuPrice;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label lp;
         private System.Windows.Forms.Label label5;
         private Guna.UI2.WinForms.Guna2Button menuButton;
         private Guna.UI2.WinForms.Guna2Button guna2Button3;

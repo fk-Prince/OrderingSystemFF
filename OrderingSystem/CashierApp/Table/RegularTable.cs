@@ -11,7 +11,7 @@ namespace OrderingSystem.CashierApp.Components
 {
     public partial class RegularTable : Form
     {
-        private readonly List<MenuModel> variants;
+        private List<MenuModel> variants;
         private DataTable table;
         private readonly IngredientServices ingredientServices;
 
@@ -31,7 +31,8 @@ namespace OrderingSystem.CashierApp.Components
             table.Columns.Add("Size");
             table.Columns.Add("Prep Estimated Time");
             table.Columns.Add("Price");
-            variants.ForEach(v => table.Rows.Add(v.FlavorName, v.SizeName, v.EstimatedTime, v.MenuPrice));
+            table.Columns.Add("Price After Tax / Discount");
+            variants.ForEach(v => table.Rows.Add(v.FlavorName, v.SizeName, v.EstimatedTime, v.MenuPrice, v.getPriceAfterVatWithDiscount().ToString("N2")));
             dataGrid.AutoGenerateColumns = false;
             dataGrid.DataSource = table;
 
@@ -70,6 +71,12 @@ namespace OrderingSystem.CashierApp.Components
             priceColumn.HeaderText = "Price";
             priceColumn.DataPropertyName = "Price";
             dataGrid.Columns.Add(priceColumn);
+
+            DataGridViewTextBoxColumn priceTaxColmn = new DataGridViewTextBoxColumn();
+            priceTaxColmn.Name = "Price After Tax / Discount";
+            priceTaxColmn.HeaderText = "Price After Tax / Discount";
+            priceTaxColmn.DataPropertyName = "Price After Tax / Discount";
+            dataGrid.Columns.Add(priceTaxColmn);
 
 
             DataGridViewButtonColumn ingredientsButtonColumn = new DataGridViewButtonColumn();
@@ -251,6 +258,38 @@ namespace OrderingSystem.CashierApp.Components
             return variants;
         }
 
+        public void refreshTable(List<MenuModel> variants)
+        {
+            this.variants = variants;
+
+            if (table != null)
+            {
+                table.Rows.Clear();
+            }
+            else
+            {
+                table = new DataTable();
+                table.Columns.Add("Flavor");
+                table.Columns.Add("Size");
+                table.Columns.Add("Prep Estimated Time");
+                table.Columns.Add("Price");
+                table.Columns.Add("Price After Tax / Discount");
+            }
+
+            foreach (var v in variants)
+            {
+                table.Rows.Add(
+                    v.FlavorName,
+                    v.SizeName,
+                    v.EstimatedTime,
+                    v.MenuPrice,
+                    v.getPriceAfterVatWithDiscount().ToString("N2")
+                );
+            }
+
+            dataGrid.DataSource = null;
+            dataGrid.DataSource = table;
+        }
 
     }
 }

@@ -17,6 +17,7 @@ namespace OrderingSystem.Model
             MenuPackageBuilder WithMenuImageByte(byte[] image);
             MenuPackageBuilder isAvailable(bool x);
             MenuPackageBuilder WithEstimatedTime(TimeSpan ts);
+            MenuPackageBuilder WithDiscount(DiscountModel ts);
             MenuPackageBuilder WithQuantity(int ts);
             MenuPackageBuilder WithPackageId(int ts);
             MenuPackageBuilder WithPackageIncluded(List<MenuModel> included);
@@ -71,7 +72,6 @@ namespace OrderingSystem.Model
             {
                 return _menuModel;
             }
-
 
             public MenuPackageBuilder WithCategory(CategoryModel category)
             {
@@ -164,6 +164,12 @@ namespace OrderingSystem.Model
             public MenuPackageBuilder isAvailable(bool ts)
             {
                 _menuModel.isAvailable = ts;
+                return this;
+            }
+
+            public MenuPackageBuilder WithDiscount(DiscountModel ts)
+            {
+                _menuModel.Discount = ts;
                 return this;
             }
         }

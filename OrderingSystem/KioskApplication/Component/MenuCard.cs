@@ -14,9 +14,7 @@ namespace OrderingSystem.KioskApplication.Cards
     {
         private readonly MenuModel menu;
         private readonly KioskMenuServices kioskMenuServices;
-        public event EventHandler<List<MenuModel>> orderListEvent;
-
-        public MenuModel Menu => menu;
+        public event EventHandler<List<OrderItemModel>> orderListEvent;
 
         public MenuCard(KioskMenuServices kioskMenuServices, MenuModel menu)
         {
@@ -33,6 +31,11 @@ namespace OrderingSystem.KioskApplication.Cards
         }
         private void cardLayout()
         {
+            dPrice.Text = menu.getPriceAfterVat() != menu.getPriceAfterVatWithDiscount() ? menu.getPriceAfterVatWithDiscount().ToString("C", new CultureInfo("en-PH")) : "0.00";
+            dPrice.Visible = menu.getPriceAfterVatWithDiscount() != menu.getPriceAfterVat();
+            v1.Visible = menu.getPriceAfterVatWithDiscount() != menu.getPriceAfterVat();
+            v2.Visible = menu.getPriceAfterVatWithDiscount() != menu.getPriceAfterVat();
+
             ooo.Visible = !(menu.MaxOrder <= 0);
             BorderRadius = 8;
             BorderThickness = 1;
@@ -41,7 +44,6 @@ namespace OrderingSystem.KioskApplication.Cards
             handleClicked(this);
             hoverEffects(this);
         }
-
         private void menuClicked(object sender, EventArgs b)
         {
             PopupOption popup = new PopupOption(kioskMenuServices, menu);
@@ -67,12 +69,14 @@ namespace OrderingSystem.KioskApplication.Cards
         private void displayMenu()
         {
             menuName.Text = menu.MenuName;
-            price.Text = menu.MenuPrice.ToString("C", new CultureInfo("en-PH"));
+            price.Text = menu.getPriceAfterVat().ToString("C", new CultureInfo("en-PH"));
             image.Image = menu.MenuImage;
             description.Text = menu.MenuDescription;
             menuName.ForeColor = Color.Black;
             price.ForeColor = Color.Black;
             description.ForeColor = Color.Black;
         }
+
+
     }
 }

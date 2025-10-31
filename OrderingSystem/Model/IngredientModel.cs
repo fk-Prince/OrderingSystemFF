@@ -18,7 +18,6 @@
             IngredientBuilder SetIngredient_id(int ingredient_id);
             IngredientBuilder SetIngredientQuantity(int ingredientQuantity);
             IngredientBuilder SetIngredientUnit(string ingredientUnit);
-
             IngredientModel Build();
         }
 

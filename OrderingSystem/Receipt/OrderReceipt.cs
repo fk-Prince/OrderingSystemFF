@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Windows.Forms;
+using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.Model;
 
 namespace OrderingSystem.Receipt
@@ -11,12 +12,12 @@ namespace OrderingSystem.Receipt
     public partial class OrderReceipt : Form
     {
         private Image image = Properties.Resources.bloopandas;
-        private string orderId;
-        private int y = 180;
+        private readonly string orderId;
+        private readonly List<OrderItemModel> menus;
+        private readonly OrderModel om;
+
+        private int y = 170;
         private int x = 10;
-        private static int lastRead = 0;
-        private List<OrderItemModel> menus;
-        private OrderModel om;
         private string message;
         private string invoice_id;
         private string estimated_date;
@@ -59,12 +60,15 @@ namespace OrderingSystem.Receipt
             e.Graphics.DrawString("Poblacion District, Davao City", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, 15, 80);
             if (!string.IsNullOrWhiteSpace(invoice_id))
             {
+                e.Graphics.DrawString("Cashier Name.: ", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, 15, y);
+                e.Graphics.DrawString(SessionStaffData.getFullName(), new Font("Segui UI", 9, FontStyle.Regular | FontStyle.Underline), Brushes.Black, 90, y);
+                y += 20;
                 e.Graphics.DrawString("Invoice ID.: ", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, 15, y);
                 e.Graphics.DrawString(invoice_id.ToString(), new Font("Segui UI", 9, FontStyle.Regular | FontStyle.Underline), Brushes.Black, 90, y);
             }
             y += 20;
             e.Graphics.DrawString("Order No.: ", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, 15, y);
-            e.Graphics.DrawString(orderId.ToString(), new Font("Segui UI", 9, FontStyle.Regular | FontStyle.Underline), Brushes.Black, 90, y);
+            e.Graphics.DrawString(orderId.ToString(), new Font("Segui UI", 9, FontStyle.Regular | FontStyle.Underline | FontStyle.Bold), Brushes.Black, 90, y);
             y += 50;
 
             e.Graphics.DrawLine(Pens.Black, x + 25, y, x + 25, y + 20);
@@ -81,52 +85,64 @@ namespace OrderingSystem.Receipt
             Brush brush = Brushes.Black;
             Graphics graphics = Graphics.FromHwnd(IntPtr.Zero);
             Font mainFont = new Font("Segui UI", 9);
-            for (int i = lastRead; i < menus.Count; i++)
+            int line = y + 30;
+            for (int i = 0; i < menus.Count; i++)
             {
                 OrderItemModel a = menus[i];
                 e.Graphics.DrawString(a.PurchaseQty.ToString(), mainFont, Brushes.Black, x, y);
-                e.Graphics.DrawLine(Pens.Black, x + 25, y - 30, x + 25, y + 30);
-                e.Graphics.DrawLine(Pens.Black, x + 310, y - 30, x + 310, y + 30);
+                e.Graphics.DrawLine(Pens.Black, x + 25, y - 30, x + 25, line);
+                e.Graphics.DrawLine(Pens.Black, x + 310, y - 30, x + 310, line);
                 x += 30;
-                e.Graphics.DrawString(a.MenuName, mainFont, Brushes.Black, x, y);
+                e.Graphics.DrawString(a.PurchaseMenu.MenuName, mainFont, Brushes.Black, x, y);
                 y += 15;
                 x += 30;
-                string va = a.SizeName?.ToLower().Trim() == a.FlavorName?.ToLower().Trim() ? a.SizeName : a.SizeName + " - " + a.FlavorName;
+                string va = a.PurchaseMenu.SizeName?.ToLower().Trim() == a.PurchaseMenu.FlavorName?.ToLower().Trim() ? "( " + a.PurchaseMenu.SizeName + " )" : "( " + a.PurchaseMenu.SizeName + " - " + a.PurchaseMenu.FlavorName + " )";
                 e.Graphics.DrawString(va, mainFont, Brushes.Black, x, y);
                 x += 260;
-                e.Graphics.DrawString(a.getTotal().ToString("N2"), mainFont, Brushes.Black, x, y);
+                e.Graphics.DrawString(a.getSubtotal().ToString("N2"), mainFont, Brushes.Black, x, y);
                 x = 10;
                 y += 35;
+                line = y + 50;
+
             }
 
             y += 20;
             SizeF size1;
-            double subtotald = menus.Sum(o => o.getTotal());
-            double couponRated = menus.Sum(o => o.getTotal() * om.CouponRate);
-            double vatd = menus.Sum(o => (o.getTotal() - om.CouponRate) * 0.12);
-            double rated = om.CouponRate * 100;
-            double totald = (subtotald - couponRated) + vatd;
+            double subtotald = menus.Sum(o => o.getSubtotal());
+            double couponRated = subtotald * (om.Coupon == null ? 0 : om.Coupon.CouponRate);
+            double vatd = menus.Sum(o => (subtotald - couponRated) * 0.12);
+            double withoutVat = menus.Sum(o => o.PurchaseMenu.MenuPrice * o.PurchaseQty);
+            double totald = (subtotald - couponRated);
 
             int y1 = y;
 
             e.Graphics.DrawString("Subtotal", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
             y += 20;
-            e.Graphics.DrawString("Discount Rate", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
+            e.Graphics.DrawString("Coupon Rate", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
             y += 20;
-            e.Graphics.DrawString("VAT", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
+            e.Graphics.DrawString("Less 12% VAT", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
             y += 20;
-            e.Graphics.DrawString("Total Amount", new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular), Brushes.Black, x, y);
+            e.Graphics.DrawString("Sales without VAT", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
+            y += 20;
+            e.Graphics.DrawString("Total Amount Due", new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular), Brushes.Black, x, y);
 
 
             x += 360;
             size1 = graphics.MeasureString(subtotald.ToString("N2"), mainFont);
             e.Graphics.DrawString(subtotald.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
+
             y1 += 20;
             size1 = graphics.MeasureString(couponRated.ToString("N2"), mainFont);
             e.Graphics.DrawString(couponRated.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
+
             y1 += 20;
             size1 = graphics.MeasureString(vatd.ToString("N2"), mainFont);
             e.Graphics.DrawString(vatd.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
+
+            y1 += 20;
+            size1 = graphics.MeasureString(withoutVat.ToString("N2"), mainFont);
+            e.Graphics.DrawString(withoutVat.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
+
             y1 += 20;
             size1 = graphics.MeasureString(totald.ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular));
             e.Graphics.DrawString(totald.ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular), Brushes.Black, x - size1.Width, y1);

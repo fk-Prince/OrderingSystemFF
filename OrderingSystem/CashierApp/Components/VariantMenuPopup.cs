@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -130,6 +131,25 @@ namespace OrderingSystem.CashierApp.Forms.Menu
             im.Dock = DockStyle.Fill;
             mm.Controls.Add(im);
             im.Show();
+        }
+
+        private void menuPrice_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(menuPrice.Text))
+            {
+                p.Text = "Price";
+                lp.Location = new Point(p.Right + 5, lp.Location.Y);
+                return;
+            }
+            if (double.TryParse(menuPrice.Text.Trim(), out double d))
+            {
+                p.Text = $"Price ( {d + (d * 0.12)} ) After Tax";
+            }
+            else
+            {
+                p.Text = "Price";
+            }
+            lp.Location = new Point(p.Right + 5, lp.Location.Y);
         }
     }
 }

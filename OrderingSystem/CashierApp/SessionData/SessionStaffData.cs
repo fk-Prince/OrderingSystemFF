@@ -13,5 +13,8 @@ namespace OrderingSystem.CashierApp.SessionData
         public static string Role { get; set; }
         public static Image Image { get; set; }
 
+
+        public static string getFullName() => $"{FirstName.Substring(0, 1) + FirstName.Substring(1)}  {LastName.Substring(0, 1) + LastName.Substring(1)}";
+
     }
 }

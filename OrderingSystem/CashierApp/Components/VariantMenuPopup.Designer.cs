@@ -34,9 +34,9 @@
             this.cmbFlavor = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.p = new System.Windows.Forms.Label();
             this.menuPrice = new Guna.UI2.WinForms.Guna2TextBox();
-            this.label11 = new System.Windows.Forms.Label();
+            this.lp = new System.Windows.Forms.Label();
             this.guna2BorderlessForm2 = new Guna.UI2.WinForms.Guna2BorderlessForm(this.components);
             this.label13 = new System.Windows.Forms.Label();
             this.estimatedTime = new Guna.UI2.WinForms.Guna2TextBox();
@@ -100,17 +100,17 @@
             this.label5.TabIndex = 63;
             this.label5.Text = "Flavor";
             // 
-            // label2
+            // p
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
-            this.label2.Location = new System.Drawing.Point(289, 93);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(33, 15);
-            this.label2.TabIndex = 62;
-            this.label2.Text = "Price";
+            this.p.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.p.AutoSize = true;
+            this.p.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.p.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.p.Location = new System.Drawing.Point(289, 93);
+            this.p.Name = "p";
+            this.p.Size = new System.Drawing.Size(33, 15);
+            this.p.TabIndex = 62;
+            this.p.Text = "Price";
             // 
             // menuPrice
             // 
@@ -132,19 +132,20 @@
             this.menuPrice.SelectedText = "";
             this.menuPrice.Size = new System.Drawing.Size(110, 25);
             this.menuPrice.TabIndex = 61;
+            this.menuPrice.TextChanged += new System.EventHandler(this.menuPrice_TextChanged);
             this.menuPrice.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
             // 
-            // label11
+            // lp
             // 
-            this.label11.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.IndianRed;
-            this.label11.Location = new System.Drawing.Point(321, 93);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(12, 13);
-            this.label11.TabIndex = 65;
-            this.label11.Text = "*";
+            this.lp.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lp.AutoSize = true;
+            this.lp.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lp.ForeColor = System.Drawing.Color.IndianRed;
+            this.lp.Location = new System.Drawing.Point(321, 93);
+            this.lp.Name = "lp";
+            this.lp.Size = new System.Drawing.Size(12, 13);
+            this.lp.TabIndex = 65;
+            this.lp.Text = "*";
             // 
             // guna2BorderlessForm2
             // 
@@ -240,9 +241,9 @@
             this.Controls.Add(this.cmbFlavor);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.p);
             this.Controls.Add(this.menuPrice);
-            this.Controls.Add(this.label11);
+            this.Controls.Add(this.lp);
             this.Controls.Add(this.guna2PictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "VariantMenuPopup";
@@ -262,9 +263,9 @@
         private System.Windows.Forms.ComboBox cmbFlavor;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label p;
         private Guna.UI2.WinForms.Guna2TextBox menuPrice;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label lp;
         private Guna.UI2.WinForms.Guna2BorderlessForm guna2BorderlessForm2;
         private System.Windows.Forms.Label label13;
         private Guna.UI2.WinForms.Guna2TextBox estimatedTime;

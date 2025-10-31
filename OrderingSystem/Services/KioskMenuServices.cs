@@ -18,7 +18,7 @@ namespace OrderingSystem.Services
             return menuRepository.getMenu();
         }
 
-        public int getMaxOrderRealTime(int menuDetailId, List<MenuModel> orderList)
+        public int getMaxOrderRealTime(int menuDetailId, List<OrderItemModel> orderList)
         {
             return menuRepository.getMaxOrderRealTime(menuDetailId, orderList);
         }

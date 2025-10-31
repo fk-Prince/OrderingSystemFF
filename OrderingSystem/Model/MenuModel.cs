@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using OrderingSystem.KioskApplication.Interface;
 
 namespace OrderingSystem.Model
 {
@@ -20,12 +21,12 @@ namespace OrderingSystem.Model
         public Image MenuImage { get; protected set; }
         public byte[] MenuImageByte { get; protected set; }
         public int MenuDetailId { get; protected set; }
-        public int PurchaseQty { get; set; }
         public string PurchaseNote { get; protected set; }
         public int CategoryId { get; protected set; }
         public double MenuPrice { get; protected set; }
         public int MaxOrder { get; protected set; }
         public CategoryModel Category { get; protected set; }
+        public DiscountModel Discount { get; protected set; }
         public override bool Equals(object obj)
         {
             if (obj is MenuModel menu)
@@ -44,6 +45,7 @@ namespace OrderingSystem.Model
             MenuBuilder WithIngredients(List<IngredientModel> ing);
             MenuBuilder WithVariant(List<MenuModel> m);
             MenuBuilder WithEstimatedTime(TimeSpan ts);
+            MenuBuilder WithDiscount(DiscountModel ts);
             MenuBuilder isAvailable(bool ts);
             MenuBuilder WithCategory(CategoryModel cat);
             MenuBuilder WithCategoryId(int cat);
@@ -51,9 +53,8 @@ namespace OrderingSystem.Model
             MenuBuilder WithMenuImageByte(byte[] image);
             MenuBuilder WithMenuId(int menuId);
             MenuBuilder WithMaxOrder(int menuId);
-            MenuBuilder WithPurchaseQty(int p);
             MenuBuilder WithMenuName(string menuName);
-            MenuBuilder WithCategoryName(string n); //
+            MenuBuilder WithCategoryName(string n);
             MenuBuilder WithFlavorName(string menuName);
             MenuBuilder WithPurchaseNote(string note);
             MenuBuilder WithSizeName(string menuName);
@@ -65,12 +66,21 @@ namespace OrderingSystem.Model
         public static MenuBuilder Builder() => new MenuBuilder();
         public double getPrice()
         {
-            return MenuPrice;
+            return MenuPrice - (MenuPrice * (Discount == null ? 0 : Discount.Rate));
         }
-        public double GetTotal()
+
+        public double getPriceAfterVat()
         {
-            return MenuPrice * PurchaseQty;
+            return CalculateVat.VatCalulator(MenuPrice);
         }
+
+        public double getPriceAfterVatWithDiscount()
+        {
+            return CalculateVat.VatCalulator(MenuPrice - (MenuPrice * (Discount == null ? 0 : Discount.Rate)));
+        }
+
+
+
 
         public MenuModel Clone()
         {
@@ -90,7 +100,6 @@ namespace OrderingSystem.Model
                 .WithMenuImageByte(MenuImageByte)
                 .WithIngredients(MenuIngredients != null ? new List<IngredientModel>(MenuIngredients) : null)
                 .WithVariant(MenuVariant != null ? new List<MenuModel>(MenuVariant.Select(v => v.Clone())) : null)
-                .WithPurchaseQty(PurchaseQty)
                 .WithCategoryName(CategoryName)
                 .WithMaxOrder(MaxOrder)
                 .isAvailable(isAvailable)
@@ -195,12 +204,6 @@ namespace OrderingSystem.Model
                 return this;
             }
 
-            public MenuBuilder WithPurchaseQty(int p)
-            {
-                _menuModel.PurchaseQty = p;
-                return this;
-            }
-
             public MenuBuilder isAvailable(bool ts)
             {
                 _menuModel.isAvailable = ts;
@@ -210,6 +213,12 @@ namespace OrderingSystem.Model
             public MenuBuilder WithPurchaseNote(string note)
             {
                 _menuModel.PurchaseNote = note;
+                return this;
+            }
+
+            public MenuBuilder WithDiscount(DiscountModel ts)
+            {
+                _menuModel.Discount = ts;
                 return this;
             }
         }

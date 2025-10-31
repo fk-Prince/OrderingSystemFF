@@ -9,11 +9,11 @@ namespace OrderingSystem.KioskApplication
     public partial class FrequentlyOrderedLayout : Guna2Panel
     {
 
-        private List<MenuModel> checkList;
+        private List<OrderItemModel> checkList;
         public FrequentlyOrderedLayout(List<MenuModel> menus)
         {
             InitializeComponent();
-            checkList = new List<MenuModel>();
+            checkList = new List<OrderItemModel>();
 
             BorderRadius = 8;
             BorderColor = Color.LightGray;
@@ -40,7 +40,7 @@ namespace OrderingSystem.KioskApplication
             }
         }
 
-        public List<MenuModel> getFrequentlyOrderList()
+        public List<OrderItemModel> getFrequentlyOrderList()
         {
             return checkList;
         }

@@ -11,8 +11,8 @@ namespace OrderingSystem.Repository
 {
     public class KioskMenuRepository : IKioskMenuRepository
     {
-        private List<MenuModel> orderList;
-        public KioskMenuRepository(List<MenuModel> orderList)
+        private List<OrderItemModel> orderList;
+        public KioskMenuRepository(List<OrderItemModel> orderList)
         {
             this.orderList = orderList;
         }
@@ -29,6 +29,10 @@ namespace OrderingSystem.Repository
                     {
                         while (reader.Read())
                         {
+                            DiscountModel dm = DiscountModel.Builder()
+                                .WithDiscountId(reader.GetInt32("discount_id"))
+                                .WithRate(reader.GetDouble("rate"))
+                                .Build();
                             var menu = MenuModel.Builder()
                                 .WithMenuId(reader.GetInt32("menu_id"))
                                 .WithMenuName(reader.GetString("menu_name"))
@@ -39,6 +43,7 @@ namespace OrderingSystem.Repository
                                 .WithCategoryId(reader.GetInt32("category_id"))
                                 .WithMaxOrder(getMaxOrderRealTime(reader.GetInt32("menu_id"), orderList))
                                 .WithMenuImage(ImageHelper.GetImageFromBlob(reader, "menu"))
+                                .WithDiscount(dm)
                                 .Build();
                             list.Add(menu);
                         }
@@ -63,31 +68,42 @@ namespace OrderingSystem.Repository
             try
             {
                 var conn = db.getConnection();
-                string query = @"                        
-                                  SELECT 
-                                      md.menu_id,
-                                      m.menu_name,
-                                      m.image,
-                                      md.menu_detail_id,
-                                      md.price,
-                                      md.flavor_name,
-                                      md.size_name,
-                                      md.estimated_time
-                                  FROM menu m
-                                  LEFT JOIN category c ON m.category_id = c.category_id
-                                  LEFT JOIN menu_detail md ON m.menu_id = md.menu_id 
-                                  WHERE m.isAvailable = 'Yes' 
+                //string query = @"                        
+                //                  SELECT 
+                //                      md.menu_id,
+                //                      m.menu_name,
+                //                      m.image,
+                //                      md.menu_detail_id,
+                //                      md.price,
+                //                      md.flavor_name,
+                //                      md.size_name,
+                //                      md.estimated_time
+                //                  FROM menu m
+                //                  LEFT JOIN category c ON m.category_id = c.category_id
+                //                  LEFT JOIN menu_detail md ON m.menu_id = md.menu_id 
+                //                  WHERE m.isAvailable = 'Yes' 
+                //                    AND m.menu_id = @menu_id
+                //                    AND md.menu_detail_id NOT IN (SELECT from_menu_detail_id FROM menu_package)
+                //                  ORDER BY md.price ASC;
+                //     ";
+                string query1 = @"
+                                    SELECT * FROM view_menu_details m 
+                                    WHERE m.isAvailable = 'Yes' 
                                     AND m.menu_id = @menu_id
-                                    AND md.menu_detail_id NOT IN (SELECT from_menu_detail_id FROM menu_package)
-                                  ORDER BY md.price ASC;
-                     ";
-                using (var cmd = new MySqlCommand(query, conn))
+                                    AND m.menu_detail_id NOT IN (SELECT from_menu_detail_id FROM menu_package)
+                                    ORDER BY m.price ASC
+                                    ";
+                using (var cmd = new MySqlCommand(query1, conn))
                 {
                     cmd.Parameters.AddWithValue("@menu_id", menu.MenuId);
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
+                            DiscountModel dm = DiscountModel.Builder()
+                                .WithDiscountId(reader.GetInt32("discount_id"))
+                                .WithRate(reader.GetDouble("rate"))
+                                .Build();
                             int maxOrder = getMaxOrderRealTime(reader.GetInt32("menu_detail_id"), orderList);
                             mds.Add(MenuModel.Builder()
                                 .WithMenuId(reader.GetInt32("menu_id"))
@@ -99,6 +115,7 @@ namespace OrderingSystem.Repository
                                 .WithMaxOrder(maxOrder)
                                 .WithFlavorName(reader.GetString("flavor_name"))
                                 .WithSizeName(reader.GetString("size_name"))
+                                .WithDiscount(dm)
                                 .Build());
                         }
                     }
@@ -115,41 +132,6 @@ namespace OrderingSystem.Repository
                 db.closeConnection();
             }
             return mds;
-        }
-        public int getMaxOrderRealTime(int menu_id, List<MenuModel> orderList)
-        {
-            var db = DatabaseHandler.getInstance();
-            try
-            {
-                var conn = db.getConnection();
-
-                using (var cmd = new MySqlCommand("p_menu_max_order", conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    string json = JsonConvert.SerializeObject(orderList);
-                    cmd.Parameters.AddWithValue("@p_menu_detail_id", menu_id);
-                    cmd.Parameters.AddWithValue("@p_json", json);
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            return reader.GetInt32("max_order");
-                        }
-                    }
-                }
-            }
-            catch (MySqlException)
-            {
-
-                Console.WriteLine("error on getMaxOrderRealTime");
-                throw;
-            }
-            finally
-            {
-                db.closeConnection();
-            }
-            return 0;
         }
         public bool isMenuPackage(MenuModel menu)
         {
@@ -483,7 +465,7 @@ namespace OrderingSystem.Repository
             }
             return 0;
         }
-        public int getMaxOrderRealTime2(int menuDetailId, int menu_id, List<MenuModel> orderList)
+        public int getMaxOrderRealTime2(int menuDetailId, int menu_id, List<OrderItemModel> orderList)
         {
             var db = DatabaseHandler.getInstance();
             try
@@ -496,6 +478,41 @@ namespace OrderingSystem.Repository
                     string json = JsonConvert.SerializeObject(orderList);
                     cmd.Parameters.AddWithValue("@p_menu_detail_id", menuDetailId);
                     cmd.Parameters.AddWithValue("@p_menu_id", menu_id);
+                    cmd.Parameters.AddWithValue("@p_json", json);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            return reader.GetInt32("max_order");
+                        }
+                    }
+                }
+            }
+            catch (MySqlException)
+            {
+
+                Console.WriteLine("error on getMaxOrderRealTime");
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+            return 0;
+        }
+        public int getMaxOrderRealTime(int menu_id, List<OrderItemModel> orderList)
+        {
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+
+                using (var cmd = new MySqlCommand("p_menu_max_order", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    string json = JsonConvert.SerializeObject(orderList);
+                    cmd.Parameters.AddWithValue("@p_menu_detail_id", menu_id);
                     cmd.Parameters.AddWithValue("@p_json", json);
 
                     using (var reader = cmd.ExecuteReader())

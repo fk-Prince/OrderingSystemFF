@@ -124,6 +124,12 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                     {
                         while (reader.Read())
                         {
+                            DiscountModel d = DiscountModel.Builder()
+                                .WithDiscountId(reader.GetInt32("discount_id"))
+                                .WithRate(reader.GetDouble("rate"))
+                                .WithUntilDate(reader.GetDateTime("until_date"))
+                                .Build();
+
                             MenuModel md = MenuModel.Builder()
                                      .WithCategoryName(reader.GetString("category_Name"))
                                      .isAvailable(reader.GetString("isAvailable").ToLower() == "yes")
@@ -133,6 +139,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                                      .WithMenuName(reader.GetString("menu_name"))
                                      .WithCategoryId(reader.GetInt32("category_id"))
                                      .WithMenuImage(ImageHelper.GetImageFromBlob(reader, "menu"))
+                                     .WithDiscount(d)
                                      .Build();
                             list.Add(md);
                         }
@@ -163,7 +170,11 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                     {
                         while (reader.Read())
                         {
-
+                            DiscountModel d = DiscountModel.Builder()
+                                .WithDiscountId(reader.GetInt32("discount_id"))
+                                .WithRate(reader.GetDouble("rate"))
+                                .WithUntilDate(reader.GetDateTime("until_date"))
+                                .Build();
                             MenuPackageModel md = MenuPackageModel.Builder()
                                 .WithMenuId(reader.GetInt32("menu_id"))
                                 .WithMenuDetailId(reader.GetInt32("menu_detail_id"))
@@ -172,6 +183,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                                 .WithEstimatedTime(reader.GetTimeSpan("estimated_time"))
                                 .WithSizeName(reader.GetString("size_name"))
                                 .WithPrice(reader.GetDouble("price"))
+                                .WithDiscount(d)
                                 .Build();
                             list.Add(md);
                         }
@@ -413,6 +425,10 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                     else cmd.Parameters.AddWithValue("@p_image", m.MenuImageByte);
                     string json = JsonConvert.SerializeObject(m.MenuVariant);
                     cmd.Parameters.AddWithValue("@p_menu_detail", json);
+                    if (m.Discount != null || m.Discount.DiscountId != 0)
+                        cmd.Parameters.AddWithValue("@p_discount_id", m.Discount.DiscountId);
+                    else
+                        cmd.Parameters.AddWithValue("@p_discount_id", DBNull.Value);
                     cmd.ExecuteNonQuery();
                     return true;
                 }
@@ -449,6 +465,10 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                     Console.WriteLine(json);
                     cmd.Parameters.AddWithValue("@p_price", m.MenuPrice);
                     cmd.Parameters.AddWithValue("@p_package_included", json);
+                    if (m.Discount != null || m.Discount.DiscountId != 0)
+                        cmd.Parameters.AddWithValue("@p_discount_id", m.Discount.DiscountId);
+                    else
+                        cmd.Parameters.AddWithValue("@p_discount_id", DBNull.Value);
                     cmd.ExecuteNonQuery();
                     return true;
                 }
@@ -465,7 +485,6 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                 db.closeConnection();
             }
         }
-
         public bool updateBundle2(int id, List<MenuModel> included)
         {
             var db = DatabaseHandler.getInstance();

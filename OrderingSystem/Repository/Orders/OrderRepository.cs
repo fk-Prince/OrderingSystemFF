@@ -84,17 +84,26 @@ namespace OrderingSystem.Repository.Order
                     {
                         while (reader.Read())
                         {
-                            OrderItemModel m = OrderItemModel.Builder()
+                            DiscountModel d = DiscountModel.Builder()
+                                .WithDiscountId(reader.GetInt32("discount_id"))
+                                .WithRate(reader.GetDouble("rate"))
+                                .Build();
+
+                            MenuModel m = MenuModel.Builder()
                                 .WithMenuName(reader.GetString("menu_name"))
                                 .WithFlavorName(reader.GetString("flavor_name"))
                                 .WithSizeName(reader.GetString("size_name"))
-                                .WithPurchaseQty(reader.GetInt32("quantity"))
                                 .WithPrice(reader.GetDouble("price"))
-                                .WithOrderItemId(reader.GetInt32("order_item_id"))
+                                .WithDiscount(d)
+                                .Build();
+                            OrderItemModel xd = OrderItemModel.Builder()
                                 //.WithNote(reader.GetString("order_note"))
                                 //.WithNoteApproved(reader.GetBoolean("note_approve"))
+                                .WithOrderItemId(reader.GetInt32("order_item_id"))
+                                .WithPurchaseQty(reader.GetInt32("quantity"))
+                                .WithPurchaseMenu(m)
                                 .Build();
-                            oim.Add(m);
+                            oim.Add(xd);
 
                             if (string.IsNullOrEmpty(orderId))
                             {
@@ -115,9 +124,9 @@ namespace OrderingSystem.Repository.Order
                 db.closeConnection();
             }
             OrderModel om = OrderModel.Builder()
-                                .SetOrderId(orderId)
-                                .SetCouponRate(couponRate)
-                                .SetOrderItemModel(oim)
+                                .WithOrderId(orderId)
+                                .WithCoupon(new CouponModel(couponRate))
+                                .WithOrderItemList(oim)
                                 .Build();
 
             return om;
@@ -131,7 +140,9 @@ namespace OrderingSystem.Repository.Order
                 using (var cmd = new MySqlCommand("p_NewOrder", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+
                     cmd.Parameters.AddWithValue("@p_json_orderList", order.JsonOrderList());
+                    Console.WriteLine(order.JsonOrderList());
                     if (order.Coupon != null)
                         cmd.Parameters.AddWithValue("@p_coupon_code", order.Coupon.CouponCode);
                     else
@@ -140,7 +151,7 @@ namespace OrderingSystem.Repository.Order
                     return true;
                 }
             }
-            catch (MySqlException ex)
+            catch (MySqlException)
             {
                 throw;
             }

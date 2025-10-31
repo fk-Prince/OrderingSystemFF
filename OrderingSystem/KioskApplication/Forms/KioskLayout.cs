@@ -9,9 +9,10 @@ using OrderingSystem.Exceptions;
 using OrderingSystem.KioskApplication;
 using OrderingSystem.KioskApplication.Cards;
 using OrderingSystem.KioskApplication.Component;
+using OrderingSystem.KioskApplication.Components;
+using OrderingSystem.KioskApplication.Forms;
 using OrderingSystem.KioskApplication.Services;
 using OrderingSystem.Model;
-using OrderingSystem.Receipt;
 using OrderingSystem.Repository;
 using OrderingSystem.Repository.CategoryRepository;
 using OrderingSystem.Repository.Coupon;
@@ -22,10 +23,10 @@ namespace OrderingSystem
 {
     public partial class KioskLayout : Form
     {
+        private readonly List<OrderItemModel> orderList;
         private readonly KioskMenuServices menuServicesKiosk;
         private readonly Dictionary<int, FlowLayoutPanel> categoryPanels;
         private readonly Dictionary<int, Guna2Panel> categoryContainer;
-        private readonly List<MenuModel> orderList;
         private readonly List<Guna2Button> buttonListTop;
         private readonly List<Guna2Button> buttonListSide;
         private List<MenuModel> allMenus;
@@ -42,7 +43,7 @@ namespace OrderingSystem
         public KioskLayout()
         {
             InitializeComponent();
-            orderList = new List<MenuModel>();
+            orderList = new List<OrderItemModel>();
             menuServicesKiosk = new KioskMenuServices(new KioskMenuRepository(orderList));
             buttonListTop = new List<Guna2Button>();
             buttonListSide = new List<Guna2Button>();
@@ -268,7 +269,6 @@ namespace OrderingSystem
         private void displayTotal(object sender, EventArgs e)
         {
             subtotal.Text = cartServices.calculateSubtotal().ToString("N2");
-            vat.Text = cartServices.calculateVat().ToString("N2");
             cdiscount.Text = cartServices.calculateCoupon(couponSelected).ToString("N2");
             total.Text = cartServices.calculateTotalAmount().ToString("N2");
             orderCount.Text = orderList.Count.ToString();
@@ -283,7 +283,11 @@ namespace OrderingSystem
         {
             ICouponRepository couponRepository = new CouponRepository();
             CouponFrm c = new CouponFrm(couponRepository);
-            c.CouponSelected += (s, e) => couponSelected = e;
+            c.CouponSelected += (s, e) =>
+            {
+                couponSelected = e;
+                displayTotal(this, EventArgs.Empty);
+            };
             DialogResult rs = c.ShowDialog(this);
             if (DialogResult.OK == rs)
             {
@@ -292,39 +296,66 @@ namespace OrderingSystem
         }
         private void confirmOrder(object sender, EventArgs e)
         {
-            if (orderList.Count == 0)
-            {
-                MessageBox.Show("No items in the cart.");
-                return;
-            }
             try
             {
+
+                if (orderList.Count == 0)
+                {
+                    MessageBox.Show("No items in the cart.");
+                    return;
+                }
                 IOrderRepository orderRepository = new OrderRepository();
                 OrderServices orderServices = new OrderServices(orderRepository);
                 string orderId = orderServices.getNewOrderId();
                 OrderModel om = OrderModel.Builder()
-                                .SetOrderId(orderId)
-                                .SetOrderList(orderList)
-                                .SetCoupon(couponSelected)
-                                .Build();
-
-                bool suc = orderServices.confirmOrder(om);
-                if (suc)
+                                    .WithOrderId(orderId)
+                                    .WithOrderItemList(orderList)
+                                    .WithCoupon(couponSelected)
+                                    .Build();
+                OrderLayout l = new OrderLayout(om, orderServices);
+                l.AddQuantity += (s, ee) =>
                 {
-                    OrderModel x = orderServices.getAllOrders(orderId);
-                    OrderReceipt or = new OrderReceipt(x);
-                    or.Message("Proceed to the cashier \n    Within 30minutes", DateTime.Now.AddMinutes(30).ToString("hh:mm:ss tt"), "");
-                    or.print();
+
+                    foreach (var cc in flowCart.Controls.OfType<CartCard>())
+                        if (cc.menu.PurchaseMenu.SizeName == ee.PurchaseMenu.SizeName &&
+                        cc.menu.PurchaseMenu.FlavorName == ee.PurchaseMenu.FlavorName &&
+                        cc.menu.PurchaseMenu.getPriceAfterVatWithDiscount() == ee.PurchaseMenu.getPriceAfterVatWithDiscount())
+                        {
+                            cartServices.addQuantity(cc, ee);
+                            displayTotal(this, EventArgs.Empty);
+                            l.refersh();
+                            break;
+                        }
+                };
+                l.DeductQuantity += (s, ee) =>
+                {
+                    foreach (var cc in flowCart.Controls.OfType<CartCard>())
+                        if (cc.menu.PurchaseMenu.SizeName == ee.PurchaseMenu.SizeName &&
+                        cc.menu.PurchaseMenu.FlavorName == ee.PurchaseMenu.FlavorName &&
+                        cc.menu.PurchaseMenu.getPriceAfterVatWithDiscount() == ee.PurchaseMenu.getPriceAfterVatWithDiscount())
+                        {
+                            cartServices.deductQuantity(cc, ee);
+                            displayTotal(this, EventArgs.Empty);
+                            l.refersh();
+                            break;
+                        }
+                };
+                l.successfulPayment += (s, ee) =>
+                {
                     orderList.Clear();
                     flowCart.Controls.Clear();
                     displayTotal(this, EventArgs.Empty);
+                };
+                DialogResult rs = l.ShowDialog(this);
+                if (rs == DialogResult.OK)
+                {
+                    l.Hide();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Internal Server Error.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
         private void t_Tick(object sender, EventArgs e)
         {

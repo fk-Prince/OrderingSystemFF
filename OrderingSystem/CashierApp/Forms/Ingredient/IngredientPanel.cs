@@ -14,13 +14,13 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
     {
         private readonly IForms iForms;
         private readonly IngredientServices ingredientServices;
-        public event EventHandler ingredientUpdated;
+        public event EventHandler IngredientUpdated;
         public IngredientPanel(IForms iForms)
         {
             this.iForms = iForms;
             ingredientServices = new IngredientServices(new IngredientRepository());
         }
-        public void popupAddIngredient(Form parentForm)
+        public void PopupAddIngredient(Form parentForm)
         {
             PopupForm p = new PopupForm();
             p.c3.Items.Add("Piece");
@@ -34,7 +34,7 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
                     if (suc)
                     {
                         MessageBox.Show("Successful Added", "Add", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        ingredientUpdated.Invoke(this, EventArgs.Empty);
+                        IngredientUpdated.Invoke(this, EventArgs.Empty);
                         p.Hide();
                     }
                     else
@@ -55,7 +55,7 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
                 p.Hide();
             }
         }
-        public void popupDeductIngredient(Form parentForm)
+        public void PopupDeductIngredient(Form parentForm)
         {
             PopupForm p = new PopupForm();
 
@@ -72,7 +72,7 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
                     if (suc)
                     {
                         MessageBox.Show("Successful", "Deduct", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        ingredientUpdated.Invoke(this, EventArgs.Empty);
+                        IngredientUpdated.Invoke(this, EventArgs.Empty);
 
                         p.Hide();
                     }
@@ -102,7 +102,7 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
                 p.Hide();
             }
         }
-        public void popupRestockIngredient(Form parentForm)
+        public void PopupRestockIngredient(Form parentForm)
         {
             int id = 0;
             PopupForm p = new PopupForm();
@@ -114,7 +114,7 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
                     if (suc)
                     {
                         MessageBox.Show("Successful", "Restock", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        ingredientUpdated.Invoke(this, EventArgs.Empty);
+                        IngredientUpdated.Invoke(this, EventArgs.Empty);
                         p.Hide();
                     }
                     else

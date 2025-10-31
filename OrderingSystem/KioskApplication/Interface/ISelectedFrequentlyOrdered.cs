@@ -6,6 +6,6 @@ namespace OrderingSystem.KioskApplication.Options
     public interface ISelectedFrequentlyOrdered
     {
 
-        List<MenuModel> getFrequentlyOrdered();
+        List<OrderItemModel> getFrequentlyOrdered();
     }
 }

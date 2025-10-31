@@ -34,6 +34,9 @@
             this.image = new Guna.UI2.WinForms.Guna2PictureBox();
             this.price = new System.Windows.Forms.Label();
             this.ooo = new Guna.UI2.WinForms.Guna2PictureBox();
+            this.dPrice = new System.Windows.Forms.Label();
+            this.v1 = new Guna.UI2.WinForms.Guna2Separator();
+            this.v2 = new Guna.UI2.WinForms.Guna2Separator();
             ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ooo)).BeginInit();
             this.SuspendLayout();
@@ -100,14 +103,51 @@
             this.ooo.UseTransparentBackground = true;
             this.ooo.Visible = false;
             // 
+            // dPrice
+            // 
+            this.dPrice.BackColor = System.Drawing.Color.Transparent;
+            this.dPrice.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dPrice.ForeColor = System.Drawing.Color.IndianRed;
+            this.dPrice.Location = new System.Drawing.Point(97, 95);
+            this.dPrice.Name = "dPrice";
+            this.dPrice.Size = new System.Drawing.Size(78, 21);
+            this.dPrice.TabIndex = 5;
+            this.dPrice.Text = "Price";
+            this.dPrice.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // v1
+            // 
+            this.v1.BackColor = System.Drawing.Color.Transparent;
+            this.v1.FillColor = System.Drawing.Color.IndianRed;
+            this.v1.Location = new System.Drawing.Point(10, 98);
+            this.v1.Name = "v1";
+            this.v1.Size = new System.Drawing.Size(81, 10);
+            this.v1.TabIndex = 6;
+            this.v1.UseTransparentBackground = true;
+            this.v1.Visible = false;
+            // 
+            // v2
+            // 
+            this.v2.BackColor = System.Drawing.Color.Transparent;
+            this.v2.FillColor = System.Drawing.Color.IndianRed;
+            this.v2.Location = new System.Drawing.Point(10, 103);
+            this.v2.Name = "v2";
+            this.v2.Size = new System.Drawing.Size(81, 10);
+            this.v2.TabIndex = 7;
+            this.v2.UseTransparentBackground = true;
+            this.v2.Visible = false;
+            // 
             // MenuCard
             // 
             this.ClientSize = new System.Drawing.Size(250, 189);
+            this.Controls.Add(this.v2);
+            this.Controls.Add(this.v1);
+            this.Controls.Add(this.dPrice);
             this.Controls.Add(this.ooo);
             this.Controls.Add(this.image);
             this.Controls.Add(this.description);
-            this.Controls.Add(this.price);
             this.Controls.Add(this.menuName);
+            this.Controls.Add(this.price);
             this.Name = "MenuCard";
             this.Text = "MenuCard";
             ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
@@ -123,5 +163,8 @@
         private Guna.UI2.WinForms.Guna2PictureBox image;
         private System.Windows.Forms.Label price;
         private Guna.UI2.WinForms.Guna2PictureBox ooo;
+        private System.Windows.Forms.Label dPrice;
+        private Guna.UI2.WinForms.Guna2Separator v1;
+        private Guna.UI2.WinForms.Guna2Separator v2;
     }
 }

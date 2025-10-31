@@ -7,6 +7,5 @@ namespace OrderingSystem.KioskApplication.Interface
         double calculateSubtotal();
         double calculateCoupon(CouponModel coupon);
         double calculateTotalAmount();
-        double calculateVat();
     }
 }

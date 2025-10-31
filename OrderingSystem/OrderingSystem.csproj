@@ -116,6 +116,7 @@
       <DependentUpon>MenuInformation.cs</DependentUpon>
     </Compile>
     <Compile Include="CashierApp\Forms\Ingredient\IngredientPanel.cs" />
+    <Compile Include="CashierApp\Forms\Menu\MenuDiscountPanel.cs" />
     <Compile Include="CashierApp\Forms\Staffs\StaffCard.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -257,6 +258,12 @@
     <Compile Include="Exceptions\InvalidPayment.cs" />
     <Compile Include="Exceptions\NotSupportedException.cs" />
     <Compile Include="Exceptions\InvalidAction.cs" />
+    <Compile Include="KioskApplication\Component\OrderCard.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="KioskApplication\Component\OrderCard.Designer.cs">
+      <DependentUpon>OrderCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="KioskApplication\Component\FrequentlyOrderedCard.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -305,7 +312,14 @@
     <Compile Include="KioskApplication\Forms\CouponFrm.Designer.cs">
       <DependentUpon>CouponFrm.cs</DependentUpon>
     </Compile>
+    <Compile Include="KioskApplication\Forms\OrderLayout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KioskApplication\Forms\OrderLayout.Designer.cs">
+      <DependentUpon>OrderLayout.cs</DependentUpon>
+    </Compile>
     <Compile Include="KioskApplication\Interface\ICalculateOrder.cs" />
+    <Compile Include="KioskApplication\Interface\CalculateVat.cs" />
     <Compile Include="KioskApplication\Interface\IOrderNote.cs" />
     <Compile Include="KioskApplication\Options\FrequentlyOrderedOption.cs" />
     <Compile Include="KioskApplication\Interface\IMenuOptions.cs" />
@@ -351,6 +365,7 @@
     </Compile>
     <Compile Include="Model\CategoryModel.cs" />
     <Compile Include="Model\CouponModel.cs" />
+    <Compile Include="Model\DiscountModel.cs" />
     <Compile Include="Model\IngredientModel.cs" />
     <Compile Include="Model\IngredientStockModel.cs" />
     <Compile Include="Model\MenuModel.cs" />
@@ -372,6 +387,8 @@
     <Compile Include="Repository\Category\ICategoryRepository.cs" />
     <Compile Include="Repository\Coupons\CouponRepository.cs" />
     <Compile Include="Repository\Coupons\ICouponRepository.cs" />
+    <Compile Include="Repository\Discount\DiscountRepository.cs" />
+    <Compile Include="Repository\Discount\IDiscountRepository.cs" />
     <Compile Include="Repository\Ingredients\IIngredientRepository.cs" />
     <Compile Include="Repository\Ingredients\IngredientRepository.cs" />
     <Compile Include="Repository\KioskMenu\IKioskMenuRepository.cs" />
@@ -385,6 +402,7 @@
     <Compile Include="Services\CartServices.cs" />
     <Compile Include="Services\CategoryServices.cs" />
     <Compile Include="Services\CouponServices.cs" />
+    <Compile Include="Services\DiscountServices.cs" />
     <Compile Include="Services\IngredientServices.cs" />
     <Compile Include="Services\InventoryServices.cs" />
     <Compile Include="Services\MenuService.cs" />
@@ -467,6 +485,9 @@
     <EmbeddedResource Include="CashierApp\Layout\CashierLayout.resx">
       <DependentUpon>CashierLayout.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="KioskApplication\Component\OrderCard.resx">
+      <DependentUpon>OrderCard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="KioskApplication\Component\FrequentlyOrderedCard.resx">
       <DependentUpon>FrequentlyOrderedCard.cs</DependentUpon>
     </EmbeddedResource>
@@ -484,6 +505,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="KioskApplication\Component\CartCard.resx">
       <DependentUpon>CartCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KioskApplication\Forms\OrderLayout.resx">
+      <DependentUpon>OrderLayout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="KioskApplication\Forms\KioskLayout.resx">
       <DependentUpon>KioskLayout.cs</DependentUpon>
@@ -583,6 +607,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\users.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minus.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -14,7 +14,7 @@ namespace OrderingSystem.KioskApplication
     {
         public MenuModel menu { get; }
         private KioskMenuServices kioskMenuServices;
-        public event EventHandler<List<MenuModel>> orderListEvent;
+        public event EventHandler<List<OrderItemModel>> orderListEvent;
         private IMenuOptions menuOptions;
         public PopupOption(KioskMenuServices kioskMenuServices, MenuModel menu)
         {
@@ -67,7 +67,7 @@ namespace OrderingSystem.KioskApplication
         }
         private void addToOrder(object sender, System.EventArgs e)
         {
-            List<MenuModel> order = new List<MenuModel>();
+            List<OrderItemModel> order = new List<OrderItemModel>();
             try
             {
                 if (menuOptions != null)

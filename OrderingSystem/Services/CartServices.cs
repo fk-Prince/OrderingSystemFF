@@ -15,23 +15,23 @@ namespace OrderingSystem.KioskApplication.Services
         //private IKioskMenuRepository _menuRepository;
         private KioskMenuServices menuServices;
         private FlowLayoutPanel flowCart;
-        private List<MenuModel> orderList;
+        private List<OrderItemModel> orderList;
         public event EventHandler quantityChanged;
 
         private CouponModel coupon;
-        public CartServices(KioskMenuServices menuServices, FlowLayoutPanel flowCart, List<MenuModel> orderList)
+        public CartServices(KioskMenuServices menuServices, FlowLayoutPanel flowCart, List<OrderItemModel> orderList)
         {
             this.menuServices = menuServices;
             this.flowCart = flowCart;
             this.orderList = orderList;
         }
 
-        public void addMenuToCart(List<MenuModel> newOrders)
+        public void addMenuToCart(List<OrderItemModel> newOrders)
         {
 
             foreach (var menu in newOrders)
             {
-                MenuModel mm = getOrder(menu);
+                OrderItemModel mm = getOrder(menu);
 
                 if (mm != null)
                 {
@@ -52,13 +52,13 @@ namespace OrderingSystem.KioskApplication.Services
 
         }
 
-        private void addQuantity(object sender, MenuModel e)
+        public void addQuantity(object sender, OrderItemModel e)
         {
             try
             {
                 CartCard cc = sender as CartCard;
-                MenuModel order = getOrder(e);
-                int b = menuServices.getMaxOrderRealTime(e.MenuDetailId, orderList);
+                OrderItemModel order = getOrder(e);
+                int b = menuServices.getMaxOrderRealTime(e.PurchaseMenu.MenuDetailId, orderList);
 
                 if (b <= 0)
                     throw new MaxOrder("Unable to add more quantity.");
@@ -72,18 +72,18 @@ namespace OrderingSystem.KioskApplication.Services
                 throw;
             }
         }
-        public MenuModel getOrder(MenuModel e)
+        public OrderItemModel getOrder(OrderItemModel e)
         {
-            MenuModel order = null;
-            if (order is MenuPackageModel)
-                return order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId && o.getPrice() == e.getPrice() && o is MenuPackageModel);
-            else
-                return order = orderList.FirstOrDefault(o => o.MenuDetailId == e.MenuDetailId && o.getPrice() == e.getPrice());
+            bool package = e.PurchaseMenu is MenuPackageModel;
+            return orderList.FirstOrDefault(o =>
+                o.PurchaseMenu.MenuDetailId == e.PurchaseMenu.MenuDetailId &&
+                o.PurchaseMenu.getPriceAfterVatWithDiscount() == e.PurchaseMenu.getPriceAfterVatWithDiscount() &&
+                (!package || o.PurchaseMenu is MenuPackageModel));
         }
-        private void deductQuantity(object sender, MenuModel e)
+        public void deductQuantity(object sender, OrderItemModel e)
         {
             CartCard cc = sender as CartCard;
-            MenuModel order = getOrder(e);
+            OrderItemModel order = getOrder(e);
             order.PurchaseQty--;
             if (order.PurchaseQty <= 0)
             {
@@ -95,37 +95,30 @@ namespace OrderingSystem.KioskApplication.Services
         }
 
 
+        public double calculateSubtotal()
+        {
+            return orderList.Sum(e => e.getSubtotal());
+        }
+
         public double calculateCoupon(CouponModel coupon)
         {
-
             if (coupon == null) return 0.00;
             this.coupon = coupon;
             double subtotal = calculateSubtotal();
-            return coupon.CouponRate * subtotal;
-        }
-
-        public double calculateSubtotal()
-        {
-            return orderList.Sum(e => e.getPrice() * e.PurchaseQty);
+            return subtotal * coupon.CouponRate;
         }
 
         public double calculateTotalAmount()
         {
             double subtotal = calculateSubtotal();
-            double vat = calculateVat();
             double coupon = calculateCoupon(this.coupon);
-            return (subtotal - coupon) + vat;
+            return (subtotal - coupon);
         }
 
-        public double calculateVat()
-        {
-            double tax = 0.12;
-            return tax * calculateSubtotal();
-        }
 
-        private void addNewCart(MenuModel menu)
-        {
 
+        private void addNewCart(OrderItemModel menu)
+        {
             CartCard cc = new CartCard(menu);
             cc.addQuantityEvent += addQuantity;
             cc.deductQuantityEvent += deductQuantity;

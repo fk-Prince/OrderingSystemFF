@@ -10,7 +10,11 @@ namespace OrderingSystem.Model
         private double couponRate;
         private int numberOfTimes;
         private DateTime expiryDate;
+        public CouponModel(double couponRate)
+        {
+            this.couponRate = couponRate;
 
+        }
         public CouponModel(string couponCode, string status, double couponRate, DateTime expiryDate, string description)
         {
             this.couponCode = couponCode;

@@ -6,6 +6,7 @@ using OrderingSystem.CashierApp.Forms.Category;
 using OrderingSystem.CashierApp.Forms.Coupon;
 using OrderingSystem.CashierApp.Forms.FactoryForm;
 using OrderingSystem.CashierApp.Forms.Ingredient;
+using OrderingSystem.CashierApp.Forms.Menu;
 using OrderingSystem.CashierApp.Forms.Staffs;
 using OrderingSystem.CashierApp.Layout;
 using OrderingSystem.CashierApp.SessionData;
@@ -45,6 +46,7 @@ namespace OrderingSystem.CashierApp.Forms
                 ri.Visible = false;
                 ai.Visible = false;
                 ri.Visible = false;
+                md.Visible = false;
             }
             image.Image = SessionStaffData.Image;
             name.Text = SessionStaffData.FirstName.Substring(0, 1).ToUpper() + SessionStaffData.FirstName.Substring(1).ToLower() + "  " + SessionStaffData.LastName.Substring(0, 1).ToUpper() + SessionStaffData.LastName.Substring(1).ToLower();
@@ -89,7 +91,6 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void newMenu(object sender, System.EventArgs e)
         {
-
             if (menuIntance == null) return;
             menuIntance.showNewMenu();
 
@@ -108,18 +109,18 @@ namespace OrderingSystem.CashierApp.Forms
         }
         private void viewRestockIngredient(object sender, System.EventArgs e)
         {
-            ingredientPanel.ingredientUpdated += (ss, ee) => instance.updateTable();
-            ingredientPanel.popupRestockIngredient(this);
+            ingredientPanel.IngredientUpdated += (ss, ee) => instance.updateTable();
+            ingredientPanel.PopupRestockIngredient(this);
         }
         private void viewAddIngredients(object sender, System.EventArgs e)
         {
-            ingredientPanel.ingredientUpdated += (ss, ee) => instance.updateTable();
-            ingredientPanel.popupAddIngredient(this);
+            ingredientPanel.IngredientUpdated += (ss, ee) => instance.updateTable();
+            ingredientPanel.PopupAddIngredient(this);
         }
         private void viewDeductIngredient(object sender, System.EventArgs e)
         {
-            ingredientPanel.ingredientUpdated += (ss, ee) => instance.updateTable();
-            ingredientPanel.popupDeductIngredient(this);
+            ingredientPanel.IngredientUpdated += (ss, ee) => instance.updateTable();
+            ingredientPanel.PopupDeductIngredient(this);
         }
 
         private void primaryButtonClickedSide(object sender, MouseEventArgs e)
@@ -184,6 +185,12 @@ namespace OrderingSystem.CashierApp.Forms
         {
             time.Text = DateTime.Now.ToString("hh:mm:ss tt");
             date.Text = DateTime.Now.ToString("yyyy, MMMM dd - dddd");
+        }
+
+        private void menuDiscount(object sender, EventArgs e)
+        {
+            MenuDiscountPanel md = new MenuDiscountPanel(new FormFactory());
+            md.AddDiscountPopup(this);
         }
     }
 }

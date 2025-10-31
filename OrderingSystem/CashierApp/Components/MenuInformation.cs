@@ -9,6 +9,7 @@ using OrderingSystem.CashierApp.Forms.Menu;
 using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.CashierApp.Table;
 using OrderingSystem.Model;
+using OrderingSystem.Repository.Discount;
 using OrderingSystem.Services;
 
 namespace OrderingSystem.CashierApp.Components
@@ -44,9 +45,7 @@ namespace OrderingSystem.CashierApp.Components
             description.Text = menu.MenuDescription;
             catTxt.Text = menu.CategoryName;
             category.Text = menu.CategoryName;
-            toggle.CheckedChanged -= guna2ToggleSwitch1_CheckedChanged;
-            toggle.Checked = menu.isAvailable;
-            toggle.CheckedChanged += guna2ToggleSwitch1_CheckedChanged;
+            cBox.SelectedIndex = menu.isAvailable ? 0 : 1;
             if (SessionStaffData.Role.ToLower() == "cashier")
             {
                 b1.Visible = false;
@@ -57,9 +56,29 @@ namespace OrderingSystem.CashierApp.Components
             try
             {
                 isAvailable();
-                List<CategoryModel> ca = categoryServices.getCategoriesByMenu();
-                ca.ForEach(e => category.Items.Add(e.CategoryName));
-                category.SelectedItem = menu.CategoryName;
+
+                List<CategoryModel> c = categoryServices.getCategories();
+                c.ForEach(ex => category.Items.Add(ex.CategoryName));
+
+                cbd.DisplayMember = "DisplayText";
+                List<DiscountModel> dm = new DiscountServices(new DiscountRepository()).GetDiscountAvailable();
+
+                dm.ForEach(d => d.DisplayText = $"{d.Rate * 100}% | {d.UntilDate:yyyy-MM-dd}");
+
+                cbd.Items.Clear();
+                dm.ForEach(ex => cbd.Items.Add(ex));
+
+                if (menu.Discount != null)
+                {
+                    var match = dm.FirstOrDefault(ed => ed.DiscountId == menu.Discount.DiscountId);
+                    if (match != null)
+                        cbd.SelectedItem = match;
+                }
+                else
+                {
+                    cbd.SelectedIndex = -1;
+                }
+
             }
             catch (Exception ex)
             {
@@ -122,9 +141,11 @@ namespace OrderingSystem.CashierApp.Components
                 catTxt.Visible = true;
                 Border(false);
             }
-            toggle.Enabled = isEditMode;
+            cBox.Enabled = isEditMode;
+            cbd.Enabled = isEditMode;
             category.Text = menu.CategoryName;
             catTxt.Text = menu.CategoryName;
+
         }
         private void confirmEdit()
         {
@@ -168,11 +189,12 @@ namespace OrderingSystem.CashierApp.Components
                     var builder = MenuPackageModel.Builder()
                                      .WithMenuId(menu.MenuId)
                                      .WithMenuName(name)
-                                     .isAvailable(toggle.Checked)
+                                     .isAvailable(cBox.Text == "Available")
                                      .WithMenuDescription(desc)
                                      .WithCategoryName(cat)
                                      .WithPrice(double.Parse(pricex))
                                      .WithPackageIncluded(package.getMenus());
+                    if (cbd.SelectedIndex != -1) builder = builder.WithDiscount((DiscountModel)cbd.SelectedItem);
                     if (imagex != null) builder = builder.WithMenuImageByte(imagex);
                     menus = builder.Build();
                     type = "bundle";
@@ -184,11 +206,12 @@ namespace OrderingSystem.CashierApp.Components
                     var builder = MenuModel.Builder()
                                  .WithMenuId(menu.MenuId)
                                  .WithMenuName(name)
-                                 .isAvailable(toggle.Checked)
+                                 .isAvailable(cBox.Text == "Available")
                                  .WithMenuDescription(desc)
                                  .WithCategoryName(cat)
                                  .WithVariant(regular.getMenus());
                     if (imagex != null) builder = builder.WithMenuImageByte(imagex);
+                    if (cbd.SelectedIndex != -1) builder = builder.WithDiscount((DiscountModel)cbd.SelectedItem);
                     menus = builder.Build();
                     type = "regular";
                 }
@@ -199,6 +222,7 @@ namespace OrderingSystem.CashierApp.Components
                 {
                     MessageBox.Show("Updated Successfully", "Update Scucessfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     menuUpdated.Invoke(this, EventArgs.Empty);
+                    regular?.refreshTable(menuService.getMenuDetail().FindAll(e => e.MenuId == menu.MenuId));
                 }
                 else MessageBox.Show("Failed to update", "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -303,38 +327,57 @@ namespace OrderingSystem.CashierApp.Components
                 pop.Hide();
             }
         }
-        private void guna2ToggleSwitch1_CheckedChanged(object sender, EventArgs e)
-        {
-            toggle.CheckedChanged -= guna2ToggleSwitch1_CheckedChanged;
-            DialogResult rs = MessageBox.Show($"Are you sure you want to {(!toggle.Checked ? "disable" : "enable")} this menu?", "Confirm Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (rs == DialogResult.Yes)
-            {
-                toggle.Checked = toggle.Checked;
-            }
-            else
-            {
-                toggle.Checked = !toggle.Checked;
-            }
-            toggle.CheckedChanged += guna2ToggleSwitch1_CheckedChanged;
 
-            isAvailable();
-        }
         private void isAvailable()
         {
-            if (toggle.Checked || !isEditMode)
+            if (cBox.Text == "Available" || !isEditMode)
             {
                 BackColor = Color.White;
                 if (package != null) package.BackColor = Color.White;
                 if (regular != null) regular.BackColor = Color.White;
-                lav.Text = "Available";
             }
             else
             {
                 if (package != null) package.BackColor = Color.LightGray;
                 if (regular != null) regular.BackColor = Color.LightGray;
                 BackColor = Color.LightGray;
-                lav.Text = "Unavailable";
             }
         }
+
+        private void price_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(lPrice.Text))
+            {
+                lPrice.Text = "Price";
+                return;
+            }
+            if (double.TryParse(price.Text.Trim(), out double d))
+            {
+                lPrice.Text = $"Price ( {d + (d * 0.12)} ) After Tax";
+            }
+            else
+            {
+                lPrice.Text = "Price";
+            }
+        }
+        private string prevStat;
+        private void cBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cBox.Text == prevStat)
+                return;
+            cBox.SelectedIndexChanged -= cBox_SelectedIndexChanged;
+            DialogResult rs = MessageBox.Show($"Are you sure you want to {(cBox.Text != "Available" ? "disable" : "enable")} this menu?", "Confirm Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (rs == DialogResult.Yes)
+            {
+                cBox.SelectedIndex = (cBox.Text == "Available") ? 0 : 1;
+            }
+            else
+                cBox.SelectedIndex = (cBox.Text == "Available") ? 1 : 0;
+            isAvailable();
+            prevStat = cBox.Text;
+            cBox.SelectedIndexChanged += cBox_SelectedIndexChanged;
+        }
+
+
     }
 }

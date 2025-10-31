@@ -36,7 +36,7 @@ namespace OrderingSystem.CashierApp.Components
             table.Columns.Add("Price");
 
 
-            menuList.ForEach(e => table.Rows.Add(false, false, null, e.MenuName, e.SizeName, e.FlavorName, e.MenuPrice.ToString("N2")));
+            menuList.ForEach(e => table.Rows.Add(false, false, null, e.MenuName, e.SizeName, e.FlavorName, e.getPrice().ToString("N2")));
 
 
 
