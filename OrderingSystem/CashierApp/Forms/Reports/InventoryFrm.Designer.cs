@@ -1,6 +1,6 @@
 ﻿namespace OrderingSystem.CashierApp.Forms
 {
-    partial class InventoryFrm
+    partial class Reports
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGrid = new System.Windows.Forms.DataGridView();
             this.txt = new Guna.UI2.WinForms.Guna2TextBox();
@@ -36,10 +37,15 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.cb = new System.Windows.Forms.ComboBox();
-            this.fromto = new Guna.UI2.WinForms.Guna2Panel();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.p1 = new Guna.UI2.WinForms.Guna2Panel();
+            this.p2 = new Guna.UI2.WinForms.Guna2Panel();
+            this.dt2 = new Guna.UI2.WinForms.Guna2DateTimePicker();
+            this.label4 = new System.Windows.Forms.Label();
+            this.db = new System.Windows.Forms.Timer(this.components);
+            this.guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
-            this.fromto.SuspendLayout();
+            this.p1.SuspendLayout();
+            this.p2.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGrid
@@ -66,6 +72,8 @@
             this.dataGrid.RowTemplate.Height = 25;
             this.dataGrid.Size = new System.Drawing.Size(1000, 450);
             this.dataGrid.TabIndex = 0;
+            this.dataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_CellClick);
+            this.dataGrid.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGrid_ColumnHeaderMouseClick);
             // 
             // txt
             // 
@@ -180,53 +188,104 @@
             this.cb.TabIndex = 21;
             this.cb.SelectedIndexChanged += new System.EventHandler(this.cb_SelectedIndexChanged);
             // 
-            // fromto
+            // p1
             // 
-            this.fromto.Controls.Add(this.dtTo);
-            this.fromto.Controls.Add(this.dtFrom);
-            this.fromto.Controls.Add(this.label2);
-            this.fromto.Controls.Add(this.label1);
-            this.fromto.Location = new System.Drawing.Point(57, 94);
-            this.fromto.Name = "fromto";
-            this.fromto.Size = new System.Drawing.Size(385, 42);
-            this.fromto.TabIndex = 22;
+            this.p1.Controls.Add(this.dtTo);
+            this.p1.Controls.Add(this.dtFrom);
+            this.p1.Controls.Add(this.label2);
+            this.p1.Controls.Add(this.label1);
+            this.p1.Location = new System.Drawing.Point(57, 94);
+            this.p1.Name = "p1";
+            this.p1.Size = new System.Drawing.Size(385, 42);
+            this.p1.TabIndex = 22;
             // 
-            // comboBox1
+            // p2
             // 
-            this.comboBox1.AutoCompleteCustomSource.AddRange(new string[] {
-            "Track Quantity In/Out",
-            "Expiry Tracking",
-            "Inventory Reports",
-            "Ingredient Usage",
-            "Menu Popular\'s",
-            "Menu Performance"});
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(445, 142);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(233, 29);
-            this.comboBox1.TabIndex = 23;
+            this.p2.Controls.Add(this.dt2);
+            this.p2.Controls.Add(this.label4);
+            this.p2.Location = new System.Drawing.Point(57, 94);
+            this.p2.Name = "p2";
+            this.p2.Size = new System.Drawing.Size(228, 42);
+            this.p2.TabIndex = 23;
+            this.p2.Visible = false;
             // 
-            // InventoryFrm
+            // dt2
+            // 
+            this.dt2.BackColor = System.Drawing.Color.Transparent;
+            this.dt2.BorderRadius = 5;
+            this.dt2.BorderThickness = 1;
+            this.dt2.Checked = true;
+            this.dt2.CustomFormat = "yyyy";
+            this.dt2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(246)))), ((int)(((byte)(255)))));
+            this.dt2.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.dt2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.dt2.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dt2.Location = new System.Drawing.Point(83, 4);
+            this.dt2.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
+            this.dt2.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
+            this.dt2.Name = "dt2";
+            this.dt2.ShowUpDown = true;
+            this.dt2.Size = new System.Drawing.Size(129, 34);
+            this.dt2.TabIndex = 24;
+            this.dt2.Value = new System.DateTime(2025, 10, 24, 21, 13, 10, 0);
+            this.dt2.ValueChanged += new System.EventHandler(this.dt2_ValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(11, 13);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(66, 15);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "Select Year:";
+            // 
+            // db
+            // 
+            this.db.Interval = 500;
+            this.db.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // guna2Button1
+            // 
+            this.guna2Button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.guna2Button1.BorderRadius = 5;
+            this.guna2Button1.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.guna2Button1.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.guna2Button1.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.guna2Button1.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.guna2Button1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.guna2Button1.ForeColor = System.Drawing.Color.White;
+            this.guna2Button1.Location = new System.Drawing.Point(877, 125);
+            this.guna2Button1.MaximumSize = new System.Drawing.Size(180, 46);
+            this.guna2Button1.MinimumSize = new System.Drawing.Size(180, 46);
+            this.guna2Button1.Name = "guna2Button1";
+            this.guna2Button1.Size = new System.Drawing.Size(180, 46);
+            this.guna2Button1.TabIndex = 24;
+            this.guna2Button1.Text = "PRINT";
+            this.guna2Button1.Click += new System.EventHandler(this.guna2Button1_Click);
+            // 
+            // Reports
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1121, 660);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.fromto);
+            this.Controls.Add(this.guna2Button1);
+            this.Controls.Add(this.p2);
+            this.Controls.Add(this.p1);
             this.Controls.Add(this.cb);
             this.Controls.Add(this.txt);
             this.Controls.Add(this.dataGrid);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximumSize = new System.Drawing.Size(1920, 1080);
             this.MinimumSize = new System.Drawing.Size(1121, 660);
-            this.Name = "InventoryFrm";
+            this.Name = "Reports";
             this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
             this.Text = "InventoryFrm";
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
-            this.fromto.ResumeLayout(false);
-            this.fromto.PerformLayout();
+            this.p1.ResumeLayout(false);
+            this.p1.PerformLayout();
+            this.p2.ResumeLayout(false);
+            this.p2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -240,7 +299,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cb;
-        private Guna.UI2.WinForms.Guna2Panel fromto;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private Guna.UI2.WinForms.Guna2Panel p1;
+        private Guna.UI2.WinForms.Guna2Panel p2;
+        private System.Windows.Forms.Label label4;
+        private Guna.UI2.WinForms.Guna2DateTimePicker dt2;
+        private System.Windows.Forms.Timer db;
+        private Guna.UI2.WinForms.Guna2Button guna2Button1;
     }
 }

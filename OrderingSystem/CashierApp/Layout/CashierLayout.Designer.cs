@@ -197,7 +197,7 @@
             this.guna2Button20.Name = "guna2Button20";
             this.guna2Button20.Size = new System.Drawing.Size(228, 45);
             this.guna2Button20.TabIndex = 11;
-            this.guna2Button20.Text = "Inventory";
+            this.guna2Button20.Text = "Reports";
             this.guna2Button20.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button20.TextOffset = new System.Drawing.Point(20, 0);
             this.guna2Button20.Click += new System.EventHandler(this.viewInventory);
