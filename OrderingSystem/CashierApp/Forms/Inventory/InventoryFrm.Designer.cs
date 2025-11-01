@@ -36,7 +36,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.cb = new System.Windows.Forms.ComboBox();
+            this.fromto = new Guna.UI2.WinForms.Guna2Panel();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
+            this.fromto.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGrid
@@ -104,7 +107,7 @@
             this.dtFrom.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dtFrom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.dtFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtFrom.Location = new System.Drawing.Point(105, 92);
+            this.dtFrom.Location = new System.Drawing.Point(55, 3);
             this.dtFrom.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.dtFrom.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
             this.dtFrom.Name = "dtFrom";
@@ -123,7 +126,7 @@
             this.dtTo.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dtTo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
             this.dtTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtTo.Location = new System.Drawing.Point(284, 92);
+            this.dtTo.Location = new System.Drawing.Point(234, 3);
             this.dtTo.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.dtTo.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
             this.dtTo.Name = "dtTo";
@@ -136,7 +139,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(61, 102);
+            this.label1.Location = new System.Drawing.Point(11, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 15);
             this.label1.TabIndex = 14;
@@ -146,7 +149,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(256, 102);
+            this.label2.Location = new System.Drawing.Point(206, 13);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(22, 15);
             this.label2.TabIndex = 15;
@@ -177,16 +180,42 @@
             this.cb.TabIndex = 21;
             this.cb.SelectedIndexChanged += new System.EventHandler(this.cb_SelectedIndexChanged);
             // 
+            // fromto
+            // 
+            this.fromto.Controls.Add(this.dtTo);
+            this.fromto.Controls.Add(this.dtFrom);
+            this.fromto.Controls.Add(this.label2);
+            this.fromto.Controls.Add(this.label1);
+            this.fromto.Location = new System.Drawing.Point(57, 94);
+            this.fromto.Name = "fromto";
+            this.fromto.Size = new System.Drawing.Size(385, 42);
+            this.fromto.TabIndex = 22;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.AutoCompleteCustomSource.AddRange(new string[] {
+            "Track Quantity In/Out",
+            "Expiry Tracking",
+            "Inventory Reports",
+            "Ingredient Usage",
+            "Menu Popular\'s",
+            "Menu Performance"});
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(445, 142);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(233, 29);
+            this.comboBox1.TabIndex = 23;
+            // 
             // InventoryFrm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1121, 660);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.fromto);
             this.Controls.Add(this.cb);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.dtTo);
-            this.Controls.Add(this.dtFrom);
             this.Controls.Add(this.txt);
             this.Controls.Add(this.dataGrid);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -196,8 +225,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
             this.Text = "InventoryFrm";
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
+            this.fromto.ResumeLayout(false);
+            this.fromto.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -210,5 +240,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cb;
+        private Guna.UI2.WinForms.Guna2Panel fromto;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

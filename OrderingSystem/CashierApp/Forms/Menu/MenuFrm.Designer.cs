@@ -40,6 +40,7 @@
             this.flowMenu.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowMenu.AutoScroll = true;
             this.flowMenu.BackColor = System.Drawing.Color.Transparent;
             this.flowMenu.Location = new System.Drawing.Point(0, 79);
             this.flowMenu.MaximumSize = new System.Drawing.Size(1920, 1080);

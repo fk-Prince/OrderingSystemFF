@@ -425,7 +425,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                     else cmd.Parameters.AddWithValue("@p_image", m.MenuImageByte);
                     string json = JsonConvert.SerializeObject(m.MenuVariant);
                     cmd.Parameters.AddWithValue("@p_menu_detail", json);
-                    if (m.Discount != null || m.Discount.DiscountId != 0)
+                    if (m.Discount != null && m.Discount.DiscountId != 0)
                         cmd.Parameters.AddWithValue("@p_discount_id", m.Discount.DiscountId);
                     else
                         cmd.Parameters.AddWithValue("@p_discount_id", DBNull.Value);
@@ -465,7 +465,7 @@ namespace OrderingSystem.Repo.CashierMenuRepository
                     Console.WriteLine(json);
                     cmd.Parameters.AddWithValue("@p_price", m.MenuPrice);
                     cmd.Parameters.AddWithValue("@p_package_included", json);
-                    if (m.Discount != null || m.Discount.DiscountId != 0)
+                    if (m.Discount != null && m.Discount.DiscountId != 0)
                         cmd.Parameters.AddWithValue("@p_discount_id", m.Discount.DiscountId);
                     else
                         cmd.Parameters.AddWithValue("@p_discount_id", DBNull.Value);

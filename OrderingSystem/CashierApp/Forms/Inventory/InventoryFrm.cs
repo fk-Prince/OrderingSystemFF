@@ -67,7 +67,6 @@ namespace OrderingSystem.CashierApp.Forms
                 view.RowFilter = finalFilter;
             }
             dataGrid.Refresh();
-
         }
 
         private void cb_SelectedIndexChanged(object sender, EventArgs e)
@@ -107,7 +106,7 @@ namespace OrderingSystem.CashierApp.Forms
             }
             dataGrid.DataSource = view;
             dataGrid.Refresh();
-
+            txt_TextChanged(this, EventArgs.Empty);
         }
 
 

@@ -75,6 +75,7 @@ namespace OrderingSystem.CashierApp.Components
 
             }
         }
+        bool x = false;
         public void initTable2()
         {
             table = new DataTable();
@@ -93,6 +94,7 @@ namespace OrderingSystem.CashierApp.Components
             dataGrid.Columns[0].Width = 48;
             dataGrid.Columns[2].Width = 70;
             dataGrid.Enabled = true;
+            x = true;
         }
         private void guna2Button1_Click(object sender, EventArgs e)
         {
@@ -126,11 +128,12 @@ namespace OrderingSystem.CashierApp.Components
         }
         private void submit(object sender, EventArgs e)
         {
-
+            if (!x) return;
             ingredientSelected.Clear();
             foreach (DataGridViewRow row in dataGrid.Rows)
             {
                 bool check = false;
+
                 if (row.Cells[3].Value != null && row.Cells[0].Value != null && bool.TryParse(row.Cells[0].Value.ToString(), out bool val))
                 {
                     check = val;

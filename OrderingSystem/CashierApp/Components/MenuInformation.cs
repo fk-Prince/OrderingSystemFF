@@ -78,6 +78,7 @@ namespace OrderingSystem.CashierApp.Components
                 {
                     cbd.SelectedIndex = -1;
                 }
+                prevStat = menu.isAvailable ? "Available" : "Not Available";
 
             }
             catch (Exception ex)
