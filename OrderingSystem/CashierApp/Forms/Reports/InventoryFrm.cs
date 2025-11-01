@@ -235,7 +235,7 @@ namespace OrderingSystem.CashierApp.Forms
         private void guna2Button1_Click(object sender, EventArgs e)
         {
             DataTable table = view.ToTable();
-            using (var save = new SaveFileDialog { Filter = "PDF File|*.pdf", FileName = "Report.pdf" })
+            using (var save = new SaveFileDialog { Filter = "PDF File|*.pdf", FileName = $"{title + " - " + DateTime.Now.ToString("yyyy-MM-dd")}" })
             {
                 if (save.ShowDialog() == DialogResult.OK)
                 {
@@ -259,14 +259,12 @@ namespace OrderingSystem.CashierApp.Forms
                         Font columnHeaderFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10);
                         foreach (DataColumn column in table.Columns)
                         {
-                            PdfPCell headerCell = new PdfPCell(new Phrase(column.ColumnName, columnHeaderFont))
-                            {
-                                BackgroundColor = BaseColor.LIGHT_GRAY,
-                                HorizontalAlignment = Element.ALIGN_CENTER,
-                                VerticalAlignment = Element.ALIGN_MIDDLE,
-                                Padding = 10,
-                                MinimumHeight = 30f
-                            };
+                            PdfPCell headerCell = new PdfPCell(new Phrase(column.ColumnName, columnHeaderFont));
+                            headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                            headerCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                            headerCell.Padding = 10;
+                            headerCell.MinimumHeight = 30f;
+                            headerCell.BackgroundColor = BaseColor.LIGHT_GRAY;
                             pdfTable.AddCell(headerCell);
                         }
 
@@ -274,10 +272,8 @@ namespace OrderingSystem.CashierApp.Forms
                         {
                             foreach (var cell in row.ItemArray)
                             {
-                                PdfPCell dataCell = new PdfPCell(new Phrase(cell?.ToString() ?? ""))
-                                {
-                                    Padding = 5
-                                };
+                                PdfPCell dataCell = new PdfPCell(new Phrase(cell?.ToString() ?? ""));
+                                dataCell.Padding = 5;
                                 pdfTable.AddCell(dataCell);
                             }
                         }
