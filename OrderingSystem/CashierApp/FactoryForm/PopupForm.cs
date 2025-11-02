@@ -17,13 +17,13 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
         {
             foreach (var c in Controls)
             {
-                if (c is Guna2TextBox t && (string.IsNullOrEmpty(t.Text) && t.Visible))
+                if (c is Guna2TextBox t && isRequired(t) && (string.IsNullOrEmpty(t.Text) && t.Visible))
                 {
                     MessageBox.Show("Empty Input Fill all fields");
                     return;
                 }
 
-                if (c is ComboBox b && (string.IsNullOrEmpty(b.Text) && b.Visible))
+                if (c is ComboBox b && isRequired(b) && (string.IsNullOrEmpty(b.Text) && b.Visible))
                 {
                     MessageBox.Show("Empty Input Fill all fields");
                     return;
@@ -42,6 +42,9 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
             comboChanged1?.Invoke(c1, EventArgs.Empty);
         }
 
-
+        private bool isRequired(Control b)
+        {
+            return !(b.Tag?.ToString().Equals("Optional", StringComparison.OrdinalIgnoreCase) ?? false);
+        }
     }
 }

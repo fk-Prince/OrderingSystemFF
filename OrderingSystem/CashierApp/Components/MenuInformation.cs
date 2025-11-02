@@ -354,7 +354,7 @@ namespace OrderingSystem.CashierApp.Components
             }
             if (double.TryParse(price.Text.Trim(), out double d))
             {
-                lPrice.Text = $"Price ( {d + (d * 0.12)} ) After Tax";
+                lPrice.Text = $"Price ({d + (d * 0.12) - (menu.Discount == null ? 0 : menu.Discount.Rate)}) After Tax / Discount";
             }
             else
             {

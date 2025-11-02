@@ -61,7 +61,7 @@ namespace OrderingSystem.Services
             return ingredientRepository.deductIngredient(stockId, quantity, reason);
         }
 
-        public bool validateRestockIngredient(int id, string quantity, DateTime value, string reason)
+        public bool validateRestockIngredient(int id, string quantity, DateTime value, string reason, string supplierName, string batchCost)
         {
             if (id == 0)
                 throw new InvalidInput("No Selected Ingredient");
@@ -72,11 +72,19 @@ namespace OrderingSystem.Services
             if (qty <= 0)
                 throw new InvalidInput("Invalid Quantity must be greater than zero.");
 
+            if (string.IsNullOrEmpty(supplierName))
+                supplierName = "N/A";
 
-            return ingredientRepository.restockIngredient(id, qty, value, reason);
+            if (!double.TryParse(batchCost, out double cost))
+                throw new InvalidInput("Cost must be a number.");
+
+            if (cost <= 0)
+                throw new InvalidInput("Cost must be must be greater than zero.");
+
+            return ingredientRepository.restockIngredient(id, qty, value, reason, supplierName, cost);
         }
 
-        public bool validateAddIngredients(string name, string quantity, string unit, DateTime expire)
+        public bool validateAddIngredients(string name, string quantity, string unit, DateTime expire, string supplierName, string batchCost)
         {
             if (ingredientRepository.isIngredientNameExists(name))
                 throw new InvalidInput("Ingredient name already exists.");
@@ -87,7 +95,16 @@ namespace OrderingSystem.Services
             if (qty <= 0)
                 throw new InvalidInput("Invalid Quantity must be greater than zero.");
 
-            return ingredientRepository.addIngredient(name, qty, unit, expire);
+            if (string.IsNullOrEmpty(supplierName))
+                supplierName = "N/A";
+
+            if (!double.TryParse(batchCost, out double cost))
+                throw new InvalidInput("Cost must be a number.");
+
+            if (cost <= 0)
+                throw new InvalidInput("Cost must be must be greater than zero.");
+
+            return ingredientRepository.addIngredient(name, qty, unit, expire, supplierName, cost);
         }
 
         public bool validateUpdateIngredient(int id, string name, string unit)
@@ -96,6 +113,11 @@ namespace OrderingSystem.Services
                 throw new InvalidInput("Ingredient name already exists.");
 
             return ingredientRepository.updateIngredient(id, name, unit);
+        }
+
+        public List<string> getSuppliers()
+        {
+            return ingredientRepository.getSuppliers();
         }
     }
 }

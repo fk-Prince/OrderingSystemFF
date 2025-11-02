@@ -60,6 +60,8 @@
             this.dataGrid.Size = new System.Drawing.Size(661, 236);
             this.dataGrid.TabIndex = 0;
             this.dataGrid.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGrid_CellValidating);
+            this.dataGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_CellValueChanged);
+            this.dataGrid.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGrid_CurrentCellDirtyStateChanged);
             // 
             // RegularTable
             // 

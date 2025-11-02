@@ -205,7 +205,7 @@
             // 
             this.mm.Location = new System.Drawing.Point(16, 327);
             this.mm.Name = "mm";
-            this.mm.Size = new System.Drawing.Size(686, 245);
+            this.mm.Size = new System.Drawing.Size(704, 245);
             this.mm.TabIndex = 15;
             // 
             // flowLayoutPanel1
@@ -404,7 +404,6 @@
             this.cbd.Location = new System.Drawing.Point(353, 12);
             this.cbd.Name = "cbd";
             this.cbd.Size = new System.Drawing.Size(217, 26);
-            this.cbd.StartIndex = 0;
             this.cbd.TabIndex = 23;
             // 
             // label5

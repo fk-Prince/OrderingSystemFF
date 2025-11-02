@@ -30,7 +30,7 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
             {
                 try
                 {
-                    bool suc = ingredientServices.validateAddIngredients(p.t1.Text.Trim(), p.t2.Text.Trim(), p.c3.Text, p.dt4.Value);
+                    bool suc = ingredientServices.validateAddIngredients(p.t1.Text.Trim(), p.t2.Text.Trim(), p.c3.Text, p.dt4.Value, p.c5.Text.Trim(), p.t6.Text.Trim());
                     if (suc)
                     {
                         MessageBox.Show("Successful Added", "Add", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -49,6 +49,14 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
                     MessageBox.Show("Internal Server Error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
+
+            List<string> supplier = ingredientServices.getSuppliers();
+            if (supplier.Count == 0) p.c5.Items.Add("N/A");
+            p.c5.Items.AddRange(supplier.ToArray());
+            p.c5.SelectedIndex = 0;
+
+
+
             DialogResult rs = iForms.selectForm(p, "add-ingredients").ShowDialog(parentForm);
             if (rs == DialogResult.OK)
             {
@@ -110,7 +118,7 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
             {
                 try
                 {
-                    bool suc = ingredientServices.validateRestockIngredient(id, p.t2.Text.Trim(), p.dt3.Value, p.c4.Text);
+                    bool suc = ingredientServices.validateRestockIngredient(id, p.t2.Text.Trim(), p.dt3.Value, p.c4.Text.Trim(), p.c5.Text.Trim(), p.t6.Text.Trim());
                     if (suc)
                     {
                         MessageBox.Show("Successful", "Restock", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -133,6 +141,12 @@ namespace OrderingSystem.CashierApp.Forms.Ingredient
             p.c1.Items.AddRange(ingredients.Select(i => i.IngredientName).ToArray());
             List<string> reas = ingredientServices.getReasons("Add");
             p.c4.Items.AddRange(reas.ToArray());
+
+            List<string> supplier = ingredientServices.getSuppliers();
+            if (supplier.Count == 0) p.c5.Items.Add("N/A");
+            p.c5.Items.AddRange(supplier.ToArray());
+            p.c5.SelectedIndex = 0;
+
             p.comboChanged1 += (ss, ee) =>
             {
                 if (ss is ComboBox cb && cb.SelectedIndex >= 0)

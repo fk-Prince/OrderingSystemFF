@@ -3,10 +3,10 @@ using OrderingSystem.Repository.Reports;
 
 namespace OrderingSystem.Services
 {
-    public class InventoryServices
+    public class ReportServices
     {
         private IInventoryReportsRepository inventoryReportsRepository;
-        public InventoryServices(IInventoryReportsRepository inventoryReportsRepository)
+        public ReportServices(IInventoryReportsRepository inventoryReportsRepository)
         {
             this.inventoryReportsRepository = inventoryReportsRepository;
 
@@ -32,9 +32,9 @@ namespace OrderingSystem.Services
         {
             return inventoryReportsRepository.getMenuPopularity();
         }
-        public DataView getMenuPerformance()
+        public DataView getInvoice()
         {
-            return inventoryReportsRepository.getMenuPerformance();
+            return inventoryReportsRepository.getInvoice();
         }
     }
 }

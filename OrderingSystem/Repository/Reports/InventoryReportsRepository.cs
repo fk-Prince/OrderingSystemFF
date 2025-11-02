@@ -204,36 +204,16 @@ namespace OrderingSystem.Repository.Reports
                 db.closeConnection();
             }
         }
-        public DataView getMenuPerformance()
+        public DataView getInvoice()
         {
-            string query = @"
-                            SELECT 
-                              m.menu_name AS 'Menu Name',
-                              md.size_name AS 'Size',
-                              md.flavor_name AS 'Flavor',
-                              md.price AS 'Price',
-                              SUM(oi.quantity) AS 'Total Sold',
-                              SUM(oi.quantity * md.price) AS 'Revenue'
-                            FROM menu_order_regular mor
-                            JOIN order_item oi ON mor.order_item_id = oi.order_item_id
-                            JOIN menu_detail md ON mor.menu_detail_id = md.menu_detail_id
-                            JOIN menu m ON md.menu_id = m.menu_id
-                            JOIN orders o ON oi.order_id = o.order_id
-                            WHERE o.status = 'Paid'
-                            GROUP BY m.menu_name,
-                              md.size_name,
-                              md.flavor_name,
-                              md.price
-                            ORDER BY Revenue DESC;
-                            ";
-
             var db = DatabaseHandler.getInstance();
             DataTable dt = new DataTable();
             try
             {
                 var conn = db.getConnection();
-                using (var cmd = new MySqlCommand(query, conn))
+                using (var cmd = new MySqlCommand("p_retrieve_invoice", conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     using (var adapter = new MySqlDataAdapter(cmd))
                     {
                         adapter.Fill(dt);

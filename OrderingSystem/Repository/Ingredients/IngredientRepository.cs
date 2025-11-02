@@ -278,7 +278,7 @@ namespace OrderingSystem.Repository.Ingredients
                 cmd.ExecuteNonQuery();
             }
         }
-        public bool restockIngredient(int id, int quantity, DateTime value, string reason)
+        public bool restockIngredient(int id, int quantity, DateTime value, string reason, string supplierName, double cost)
         {
             string query = @"INSERT INTO ingredient_stock (ingredient_id,current_stock,expiry_date) VALUES (@ingredient_id,@current_stock,@expiry_date)";
             int lastId;
@@ -297,6 +297,7 @@ namespace OrderingSystem.Repository.Ingredients
 
                         lastId = (int)cmd.LastInsertedId;
                     }
+                    checkSupplier(supplierName, cost, lastId, transaction, conn);
                     monitorInventory(lastId, quantity, reason, transaction, conn, "Add");
                     transaction.Commit();
                 }
@@ -350,7 +351,7 @@ namespace OrderingSystem.Repository.Ingredients
                 db.closeConnection();
             }
         }
-        public bool addIngredient(string name, int quantity, string unit, DateTime expiry)
+        public bool addIngredient(string name, int quantity, string unit, DateTime expiry, string supplierName, double cost)
         {
             string query1 = @"INSERT INTO ingredients (ingredient_name,unit) VALUES (@ingredient_name,@unit)";
             string query2 = @"INSERT INTO ingredient_stock (ingredient_id,current_stock,expiry_date) VALUES (@ingredient_id,@current_stock,@expiry_date)";
@@ -380,6 +381,7 @@ namespace OrderingSystem.Repository.Ingredients
 
                         lastId = (int)cmd.LastInsertedId;
                     }
+                    checkSupplier(supplierName, cost, lastId, transaction, conn);
                     monitorInventory(lastId, quantity, "Initial-Stock", transaction, conn, "Add");
                     transaction.Commit();
                 }
@@ -392,6 +394,39 @@ namespace OrderingSystem.Repository.Ingredients
             finally
             {
                 db.closeConnection();
+            }
+        }
+        private void checkSupplier(string supplierName, double cost, int stock_id, MySqlTransaction trans, MySqlConnection conn)
+        {
+            string query1 = @"SELECT supplier_id FROM suppliers WHERE supplier_name = @supplier_name";
+            string query2 = @"INSERT INTO suppliers (supplier_name) VALUES (@supplier_name)";
+            string query3 = @"INSERT INTO supplier_ingredient_stock (ingredient_stock_id,supplier_id,batch_cost) VALUES (@ingredient_stock_id,@supplier_id,@batch_cost)";
+
+            int id = 0;
+            using (var cmd = new MySqlCommand(query1, conn, trans))
+            {
+                cmd.Parameters.AddWithValue("@supplier_name", supplierName);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                        id = reader.GetInt32("supplier_id");
+                }
+            }
+            if (id == 0)
+            {
+                using (var cmd = new MySqlCommand(query2, conn, trans))
+                {
+                    cmd.Parameters.AddWithValue("@supplier_name", supplierName);
+                    cmd.ExecuteNonQuery();
+                    id = (int)cmd.LastInsertedId;
+                }
+            }
+            using (var cmd = new MySqlCommand(query3, conn, trans))
+            {
+                cmd.Parameters.AddWithValue("@ingredient_stock_id", stock_id);
+                cmd.Parameters.AddWithValue("@supplier_id", id);
+                cmd.Parameters.AddWithValue("@batch_cost", cost);
+                cmd.ExecuteNonQuery();
             }
         }
         public bool removeExpiredIngredient()
@@ -441,7 +476,6 @@ namespace OrderingSystem.Repository.Ingredients
                 db.closeConnection();
             }
         }
-
         public bool updateIngredient(int stock_id, string name, string unit)
         {
             string query1 = @"SELECT ingredient_id FROM ingredient_stock WHERE ingredient_stock_id = @ingredient_stock_id LIMIT 1";
@@ -477,6 +511,35 @@ namespace OrderingSystem.Repository.Ingredients
             {
                 db.closeConnection();
             }
+        }
+
+        public List<string> getSuppliers()
+        {
+            List<string> im = new List<string>();
+            var db = DatabaseHandler.getInstance();
+            try
+            {
+                var conn = db.getConnection();
+                using (var cmd = new MySqlCommand("SELECT DISTINCT supplier_name FROM suppliers", conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            im.Add(reader.GetString("supplier_name"));
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                db.closeConnection();
+            }
+            return im;
         }
     }
 }

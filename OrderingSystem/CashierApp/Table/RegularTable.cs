@@ -31,8 +31,9 @@ namespace OrderingSystem.CashierApp.Components
             table.Columns.Add("Size");
             table.Columns.Add("Prep Estimated Time");
             table.Columns.Add("Price");
+            table.Columns.Add("Price After Tax");
             table.Columns.Add("Price After Tax / Discount");
-            variants.ForEach(v => table.Rows.Add(v.FlavorName, v.SizeName, v.EstimatedTime, v.MenuPrice, v.getPriceAfterVatWithDiscount().ToString("N2")));
+            variants.ForEach(v => table.Rows.Add(v.FlavorName, v.SizeName, v.EstimatedTime, v.MenuPrice, v.getPriceAfterVat().ToString("N2"), v.getPriceAfterVatWithDiscount().ToString("N2")));
             dataGrid.AutoGenerateColumns = false;
             dataGrid.DataSource = table;
 
@@ -71,6 +72,12 @@ namespace OrderingSystem.CashierApp.Components
             priceColumn.HeaderText = "Price";
             priceColumn.DataPropertyName = "Price";
             dataGrid.Columns.Add(priceColumn);
+
+            DataGridViewTextBoxColumn priceTaxColumn = new DataGridViewTextBoxColumn();
+            priceTaxColumn.Name = "Price After Tax";
+            priceTaxColumn.HeaderText = "Price After Tax";
+            priceTaxColumn.DataPropertyName = "Price After Tax";
+            dataGrid.Columns.Add(priceTaxColumn);
 
             DataGridViewTextBoxColumn priceTaxColmn = new DataGridViewTextBoxColumn();
             priceTaxColmn.Name = "Price After Tax / Discount";
@@ -134,7 +141,7 @@ namespace OrderingSystem.CashierApp.Components
 
         private void dataGrid_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            //if (dataGrid.Columns[e.ColumnIndex].Name == "Quantity")
+            //if (dataGrid.Columns[e.ColumnIndex].Name == "Price")
             //{
             //    string input = e.FormattedValue?.ToString().Trim();
 
@@ -144,32 +151,6 @@ namespace OrderingSystem.CashierApp.Components
             //    string pattern = @"^(?:\d{1,3}(?:,\d{3})*|\d+)?(?:\.\d+)?$";
 
             //    if (!Regex.IsMatch(input, pattern))
-            //    {
-            //        MessageBox.Show("Invalid Input", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        e.Cancel = true;
-            //    }
-            //}
-            //if (dataGrid.Columns[e.ColumnIndex].Name == "Prep Estimated Time")
-            //{
-            //    string input = e.FormattedValue?.ToString().Trim();
-
-            //    if (string.IsNullOrEmpty(input))
-            //        return;
-            //    if (!TimeSpan.TryParse(input, out _))
-            //    {
-            //        MessageBox.Show("Invalid iNptu");
-            //        e.Cancel = true;
-            //    }
-            //}
-
-            //if (dataGrid.Columns[e.ColumnIndex].Name == "Size" || dataGrid.Columns[e.ColumnIndex].Name == "Flavor")
-            //{
-            //    string input = e.FormattedValue?.ToString().Trim();
-
-            //    if (string.IsNullOrEmpty(input))
-            //        return;
-
-            //    if (!Regex.IsMatch(input, @"^[a-zA-Z]+$"))
             //    {
             //        MessageBox.Show("Invalid Input", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
             //        e.Cancel = true;
@@ -291,5 +272,40 @@ namespace OrderingSystem.CashierApp.Components
             dataGrid.DataSource = table;
         }
 
+        private void dataGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dataGrid.Rows[e.RowIndex];
+
+            if (dataGrid.Columns[e.ColumnIndex].Name == "Price")
+            {
+                string priceText = row.Cells["Price"].Value?.ToString();
+                if (double.TryParse(priceText, out double price))
+                {
+                    double vat = price * 0.12;
+                    double priceAfterTax = price + vat;
+
+                    var variant = variants.Count > e.RowIndex ? variants[e.RowIndex] : null;
+                    double discount = variant?.Discount?.Rate ?? 0;
+
+                    double priceAfterDiscount = priceAfterTax - discount;
+
+                    row.Cells["Price After Tax"].Value = priceAfterTax.ToString("N2");
+                    row.Cells["Price After Tax / Discount"].Value = priceAfterDiscount.ToString("N2");
+                }
+                else
+                {
+                    row.Cells["Price After Tax"].Value = "";
+                    row.Cells["Price After Tax / Discount"].Value = "";
+                }
+            }
+        }
+
+        private void dataGrid_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dataGrid.IsCurrentCellDirty)
+                dataGrid.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
     }
 }

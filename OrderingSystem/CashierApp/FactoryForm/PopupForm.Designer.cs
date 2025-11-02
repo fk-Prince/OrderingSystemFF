@@ -44,12 +44,16 @@
             this.c3 = new System.Windows.Forms.ComboBox();
             this.c4 = new System.Windows.Forms.ComboBox();
             this.guna2BorderlessForm1 = new Guna.UI2.WinForms.Guna2BorderlessForm(this.components);
-            this.guna2PictureBox1 = new Guna.UI2.WinForms.Guna2PictureBox();
+            this.x = new Guna.UI2.WinForms.Guna2PictureBox();
             this.dt2 = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.dt3 = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.dt4 = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.dt1 = new Guna.UI2.WinForms.Guna2DateTimePicker();
-            ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).BeginInit();
+            this.c5 = new System.Windows.Forms.ComboBox();
+            this.l5 = new System.Windows.Forms.Label();
+            this.l6 = new System.Windows.Forms.Label();
+            this.t6 = new Guna.UI2.WinForms.Guna2TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.x)).BeginInit();
             this.SuspendLayout();
             // 
             // t1
@@ -250,22 +254,22 @@
             this.guna2BorderlessForm1.DockIndicatorTransparencyValue = 0.6D;
             this.guna2BorderlessForm1.TransparentWhileDrag = true;
             // 
-            // guna2PictureBox1
+            // x
             // 
-            this.guna2PictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.guna2PictureBox1.BorderRadius = 10;
-            this.guna2PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.guna2PictureBox1.FillColor = System.Drawing.Color.Transparent;
-            this.guna2PictureBox1.Image = global::OrderingSystem.Properties.Resources.exit;
-            this.guna2PictureBox1.ImageRotate = 0F;
-            this.guna2PictureBox1.Location = new System.Drawing.Point(393, 4);
-            this.guna2PictureBox1.Name = "guna2PictureBox1";
-            this.guna2PictureBox1.Size = new System.Drawing.Size(25, 25);
-            this.guna2PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.guna2PictureBox1.TabIndex = 60;
-            this.guna2PictureBox1.TabStop = false;
-            this.guna2PictureBox1.UseTransparentBackground = true;
-            this.guna2PictureBox1.Click += new System.EventHandler(this.guna2PictureBox1_Click);
+            this.x.BackColor = System.Drawing.Color.Transparent;
+            this.x.BorderRadius = 10;
+            this.x.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.x.FillColor = System.Drawing.Color.Transparent;
+            this.x.Image = global::OrderingSystem.Properties.Resources.exit;
+            this.x.ImageRotate = 0F;
+            this.x.Location = new System.Drawing.Point(393, 4);
+            this.x.Name = "x";
+            this.x.Size = new System.Drawing.Size(25, 25);
+            this.x.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.x.TabIndex = 60;
+            this.x.TabStop = false;
+            this.x.UseTransparentBackground = true;
+            this.x.Click += new System.EventHandler(this.guna2PictureBox1_Click);
             // 
             // dt2
             // 
@@ -331,11 +335,65 @@
             this.dt1.Value = new System.DateTime(2025, 10, 26, 0, 0, 0, 0);
             this.dt1.Visible = false;
             // 
+            // c5
+            // 
+            this.c5.FormattingEnabled = true;
+            this.c5.Location = new System.Drawing.Point(430, 125);
+            this.c5.Name = "c5";
+            this.c5.Size = new System.Drawing.Size(304, 21);
+            this.c5.TabIndex = 72;
+            this.c5.Visible = false;
+            // 
+            // l5
+            // 
+            this.l5.AutoSize = true;
+            this.l5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l5.Location = new System.Drawing.Point(427, 109);
+            this.l5.Name = "l5";
+            this.l5.Size = new System.Drawing.Size(119, 13);
+            this.l5.TabIndex = 71;
+            this.l5.Text = "Supplier Name (If any)";
+            // 
+            // l6
+            // 
+            this.l6.AutoSize = true;
+            this.l6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l6.Location = new System.Drawing.Point(427, 174);
+            this.l6.Name = "l6";
+            this.l6.Size = new System.Drawing.Size(61, 13);
+            this.l6.TabIndex = 74;
+            this.l6.Text = "Batch Cost";
+            // 
+            // t6
+            // 
+            this.t6.BorderRadius = 5;
+            this.t6.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.t6.DefaultText = "";
+            this.t6.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.t6.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.t6.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.t6.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.t6.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+            this.t6.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.t6.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.t6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.t6.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.t6.Location = new System.Drawing.Point(430, 190);
+            this.t6.Name = "t6";
+            this.t6.PlaceholderText = "";
+            this.t6.SelectedText = "";
+            this.t6.Size = new System.Drawing.Size(304, 36);
+            this.t6.TabIndex = 73;
+            // 
             // PopupForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(425, 484);
+            this.ClientSize = new System.Drawing.Size(421, 484);
+            this.Controls.Add(this.l6);
+            this.Controls.Add(this.t6);
+            this.Controls.Add(this.c5);
+            this.Controls.Add(this.l5);
             this.Controls.Add(this.dt1);
             this.Controls.Add(this.dt4);
             this.Controls.Add(this.dt3);
@@ -346,7 +404,7 @@
             this.Controls.Add(this.c1);
             this.Controls.Add(this.l4);
             this.Controls.Add(this.t4);
-            this.Controls.Add(this.guna2PictureBox1);
+            this.Controls.Add(this.x);
             this.Controls.Add(this.title);
             this.Controls.Add(this.b1);
             this.Controls.Add(this.l3);
@@ -359,7 +417,7 @@
             this.Name = "PopupForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PopupForm";
-            ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.x)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -374,7 +432,6 @@
         public Guna.UI2.WinForms.Guna2TextBox t3;
         public System.Windows.Forms.Label title;
         public Guna.UI2.WinForms.Guna2Button b1;
-        private Guna.UI2.WinForms.Guna2PictureBox guna2PictureBox1;
         public System.Windows.Forms.Label l4;
         public Guna.UI2.WinForms.Guna2TextBox t4;
         private Guna.UI2.WinForms.Guna2BorderlessForm guna2BorderlessForm1;
@@ -386,5 +443,10 @@
         public Guna.UI2.WinForms.Guna2DateTimePicker dt4;
         public Guna.UI2.WinForms.Guna2DateTimePicker dt1;
         public System.Windows.Forms.ComboBox c2;
+        public System.Windows.Forms.ComboBox c5;
+        public System.Windows.Forms.Label l5;
+        public System.Windows.Forms.Label l6;
+        public Guna.UI2.WinForms.Guna2TextBox t6;
+        public Guna.UI2.WinForms.Guna2PictureBox x;
     }
 }

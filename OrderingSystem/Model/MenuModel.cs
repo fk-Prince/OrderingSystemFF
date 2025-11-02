@@ -79,9 +79,6 @@ namespace OrderingSystem.Model
             return CalculateVat.VatCalulator(MenuPrice - (MenuPrice * (Discount == null ? 0 : Discount.Rate)));
         }
 
-
-
-
         public MenuModel Clone()
         {
             return Builder()
@@ -105,6 +102,16 @@ namespace OrderingSystem.Model
                 .isAvailable(isAvailable)
                 .Build();
         }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public class MenuBuilder : IMenuBuilder
         {
             private readonly MenuModel _menuModel = new MenuModel();

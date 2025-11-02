@@ -117,7 +117,7 @@ namespace OrderingSystem.Receipt
             double subtotald = menus.Sum(o => o.getSubtotal());
             double couponRated = subtotald * (om.Coupon == null ? 0 : om.Coupon.CouponRate);
             double vatd = menus.Sum(o => (subtotald - couponRated) * 0.12);
-            double withoutVat = menus.Sum(o => o.PurchaseMenu.MenuPrice * o.PurchaseQty);
+            double withoutVat = menus.Sum(o => o.PurchaseMenu.getPrice() * o.PurchaseQty);
             double totald = (subtotald - couponRated);
 
             int y1 = y;
@@ -174,7 +174,7 @@ namespace OrderingSystem.Receipt
             int bx = 5;
             for (int b = 0; b < 55; b++)
             {
-                e.Graphics.DrawString("-", new Font("Sans-serif", 9), Brushes.Black, bx, y + 40);
+                e.Graphics.DrawString("-", new Font("Sans-serif", 9), Brushes.Black, bx + 2, y + 40);
                 bx += 7;
             }
 

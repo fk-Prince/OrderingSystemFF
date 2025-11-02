@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using OrderingSystem.CashierApp.Forms.Staffs;
 
@@ -6,6 +7,10 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
 {
     public class FormFactory : IForms
     {
+
+        // POPUPFORM
+        public static Size defaultSize = new Size(425, 484);
+        public static Size wideSize = new Size(820, 484);
         public Form selectForm(Form fx, string type)
         {
             if (fx is PopupForm f1 && type.ToLower() == "coupon")
@@ -34,6 +39,15 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
                 f2.c3.Visible = true;
                 f2.b1.Text = "Submit";
                 f2.title.Text = "Add Ingredients";
+                f2.Size = wideSize;
+                f2.title.Size = new Size(wideSize.Width, f2.title.Height);
+                f2.x.Location = new Point(wideSize.Width - (f2.x.Width + 4), 4);
+                f2.l6.Visible = true;
+                f2.l5.Visible = true;
+                f2.c5.Visible = true;
+                f2.t6.Visible = true;
+                f2.c5.Tag = "Optional";
+                centerButton(f2);
             }
             else if (fx is PopupForm f3 && type.ToLower() == "restock-ingredients")
             {
@@ -50,6 +64,15 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
                 f3.c4.Visible = true;
                 f3.b1.Text = "Submit";
                 f3.title.Text = "Restock Ingredients";
+                f3.Size = wideSize;
+                f3.title.Size = new Size(wideSize.Width, f3.title.Height);
+                f3.x.Location = new Point(wideSize.Width - (f3.x.Width + 4), 4);
+                f3.l6.Visible = true;
+                f3.l5.Visible = true;
+                f3.c5.Visible = true;
+                f3.t6.Visible = true;
+                f3.c5.Tag = "Optional";
+                centerButton(f3);
             }
             else if (fx is PopupForm f4 && type.ToLower() == "deduct-ingredients")
             {
@@ -124,6 +147,11 @@ namespace OrderingSystem.CashierApp.Forms.FactoryForm
             }
 
             return fx;
+        }
+
+        public void centerButton(PopupForm f)
+        {
+            f.b1.Location = new Point((f.Width - f.b1.Width) / 2, f.b1.Location.Y);
         }
     }
 }

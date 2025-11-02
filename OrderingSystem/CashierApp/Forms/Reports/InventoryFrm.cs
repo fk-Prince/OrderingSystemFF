@@ -15,9 +15,9 @@ namespace OrderingSystem.CashierApp.Forms
     public partial class Reports : Form
     {
         private DataView view;
-        private InventoryServices inventoryServices;
+        private readonly ReportServices inventoryServices;
         private string title;
-        public Reports(InventoryServices inventoryServices)
+        public Reports(ReportServices inventoryServices)
         {
             InitializeComponent();
             this.inventoryServices = inventoryServices;
@@ -55,8 +55,8 @@ namespace OrderingSystem.CashierApp.Forms
                 case "Menu Popular's":
                     reportMenuPopular();
                     break;
-                case "Menu Performance":
-                    reportMenuPerformance();
+                case "Invoice Record":
+                    reportInvoice();
                     break;
             }
             ;
@@ -95,10 +95,10 @@ namespace OrderingSystem.CashierApp.Forms
                 txt.PlaceholderText = "Search Menu";
                 view = inventoryServices.getMenuPopularity();
             }
-            else if (s == "Menu Performance")
+            else if (s == "Invoice Record")
             {
-                txt.PlaceholderText = "Search Menu, Flavor, Size, Price";
-                view = inventoryServices.getMenuPerformance();
+                txt.PlaceholderText = "Invoice Record";
+                view = inventoryServices.getInvoice();
             }
             dataGrid.DataSource = view;
             dataGrid.Refresh();
@@ -209,15 +209,13 @@ namespace OrderingSystem.CashierApp.Forms
                 view.RowFilter = finalFilter;
             }
         }
-        private void reportMenuPerformance()
+        private void reportInvoice()
         {
             p1.Visible = true;
             p2.Visible = false;
-            string menuFilter = string.IsNullOrEmpty(txt.Text) ? "" : $"[Menu Name] LIKE '%{txt.Text}%'";
-            string sizeFilter = string.IsNullOrEmpty(txt.Text) ? "" : $"[Size] LIKE '%{txt.Text}%'";
-            string flavorFilter = string.IsNullOrEmpty(txt.Text) ? "" : $"[Flavor] LIKE '%{txt.Text}%'";
-            string priceFilter = string.IsNullOrEmpty(txt.Text) ? "" : $"[Price] LIKE '%{txt.Text}%'";
-            string finalFilter = string.Join(" OR ", new[] { menuFilter, sizeFilter, flavorFilter, priceFilter }.Where(f => !string.IsNullOrEmpty(f)));
+            string dateFilter = $"[Date] >= #{dtFrom.Value:yyyy-MM-dd}# AND [Date] <= #{dtTo.Value:yyyy-MM-dd}#";
+            string invoiceFilter = string.IsNullOrEmpty(txt.Text) ? "" : $"[Invoice ID] LIKE '%{txt.Text}%'";
+            string finalFilter = string.Join(" AND ", new[] { invoiceFilter, dateFilter }.Where(f => !string.IsNullOrEmpty(f)));
             view.RowFilter = finalFilter;
         }
         private void reportMenuPopular()
@@ -239,7 +237,7 @@ namespace OrderingSystem.CashierApp.Forms
             {
                 if (save.ShowDialog() == DialogResult.OK)
                 {
-                    using (var doc = new Document(PageSize.A4, 10f, 10f, 20f, 20f))
+                    using (var doc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f))
                     {
                         PdfWriter.GetInstance(doc, new FileStream(save.FileName, FileMode.Create));
                         doc.Open();

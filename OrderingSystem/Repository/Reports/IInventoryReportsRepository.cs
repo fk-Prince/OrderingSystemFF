@@ -9,7 +9,7 @@ namespace OrderingSystem.Repository.Reports
         DataView getInventoryReports();
         DataView getIngredientsUsage();
         DataView getMenuPopularity();
-        DataView getMenuPerformance();
+        DataView getInvoice();
 
     }
 }
