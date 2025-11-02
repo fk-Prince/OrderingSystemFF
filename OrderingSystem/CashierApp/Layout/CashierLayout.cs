@@ -142,7 +142,7 @@ namespace OrderingSystem.CashierApp.Forms
         private void viewInventory(object sender, System.EventArgs e)
         {
             hideSubPanel();
-            loadForm(new Reports(new ReportServices(new InventoryReportsRepository())));
+            loadForm(new ReportsFrm(new ReportServices(new InventoryReportsRepository())));
         }
         private void viewStaff(object sender, System.EventArgs e)
         {

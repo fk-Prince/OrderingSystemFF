@@ -407,11 +407,11 @@
     <Compile Include="CashierApp\Forms\Ingredient\IngredientFrm.Designer.cs">
       <DependentUpon>IngredientFrm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CashierApp\Forms\Reports\InventoryFrm.cs">
+    <Compile Include="CashierApp\Forms\Reports\ReportsFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CashierApp\Forms\Reports\InventoryFrm.Designer.cs">
-      <DependentUpon>InventoryFrm.cs</DependentUpon>
+    <Compile Include="CashierApp\Forms\Reports\ReportsFrm.Designer.cs">
+      <DependentUpon>ReportsFrm.cs</DependentUpon>
     </Compile>
     <Compile Include="CashierApp\Forms\Menu\MenuBundleFrm.cs">
       <SubType>Form</SubType>
@@ -659,8 +659,8 @@
     <EmbeddedResource Include="CashierApp\Forms\Ingredient\IngredientFrm.resx">
       <DependentUpon>IngredientFrm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CashierApp\Forms\Reports\InventoryFrm.resx">
-      <DependentUpon>InventoryFrm.cs</DependentUpon>
+    <EmbeddedResource Include="CashierApp\Forms\Reports\ReportsFrm.resx">
+      <DependentUpon>ReportsFrm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CashierApp\Forms\Menu\MenuBundleFrm.resx">
       <DependentUpon>MenuBundleFrm.cs</DependentUpon>

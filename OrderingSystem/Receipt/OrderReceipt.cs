@@ -57,10 +57,6 @@ namespace OrderingSystem.Receipt
         {
             this.cash = cash;
         }
-        public void PaymentMethod(string paymentMethod)
-        {
-            this.paymentMethod = paymentMethod;
-        }
 
         private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
         {

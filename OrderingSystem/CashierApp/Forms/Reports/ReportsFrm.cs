@@ -12,12 +12,13 @@ using Font = iTextSharp.text.Font;
 
 namespace OrderingSystem.CashierApp.Forms
 {
-    public partial class Reports : Form
+    public partial class ReportsFrm : Form
     {
         private DataView view;
         private readonly ReportServices inventoryServices;
         private string title;
-        public Reports(ReportServices inventoryServices)
+        private string typePdf;
+        public ReportsFrm(ReportServices inventoryServices)
         {
             InitializeComponent();
             this.inventoryServices = inventoryServices;
@@ -37,25 +38,37 @@ namespace OrderingSystem.CashierApp.Forms
         {
             dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             string s = cb.Text;
-            title = s;
+
             switch (s)
             {
                 case "Track Quantity In/Out":
+                    typePdf = "Normal";
+                    title = "Ingredient Report";
                     reportTrackQuantity();
                     break;
                 case "Expiry Tracking":
+                    typePdf = "Normal";
+                    title = "Expiry Report";
                     reportExpirationIngredient();
                     break;
                 case "Inventory Reports":
+                    typePdf = "Normal";
+                    title = "Inventory Report";
                     reportInventory();
                     break;
                 case "Ingredient Usage":
+                    typePdf = "Normal";
+                    title = "Inventory Usage Report";
                     reportIngredientUsage();
                     break;
                 case "Menu Popular's":
+                    typePdf = "Normal";
+                    title = "Menu Popular Report";
                     reportMenuPopular();
                     break;
                 case "Invoice Record":
+                    typePdf = "Rotate";
+                    title = "Invoice Report";
                     reportInvoice();
                     break;
             }
@@ -237,7 +250,7 @@ namespace OrderingSystem.CashierApp.Forms
             {
                 if (save.ShowDialog() == DialogResult.OK)
                 {
-                    using (var doc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 20f))
+                    using (var doc = new Document(typePdf == "Normal" ? PageSize.A4 : PageSize.A4.Rotate(), 10f, 10f, 20f, 20f))
                     {
                         PdfWriter.GetInstance(doc, new FileStream(save.FileName, FileMode.Create));
                         doc.Open();
@@ -260,9 +273,11 @@ namespace OrderingSystem.CashierApp.Forms
                             PdfPCell headerCell = new PdfPCell(new Phrase(column.ColumnName, columnHeaderFont));
                             headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
                             headerCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                            headerCell.Padding = 10;
-                            headerCell.MinimumHeight = 30f;
-                            headerCell.BackgroundColor = BaseColor.LIGHT_GRAY;
+                            headerCell.Padding = 6f;
+                            headerCell.MinimumHeight = 20;
+                            headerCell.BackgroundColor = new BaseColor(220, 220, 220);
+                            headerCell.BorderWidth = 0.3f;
+                            headerCell.BorderColor = new BaseColor(180, 180, 180);
                             pdfTable.AddCell(headerCell);
                         }
 
@@ -271,7 +286,11 @@ namespace OrderingSystem.CashierApp.Forms
                             foreach (var cell in row.ItemArray)
                             {
                                 PdfPCell dataCell = new PdfPCell(new Phrase(cell?.ToString() ?? ""));
-                                dataCell.Padding = 5;
+                                dataCell.Padding = 5f;
+                                dataCell.MinimumHeight = 16f;
+                                dataCell.BackgroundColor = new BaseColor(245, 245, 245);
+                                dataCell.BorderWidth = 0.3f;
+                                dataCell.BorderColor = new BaseColor(200, 200, 200);
                                 pdfTable.AddCell(dataCell);
                             }
                         }
