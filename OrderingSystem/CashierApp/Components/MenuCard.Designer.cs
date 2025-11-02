@@ -44,17 +44,21 @@
             this.image.BorderRadius = 10;
             this.image.CustomizableEdges.BottomLeft = false;
             this.image.CustomizableEdges.BottomRight = false;
+            this.image.Dock = System.Windows.Forms.DockStyle.Top;
             this.image.Image = global::OrderingSystem.Properties.Resources.placeholder;
             this.image.ImageRotate = 0F;
-            this.image.Location = new System.Drawing.Point(-1, -2);
+            this.image.Location = new System.Drawing.Point(0, 0);
             this.image.Name = "image";
-            this.image.Size = new System.Drawing.Size(258, 107);
+            this.image.Size = new System.Drawing.Size(236, 107);
             this.image.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.image.TabIndex = 0;
             this.image.TabStop = false;
             // 
             // menuName
             // 
+            this.menuName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.menuName.AutoEllipsis = true;
             this.menuName.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menuName.Location = new System.Drawing.Point(10, 108);
@@ -65,6 +69,9 @@
             // 
             // menuDescription
             // 
+            this.menuDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.menuDescription.AutoEllipsis = true;
             this.menuDescription.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menuDescription.Location = new System.Drawing.Point(26, 165);
@@ -76,6 +83,9 @@
             // 
             // guna2Panel1
             // 
+            this.guna2Panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2Panel1.AutoRoundedCorners = true;
             this.guna2Panel1.BackColor = System.Drawing.Color.Transparent;
             this.guna2Panel1.Controls.Add(this.guna2PictureBox1);
