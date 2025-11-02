@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace OrderingSystem.Model
@@ -8,8 +9,38 @@ namespace OrderingSystem.Model
         private string order_id;
         public List<OrderItemModel> OrderItemList { get; set; }
         public CouponModel Coupon { get; set; }
-
         public string OrderId { get => order_id; }
+
+
+        public double GetGrossRevenue()
+        {
+            return OrderItemList.Sum(item => item.getSubtotal());
+        }
+
+        public double GetCouponDiscount()
+        {
+            if (Coupon == null) return 0;
+            return GetGrossRevenue() * Coupon.CouponRate;
+        }
+
+
+        public double GetTotalWithVAT()
+        {
+            return GetGrossRevenue() - GetCouponDiscount();
+        }
+
+        public double GetVATAmount()
+        {
+            double totalWithVAT = GetTotalWithVAT();
+            double totalWithoutVAT = totalWithVAT / 1.12;
+            return totalWithVAT - totalWithoutVAT;
+        }
+
+        public double GetAmountWithoutVAT()
+        {
+            return GetTotalWithVAT() / 1.12;
+        }
+
         public string JsonOrderList()
         {
             return JsonConvert.SerializeObject(OrderItemList);
@@ -26,19 +57,17 @@ namespace OrderingSystem.Model
                 _order = new OrderModel();
             }
 
-
             public OrderBuilder WithOrderId(string c)
             {
                 _order.order_id = c;
                 return this;
             }
+
             public OrderBuilder WithOrderItemList(List<OrderItemModel> c)
             {
                 _order.OrderItemList = c;
                 return this;
             }
-
-
 
             public OrderBuilder WithCoupon(CouponModel c)
             {
@@ -46,15 +75,10 @@ namespace OrderingSystem.Model
                 return this;
             }
 
-
             public OrderModel Build()
             {
                 return _order;
             }
-
-
         }
-
-
     }
 }

@@ -8,5 +8,7 @@ namespace OrderingSystem.CashierApp.Payment
         string PaymentName { get; }
         double calculateFee(double amount);
         bool processPayment(OrderModel order, double cash);
+
+        double getCash();
     }
 }

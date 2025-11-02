@@ -14,6 +14,7 @@ namespace OrderingSystem.CashierApp.Forms.Order
         private OrderModel om;
         private OrderServices orderServices;
 
+        public double Cash;
         public PaymentMethod(OrderServices orderServices)
         {
             InitializeComponent();
@@ -67,11 +68,14 @@ namespace OrderingSystem.CashierApp.Forms.Order
                     throw new InvalidPayment("Cash amount is invalid.");
 
                 payment.calculateFee(om.OrderItemList.Sum(ex => ex.getTotal()));
-                bool suc = payment.processPayment(om, double.Parse(t1.Text));
+
+                double cashAmount = cb.SelectedItem.ToString() == "Cash" ? double.Parse(t1.Text) : 0;
+                bool suc = payment.processPayment(om, cashAmount);
                 if (suc)
                 {
                     MessageBox.Show("Successfull Payment", "Payment Method", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     DialogResult = DialogResult.OK;
+                    Cash = payment.getCash();
                 }
                 else
                     MessageBox.Show("Failed to Proceed Payment", "Payment Method", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -112,7 +116,7 @@ namespace OrderingSystem.CashierApp.Forms.Order
         public void setOrder(OrderModel om)
         {
             this.om = om;
-            total.Text = om.OrderItemList.Sum(e => e.getTotal()).ToString("N2");
+            total.Text = om.OrderItemList.Sum(e => e.getSubtotal()).ToString("N2");
         }
 
         private void t1_TextChanged(object sender, EventArgs e)

@@ -64,19 +64,6 @@ namespace OrderingSystem.CashierApp.Forms
                 if (om.OrderItemList.Count > 0)
                     foreach (var order in om.OrderItemList)
                         table.Rows.Add(om.OrderId, order.PurchaseMenu.MenuName, order.PurchaseMenu.getPriceAfterVatWithDiscount().ToString("N2"), order.PurchaseQty, order.getSubtotal().ToString("N2"));
-                //table.Rows.Add(om.OrderId, order.MenuName, order.Note, order.NoteApproved, order.Price, order.PurchaseQty, order.getTotal());
-
-                //double subtotald = om.OrderItemList.Sum(o => o.getTotal());
-                //double couponRated = subtotald * om.Coupon.CouponRate;
-                //double vatd = (subtotald - couponRated) * 0.12;
-                //double totald = om.OrderItemList.Sum(o => o.PurchaseMenu.getPrice());
-
-                //double rated = om.Coupon.CouponRate * 100;
-                //subtotal.Text = subtotald.ToString("N2");
-                //coupon.Text = couponRated.ToString("N2");
-                //rate.Text = rated != 0 ? rated.ToString() + "%" : "";
-                //vat.Text = vatd.ToString("N2");
-                //total.Text = totald.ToString("N2");
 
                 double subtotald = om.OrderItemList.Sum(o => o.getSubtotal());
                 double couponRated = subtotald * (om.Coupon == null ? 0 : om.Coupon.CouponRate);
@@ -114,6 +101,7 @@ namespace OrderingSystem.CashierApp.Forms
             coupon.Text = "0.00";
             vat.Text = "0.00";
             total.Text = "0.00";
+            wo.Text = "0.00";
         }
         private void cashPayment(object sender, System.EventArgs e)
         {
@@ -125,6 +113,7 @@ namespace OrderingSystem.CashierApp.Forms
             {
                 Tuple<TimeSpan, string> xd = orderServices.getTimeInvoiceWaiting(om.OrderId);
                 OrderReceipt or = new OrderReceipt(om);
+                or.Cash(p.Cash);
                 or.Message("Wait for your Order", xd.Item1.ToString(@"hh\:mm\:ss"), xd.Item2);
                 or.print();
                 p.Hide();
@@ -150,5 +139,6 @@ namespace OrderingSystem.CashierApp.Forms
                 e.Handled = true;
             }
         }
+
     }
 }

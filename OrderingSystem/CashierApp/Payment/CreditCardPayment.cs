@@ -34,5 +34,10 @@ namespace OrderingSystem.CashierApp.Payment
 
             return orderServices.payOrder(order, SessionStaffData.StaffId, PaymentName);
         }
+
+        public double getCash()
+        {
+            return 0;
+        }
     }
 }

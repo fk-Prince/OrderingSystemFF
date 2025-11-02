@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.Linq;
 using System.Windows.Forms;
 using OrderingSystem.CashierApp.SessionData;
 using OrderingSystem.Model;
@@ -19,6 +18,7 @@ namespace OrderingSystem.Receipt
         private int y = 170;
         private int x = 10;
         private string message;
+        private string paymentMethod;
         private double cash;
         private string invoice_id;
         private string estimated_date;
@@ -56,6 +56,10 @@ namespace OrderingSystem.Receipt
         public void Cash(double cash)
         {
             this.cash = cash;
+        }
+        public void PaymentMethod(string paymentMethod)
+        {
+            this.paymentMethod = paymentMethod;
         }
 
         private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
@@ -102,8 +106,11 @@ namespace OrderingSystem.Receipt
                 e.Graphics.DrawString(a.PurchaseMenu.MenuName, mainFont, Brushes.Black, x, y);
                 y += 15;
                 x += 30;
-                string va = a.PurchaseMenu.SizeName?.ToLower().Trim() == a.PurchaseMenu.FlavorName?.ToLower().Trim() ? "( " + a.PurchaseMenu.SizeName + " )" : "( " + a.PurchaseMenu.SizeName + " - " + a.PurchaseMenu.FlavorName + " )";
-                e.Graphics.DrawString(va, mainFont, Brushes.Black, x, y);
+                if (!(a.PurchaseMenu is MenuPackageModel))
+                {
+                    string va = a.PurchaseMenu.SizeName?.ToLower().Trim() == a.PurchaseMenu.FlavorName?.ToLower().Trim() ? "( " + a.PurchaseMenu.SizeName + " )" : "( " + a.PurchaseMenu.SizeName + " - " + a.PurchaseMenu.FlavorName + " )";
+                    e.Graphics.DrawString(va, mainFont, Brushes.Black, x, y);
+                }
                 x += 260;
                 e.Graphics.DrawString(a.getSubtotal().ToString("N2"), mainFont, Brushes.Black, x, y);
                 x = 10;
@@ -114,23 +121,31 @@ namespace OrderingSystem.Receipt
 
             y += 20;
             SizeF size1;
-            double subtotald = menus.Sum(o => o.getSubtotal());
-            double couponRated = subtotald * (om.Coupon == null ? 0 : om.Coupon.CouponRate);
-            double vatd = menus.Sum(o => (subtotald - couponRated) * 0.12);
-            double withoutVat = menus.Sum(o => o.PurchaseMenu.getPrice() * o.PurchaseQty);
-            double totald = (subtotald - couponRated);
+            double subtotal = om.GetGrossRevenue();
+            double couponDiscount = om.GetCouponDiscount();
+            double totalWithVAT = om.GetTotalWithVAT();
+            double vatAmount = om.GetVATAmount();
+            double amountWithoutVAT = om.GetAmountWithoutVAT();
 
             int y1 = y;
 
             e.Graphics.DrawString("Subtotal", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
             y += 20;
-            e.Graphics.DrawString("Coupon Rate", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
+
+            if (couponDiscount > 0)
+            {
+                e.Graphics.DrawString("Coupon Discount", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
+                y += 20;
+            }
+
+            e.Graphics.DrawString("Amount Due", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
             y += 20;
-            e.Graphics.DrawString("Less 12% VAT", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
+            e.Graphics.DrawString("Less: VAT (12%)", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
             y += 20;
-            e.Graphics.DrawString("Sales without VAT", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
+            e.Graphics.DrawString("VATable Sales", new Font("Segui UI", 9, FontStyle.Regular), Brushes.Black, x, y);
             y += 20;
             e.Graphics.DrawString("Total Amount Due", new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular), Brushes.Black, x, y);
+
             if (cash != 0)
             {
                 y += 20;
@@ -139,26 +154,33 @@ namespace OrderingSystem.Receipt
                 e.Graphics.DrawString("Change", new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular), Brushes.Black, x, y);
             }
 
-
             x += 360;
-            size1 = graphics.MeasureString(subtotald.ToString("N2"), mainFont);
-            e.Graphics.DrawString(subtotald.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
 
+            size1 = graphics.MeasureString(subtotal.ToString("N2"), mainFont);
+            e.Graphics.DrawString(subtotal.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
             y1 += 20;
-            size1 = graphics.MeasureString(couponRated.ToString("N2"), mainFont);
-            e.Graphics.DrawString(couponRated.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
 
-            y1 += 20;
-            size1 = graphics.MeasureString(vatd.ToString("N2"), mainFont);
-            e.Graphics.DrawString(vatd.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
+            if (couponDiscount > 0)
+            {
+                size1 = graphics.MeasureString(couponDiscount.ToString("N2"), mainFont);
+                e.Graphics.DrawString("(" + couponDiscount.ToString("N2") + ")", mainFont, Brushes.Black, x - size1.Width, y1);
+                y1 += 20;
+            }
 
+            size1 = graphics.MeasureString(totalWithVAT.ToString("N2"), mainFont);
+            e.Graphics.DrawString(totalWithVAT.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
             y1 += 20;
-            size1 = graphics.MeasureString(withoutVat.ToString("N2"), mainFont);
-            e.Graphics.DrawString(withoutVat.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
 
+            size1 = graphics.MeasureString(vatAmount.ToString("N2"), mainFont);
+            e.Graphics.DrawString("(" + vatAmount.ToString("N2") + ")", mainFont, Brushes.Black, x - size1.Width, y1);
             y1 += 20;
-            size1 = graphics.MeasureString(totald.ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular));
-            e.Graphics.DrawString(totald.ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular), Brushes.Black, x - size1.Width, y1);
+
+            size1 = graphics.MeasureString(amountWithoutVAT.ToString("N2"), mainFont);
+            e.Graphics.DrawString(amountWithoutVAT.ToString("N2"), mainFont, Brushes.Black, x - size1.Width, y1);
+            y1 += 20;
+
+            size1 = graphics.MeasureString(totalWithVAT.ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular));
+            e.Graphics.DrawString(totalWithVAT.ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular), Brushes.Black, x - size1.Width, y1);
 
             if (cash != 0)
             {
@@ -167,9 +189,10 @@ namespace OrderingSystem.Receipt
                 e.Graphics.DrawString(cash.ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular), Brushes.Black, x - size1.Width, y1);
 
                 y1 += 20;
-                size1 = graphics.MeasureString((cash - totald).ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular));
-                e.Graphics.DrawString((cash - totald).ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular), Brushes.Black, x - size1.Width, y1);
+                size1 = graphics.MeasureString((cash - totalWithVAT).ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular));
+                e.Graphics.DrawString((cash - totalWithVAT).ToString("N2"), new Font("Segui UI", 10, FontStyle.Bold | FontStyle.Regular), Brushes.Black, x - size1.Width, y1);
             }
+
 
             int bx = 5;
             for (int b = 0; b < 55; b++)
